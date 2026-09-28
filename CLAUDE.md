@@ -10,11 +10,12 @@ This file loads every session, so it stays short. Details live in `docs/`.
 - **Target clients:** e-commerce businesses, Shopify store owners and startups.
 - **Services (exactly four):** Shopify Development, WordPress Development, Next.js Development and Figma to Web.
 - **Planned pages:** Home, Services, About, Portfolio and Contact.
-- **Invent nothing.** No clients, testimonials, reviews, logos, metrics or contact details. Use clearly marked placeholders and list them under Known issues in `docs/PROGRESS.md`.
+- **Invent nothing.** No clients, testimonials, reviews, logos, metrics or contact details. Use clearly marked placeholders and list them under Known issues in `docs/PROGRESS.md`. The Portfolio shows only projects the user has confirmed, one by one, as their work.
 
 ## Current milestone: homepage only
 - Build only `/` (`src/app/page.tsx`) and its eight sections: Header, Hero, Services, Why ecommercewisers, Process, Portfolio Preview, CTA and Footer.
-- **Never create or start the Services, About, Portfolio or Contact pages or routes**, even when a task seems to need them. Phase 5 decides how nav links to those future pages behave.
+- **Never create or start the Services, About, Portfolio or Contact pages or routes**, even when a task seems to need them.
+- Nav links are in-page anchors (`/#services`, `/#why`, `/#process`, `/#work`, `/#contact`). **No links go to future pages.** The section plans are in `docs/PLAN.md` → Homepage plan.
 - Phase 11 (future pages) starts only after explicit approval.
 
 ## Stack (installed versions)
@@ -45,7 +46,8 @@ This file loads every session, so it stays short. Details live in `docs/`.
 **Theme rule:** the site is dark-first. The page is `bg-background` (#000) and surfaces are `bg-surface` (#111). A light band is a `<section className="theme-light">`, and inside it the same semantic utilities switch to light values.
 
 Hard rules:
-- Use the semantic utilities only: `bg-background`, `bg-surface`, `bg-surface-muted`, `text-foreground`, `text-muted`, `border-border`, `bg-primary text-primary-foreground`, `text-primary`. Don't use the raw palette utilities (`bg-black`, `text-white`, …), because they don't flip in light bands.
+- Use the semantic utilities only: `bg-background`, `bg-surface`, `bg-surface-muted`, `text-foreground`, `text-muted`, `border-border`, `bg-primary text-primary-foreground`, `text-accent`. Don't use the raw palette utilities (`bg-black`, `text-white`, …), because they don't flip in light bands.
+- **Gold text is always `text-accent`** (gold on dark, black on light bands). Never use `text-primary` for text.
 - Raw hex belongs only in `src/app/globals.css`. No arbitrary colour values (`bg-[#…]`), no gradients, no blue, purple, green, red or any other hue. `globals.css` wipes Tailwind's default palette.
 - **Gold text never goes on a light band** (it is only 1.8:1 there). On light bands, gold appears only as a fill with black text on it.
 - No `dark:` variants. The theme comes from tokens.
@@ -53,13 +55,14 @@ Hard rules:
 ## Design principles
 - Modern, technical and clean, with generous whitespace, a strong type hierarchy and a restrained accent.
 - The fonts are Geist and Geist Mono via `next/font`.
-- For spacing, radius, the type scale, buttons, cards and motion, follow `docs/DESIGN.md`. Items marked **Proposed** there are confirmed in Phase 5.
+- For spacing, radius, the type scale, buttons, cards, icons, images and motion, follow `docs/DESIGN.md`. Everything there is **Locked** (Phase 5).
+- The logo is the text `Wordmark` component. The icons are generic inline SVGs, with no brand marks. Only one gold button shows above the fold.
 
 ## Coding and component rules
 - Use Server Components by default. Add `"use client"` only where there is interaction (the mobile nav toggle, for example), and keep those components small.
 - TypeScript is strict: no `any`, and props are typed with an interface or type.
-- Put sections in `src/components/sections/` and shared UI in `src/components/ui/`, unless Phase 5 decides otherwise. One component per file, with PascalCase names.
-- Repeated content (services, process steps) lives in typed arrays mapped to markup, not copy-pasted blocks.
+- Put sections in `src/components/sections/` and shared UI in `src/components/ui/`. One component per file, with PascalCase names. The exception is `src/components/ui/icons.tsx`, which holds all the icons.
+- All homepage copy and data (nav, services, points, steps, projects, contact) lives in typed exports in `src/content/site.ts`, mapped to markup. No copy-pasted blocks.
 - Reuse before you create. No duplicate markup and no dead code.
 - **Add no new dependency without asking.**
 - Use `next/image` for images and `next/link` for internal links.
@@ -78,7 +81,7 @@ Build mobile-first. Pages must work from 320px, so check them at 375, 768, 1024 
 ## Performance
 - Pages render statically, with minimal client JS.
 - Load fonts with `next/font` only.
-- Use `next/image` with `sizes`, and set `priority` only on the hero image.
+- Use `next/image` with `sizes`. `priority` is deprecated in Next 16. Use `preload`, and only for an above-the-fold image; the homepage has none.
 - No layout shift and no animation libraries.
 
 ## Testing

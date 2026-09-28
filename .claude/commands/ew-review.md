@@ -10,7 +10,7 @@ Review the current changes in ecommercewisers. Focus, if given: $ARGUMENTS
 
 1. Run `git status` and `git diff` (plus `git diff --staged`). Read each changed file in full, plus `CLAUDE.md` and `docs/DESIGN.md`.
 2. Check against the project rules:
-   - **Tokens**: only the semantic utilities from `globals.css` (`bg-background`, `bg-surface`, `text-muted`, `border-border`, `bg-primary text-primary-foreground` and so on). No raw palette utilities (`bg-black`, `text-white`, `bg-light-gray` and so on, which don't flip in light bands), no raw hex, no arbitrary colour values, no gradients, no other hues. Gold is used sparingly and never as text on a `.theme-light` band.
+   - **Tokens**: only the semantic utilities from `globals.css` (`bg-background`, `bg-surface`, `text-muted`, `border-border`, `bg-primary text-primary-foreground` and so on). No raw palette utilities (`bg-black`, `text-white`, `bg-light-gray` and so on, which don't flip in light bands), no raw hex, no arbitrary colour values, no gradients, no other hues. Gold is used sparingly: one gold button above the fold, and gold text only through `text-accent` (never `text-primary`).
    - **Consistency**: spacing, radius, type scale and button/card patterns match `DESIGN.md` and the existing components.
    - **Responsive**: works from 320px up. No horizontal scroll, readable line lengths, and tap targets of at least 44px.
    - **Accessibility**: landmarks, one `h1`, heading order, alt text, visible focus, keyboard reachability, labels, contrast, and `prefers-reduced-motion`.

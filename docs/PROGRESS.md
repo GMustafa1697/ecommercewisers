@@ -3,12 +3,9 @@
 _Last updated: 2026-09-29_
 
 ## Now
-- **Current phase:** Phase 5, Homepage planning. **Waiting for your approval to start.**
-- **Current task:** none. Phases 0–4 are done and committed.
-- **Next task:** `/ew-plan "homepage sections"`
-  - Confirm the Proposed items in `DESIGN.md`.
-  - Plan the 8 sections.
-  - Decide the nav behaviour for future pages and the image list.
+- **Current phase:** Phase 6, Homepage development. **Waiting for your approval to start.**
+- **Current task:** none. Phases 0–5 are done and committed.
+- **Next task:** cycle 1, shared UI and tokens. Start it with `/ew-plan "Phase 6 cycle 1: shared UI and tokens"` (see `docs/PLAN.md` → Phase 6 and Homepage plan).
 
 ## Completed
 - **Phase 0, Project understanding:** see the Project snapshot below. Nothing changed.
@@ -35,9 +32,14 @@ _Last updated: 2026-09-29_
   - Tailwind scanning `src/` only
 
   The body font is Geist, replacing Arial, and the placeholder page uses the tokens. Built CSS: the 7 palette variables and no default palette; the semantic utilities resolve to `var(--…)`.
+- **Phase 5, Homepage planning:**
+  - Homepage plan in `docs/PLAN.md`: structure, theme rhythm, nav, 8 section specs, draft copy, files, 9 build cycles.
+  - Every `DESIGN.md` item is now Locked, adding `--accent`, the focus ring, button sizes, the wordmark, icons and images.
+  - `CLAUDE.md`: `text-accent` rule, `preload` instead of the deprecated `priority`, anchor-only nav, `site.ts`.
+  - `/ew-test`: new sweeps for `text-primary` text and `priority`.
 
 ## In progress
-- Nothing. Stopped before Phase 5, as planned.
+- Nothing. Stopped before Phase 6, as planned.
 
 ## Decisions log
 | Date | Area | Decision |
@@ -52,12 +54,22 @@ _Last updated: 2026-09-29_
 | 2026-09-29 | Location | The project root is this folder, not a subfolder |
 | 2026-09-29 | Tooling | `typecheck` = `next typegen && tsc --noEmit` (Next 16 generates `LayoutProps`). No extra dependencies; `clsx` and `tailwind-merge` wait until Phase 6 needs them. |
 | 2026-09-29 | Tokens | `.theme-light` also sets its own background and text colour (one class makes a band) and sits in `@layer components` so utilities can override it. Tailwind scans `src/` only (`source("..")`). The light-band muted and border colours are black at 70% and 12% (same palette, AA-safe). |
+| 2026-09-29 | Portfolio | The old repo's `public/work/*` projects (Ella, Ecomus, Home Gym, Layout 22) are **your real work** (your answer in Phase 5). Each project's name, label and image is confirmed in cycle 7 before it's built. The images are cropped and resized first. |
+| 2026-09-29 | Contact | The CTA and Footer use `mailto:` with a **placeholder** email (`hello@example.com`, marked in `site.ts`) until you send the real one. No Contact page in this milestone. |
+| 2026-09-29 | Hero | The visual is a decorative code panel (`store.config.ts` snippet), not an image |
+| 2026-09-29 | Nav | In-page anchors only (`/#services`, `/#why`, `/#process`, `/#work`, `/#contact`); no links to future pages |
+| 2026-09-29 | Design | New semantic token `--accent` (gold on dark, black on light bands) for all gold text and the focus ring. Header CTA is secondary, so only one gold button shows above the fold. Text wordmark as the logo. Generic SVG icons, no brand marks. |
+| 2026-09-29 | Old-repo images | Only the portfolio shots are used. The brand marks (off-palette), the "ecomwisers" logos and `reviews/*` (the milestone has no reviews section) are not. |
 
 ## Known issues
 - **Exposed API key (your action):** the old repo pushed an OpenRouter key (in `.claude/settings.loca.json`) to GitHub. **Rotate it.** That file does not exist in this folder, and it is gitignored here anyway.
-- **No logo:** there is no real `ecommercewisers` logo. The old repo's SVGs say "ecomwisers", so they can't be used as they are.
+- **No logo:** there is no real `ecommercewisers` logo. The text `Wordmark` stands in. The old repo's SVGs say "ecomwisers", so they can't be used as they are.
 - **Default favicon:** `src/app/favicon.ico` is still the create-next-app icon.
-- **No contact details yet:** email, phone and social links are needed for the Footer and CTA. Placeholders must be marked.
+- **Placeholder email (blocks deploy):** the CTA and Footer use `hello@example.com` until you send the real address. Social links stay hidden until you provide them.
+- **Portfolio to confirm (cycle 7):**
+  - the name, label and image for each of the 4 candidates
+  - the Ecomus capture is a Next.js demo on vercel.app, but the old label said "Shopify theme customisation"
+  - three of the source images are low-res (370–540px wide), and the two full captures are 6.7 MB and 12 MB, so they need cropping and resizing outside the project
 - **Boilerplate README:** `README.md` is still the create-next-app text.
 - **Tooling warnings:**
   - npm flags ESLint 9.39.5 as deprecated. It is the version `eslint-config-next` 16.3.6 uses; leave it until Next supports ESLint 10.
@@ -103,13 +115,14 @@ _Last updated: 2026-09-29_
 | Tailwind's full default palette makes off-brand colours possible | Phase 4 (`--color-*: initial`) |
 | Boilerplate README, default favicon | Open (see Known issues) |
 
-**Recommended structure** (Proposed; confirmed in Phase 5)
+**Structure** (confirmed in Phase 5; the full file list is in `docs/PLAN.md` → Homepage plan)
 ```
 src/
-  app/            layout.tsx, page.tsx, globals.css (tokens)
+  app/            layout.tsx (Header, Footer), page.tsx (main and sections), globals.css (tokens)
+  content/        site.ts (all homepage copy and data)
   components/
-    sections/     Header, Hero, Services, … (one file per section)
-    ui/           Container, Button, SectionHeading, …
+    sections/     Header, MobileNav, Hero, Services, WhyUs, Process, PortfolioPreview, Cta, Footer
+    ui/           Container, ButtonLink, SectionHeading, Wordmark, icons.tsx
 public/
-  images/         images from the old repo (Phase 6)
+  images/work/    confirmed portfolio shots only (cropped and resized)
 ```

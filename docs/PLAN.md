@@ -33,22 +33,23 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 - [x] Placeholder page uses the semantic utilities
 - [x] `DESIGN.md` updated with the implementation and usage → commit `Phase 4: design system tokens`
 
-## Phase 5: Homepage planning (next, needs approval)
-- [ ] Confirm the Proposed design items (type scale, spacing, radius, buttons, cards, icons, focus ring)
-- [ ] Plan each section: content, layout per breakpoint, components, a11y, dark or light band
-- [ ] Decide the nav behaviour for the future pages (Services, About, Portfolio, Contact)
-- [ ] List the images needed from the old repo, and the placeholders (logo, contact details)
+## Phase 5: Homepage planning
+- [x] Confirm the design items: all Locked in `DESIGN.md`, adding `--accent`, the focus ring, button sizes, the wordmark, icons and images
+- [x] Plan each section: see **Homepage plan** below
+- [x] Nav behaviour: in-page anchors (`/#services` …), with no links to future pages
+- [x] Images: only the portfolio shots (your real work, cropped and resized). No other old-repo images.
+- [x] Placeholders: the contact email (blocks deploy); the social links stay hidden until provided
 
-## Phase 6: Homepage development (one section per cycle)
-- [ ] Shared UI: container, button, section heading (as approved in Phase 5)
-- [ ] Header: logo, navigation, CTA, mobile navigation
-- [ ] Hero: headline, supporting text, primary and secondary CTA, hero visual
-- [ ] Services: Shopify, WordPress, Next.js, Figma to Web
-- [ ] Why ecommercewisers: clear client-value points
-- [ ] Process: Discover, Design, Develop, Launch
-- [ ] Portfolio Preview: selected projects (real projects only)
-- [ ] CTA: a closing section focused on starting a project
-- [ ] Footer: navigation, services, contact and social, copyright
+## Phase 6: Homepage development (one cycle per line, each `/ew-plan` → approve → `/ew-implement` → `/ew-test` → `/ew-review` → commit)
+- [ ] 1. Shared UI and tokens: `--accent`, focus ring, scroll padding; `site.ts`; `Container`, `ButtonLink`, `SectionHeading`, `Wordmark`, `icons.tsx`; the page skeleton in `layout.tsx` and `page.tsx`
+- [ ] 2. Header: wordmark, nav, secondary CTA, skip link, `MobileNav`
+- [ ] 3. Hero: eyebrow, H1, supporting line, two CTAs, code panel
+- [ ] 4. Services: 4 cards on a light band
+- [ ] 5. Why ecommercewisers: 4 value points
+- [ ] 6. Process: Discover, Design, Develop, Launch on a light band
+- [ ] 7. Portfolio Preview: confirm each project, crop and resize the images, then build
+- [ ] 8. CTA: surface panel, `mailto:` button (placeholder email)
+- [ ] 9. Footer: wordmark, nav, services, contact, copyright
 
 ## Phase 7: Testing
 - [ ] `npm run check` and the `/ew-test` sweeps are clean
@@ -73,6 +74,90 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 - [ ] About
 - [ ] Portfolio
 - [ ] Contact
+
+## Homepage plan (approved in Phase 5, 2026-09-29)
+
+### Structure
+| # | Section | Component | `id` | Theme | Columns (mobile / `sm` / `lg`) |
+|---|---|---|---|---|---|
+| 1 | Header | `Header` + `MobileNav` | | dark, sticky `h-16`, `border-b border-border` | nav inline from `md` |
+| 2 | Hero | `Hero` | | dark | 1 / 1 / 2 (text 7 : panel 5) |
+| 3 | Services | `Services` | `services` | **light band** | 1 / 2 / 4 |
+| 4 | Why ecommercewisers | `WhyUs` | `why` | dark | 1 / 2 / 4 |
+| 5 | Process | `Process` | `process` | **light band** | 1 / 2 / 4 |
+| 6 | Portfolio Preview | `PortfolioPreview` | `work` | dark | 1 / 2 / 4 |
+| 7 | CTA | `Cta` | `contact` | dark, `bg-surface` panel | 1 (text and button side by side from `md`) |
+| 8 | Footer | `Footer` | | `bg-surface`, `border-t border-border` | 1 / 2 / 4 (from `md`) |
+
+- **Page skeleton:** `layout.tsx` renders `Header`, then `{children}`, then `Footer`. `page.tsx` renders `<main id="main">` with sections 2–7. There is no other route.
+- **Nav (Header and Footer):** Services `/#services` · Why us `/#why` · Process `/#process` · Work `/#work` · Contact `/#contact`. They use `next/link`. **No links go to the future pages.**
+
+### Sections
+1. **Header**
+   - The `Wordmark` links to `/`. The nav is `<nav aria-label="Main">`, shown from `md`.
+   - "Start a project" is a **secondary** `md`-size button that goes to `/#contact`.
+   - A skip link, "Skip to content", goes to `#main`.
+   - Below `md`, `MobileNav` (the only `"use client"` component) adds a 44px icon button with `aria-label`, `aria-expanded` and `aria-controls`. Its panel sits under the header with the links stacked, then the CTA. It closes on a link click or Escape.
+2. **Hero**
+   - Eyebrow, H1, supporting line, then a primary `lg` button "Start a project" (`/#contact`) and a secondary `lg` button "Explore services" (`/#services`).
+   - The **code panel** is `bg-surface border border-border rounded-lg`, in Geist Mono with `aria-hidden="true"`. Keys are `text-foreground`, strings `text-accent` and comments `text-muted`. Lines are ≤ 36 characters.
+     ```ts
+     // store.config.ts
+     export const store = {
+       platform: "shopify",
+       // or "wordpress", "nextjs"
+       design: "figma-to-web",
+       priorities: [
+         "speed",
+         "reliability",
+         "clean code",
+       ],
+     };
+     ```
+3. **Services**
+   - `SectionHeading`, then 4 cards: an icon (`text-accent`, which is black on the band), an H3 and one line.
+   - The data comes from `site.ts` (`services`) and is shared with the Footer.
+4. **Why ecommercewisers**
+   - `SectionHeading`, then 4 items. Each has a `border-t border-border pt-6`, a check icon (`text-accent`, gold), an H3 and one line. No cards and no metrics.
+5. **Process**
+   - `SectionHeading`, then an `<ol>` of 4 steps. Each has a number `01`–`04` (`font-mono text-accent`, black on the band), an H3 and one line.
+6. **Portfolio Preview**
+   - `SectionHeading` (eyebrow "Work", H2 "Selected projects"), then project cards. Each card is a top-of-page crop (`aspect-[4/5]`, `rounded-lg`, `next/image` with `sizes`), a label (eyebrow style) and the project name (H3). There are no external links unless you provide live URLs.
+   - The data comes from `site.ts` (`projects`). **If the list is empty, the section renders nothing and the "Work" nav link is hidden.**
+   - The images go in `public/images/work/`. Crop and resize them before committing (see `DESIGN.md` → Images). No new dependency: do the resizing outside the project.
+   - **Candidates. Confirm each one's name, label and image in cycle 7, before anything is built:**
+
+     | Project | Label (from the old site) | Source image in `ecomwiser/public/work/` | To check |
+     |---|---|---|---|
+     | Ella — Jewelry store | Shopify theme customisation | `screencapture-new-ella-demo-07-…png` (12 MB) or `ella-shopify-7.0-home-jewelery.jpg` (370px wide) | which image |
+     | Ecomus — Activewear store | Shopify theme customisation | `screencapture-ecomusnext-themesflat-vercel-app-…png` (6.7 MB) | the capture is a Next.js demo on vercel.app, so is the label right? |
+     | Home Gym | Custom development | `ella-7-home-gym.jpg` (370px wide) | the old label said "Work example"; low-res |
+     | Layout 22 | UI / Layout system | `layout-22.png` (540px wide) | low-res |
+7. **CTA**
+   - A `bg-surface border border-border rounded-lg p-8 md:p-12` panel with an H2, one line and a primary `lg` button "Start a project" that goes to `mailto:{contact.email}?subject=Project%20enquiry`.
+   - The email is a **placeholder**, `hello@example.com`, marked `// PLACEHOLDER` in `site.ts`. It **blocks deploy**.
+8. **Footer**
+   - Column 1: `Wordmark` and a one-line description. Then Navigation (`<nav aria-label="Footer">`), Services (the 4 names → `/#services`) and Contact (the email; social links only once they're provided).
+   - Bottom row: `© {year} ecommercewisers. All rights reserved.`
+
+### Copy (draft, approved; it lives in `src/content/site.ts`)
+| Where | Text |
+|---|---|
+| Hero | Eyebrow "E-commerce development agency" · H1 "We build fast, reliable online stores." · "Shopify, WordPress and Next.js development, plus Figma to Web, for e-commerce businesses, Shopify store owners and startups." |
+| Services | Eyebrow "Services" · H2 "What we build" · **Shopify Development:** "Shopify stores built or customised to fit your products and brand." · **WordPress Development:** "WordPress sites and stores your team can manage with ease." · **Next.js Development:** "Custom storefronts and web apps built for speed." · **Figma to Web:** "Your Figma designs turned into responsive, production-ready pages." |
+| Why | Eyebrow "Why ecommercewisers" · H2 "What working with us looks like" · **Performance first:** "Pages built to load fast on real phones." · **E-commerce focus:** "Catalogs, product pages, checkout and the content around them." · **A clear process:** "You approve a plan before we build, and see progress at every step." · **Maintainable code:** "Typed, documented code your team can build on." |
+| Process | Eyebrow "Process" · H2 "From brief to launch in four steps" · **Discover:** "We learn your products, customers and goals, and agree what to build." · **Design:** "We plan structure and design, or work from your Figma files." · **Develop:** "We build, test on real devices and share progress as we go." · **Launch:** "We launch, check everything live and hand over what you need to run it." |
+| Portfolio | Eyebrow "Work" · H2 "Selected projects" |
+| CTA | H2 "Have a store to build or improve?" · "Tell us what you're working on and we'll reply with next steps." · Button "Start a project" |
+| Footer | "E-commerce development: Shopify, WordPress, Next.js and Figma to Web." · © line |
+
+### Files (Phase 6)
+- `src/content/site.ts`: typed `site` (name, description), `nav`, `services`, `whyPoints`, `processSteps`, `projects`, `contact` (email placeholder), `socials` (empty)
+- `src/components/ui/`: `Container.tsx`, `ButtonLink.tsx` (variant and size map; `next/link` for `/…` hrefs, `<a>` for `mailto:`), `SectionHeading.tsx`, `Wordmark.tsx`, `icons.tsx`
+- `src/components/sections/`: `Header.tsx`, `MobileNav.tsx`, `Hero.tsx`, `Services.tsx`, `WhyUs.tsx`, `Process.tsx`, `PortfolioPreview.tsx`, `Cta.tsx`, `Footer.tsx`
+- `src/app/`: `globals.css` (`--accent`, focus ring, scroll), `layout.tsx` (Header and Footer), `page.tsx` (`main` and the sections)
+- `public/images/work/`: the confirmed portfolio images only
+- **No new dependencies.**
 
 ## Completion checklist (guide §15)
 - [ ] Project runs locally

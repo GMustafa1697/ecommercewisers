@@ -15,6 +15,8 @@ Do not fix anything unless the user asks. Run each step even if an earlier one f
    - the word `premium`, case-insensitive
    - raw hex colours (`#[0-9a-fA-F]{3,8}\b`) in `.ts` and `.tsx` files. Hex belongs only in `src/app/globals.css`.
    - `gradient`, `dark:`, or Tailwind palette classes such as `blue-500`, `zinc-100` or `gray-700`
+   - `text-primary` used for text (`text-primary([^-]|$)`). Gold text is `text-accent`; `text-primary-foreground` is fine.
+   - the deprecated `priority` prop on `<Image>`. Use `preload`.
    - the old brand spellings `Ecomwiser` or `ecomwisers`
 5. `git status`: confirm that no `.claude/settings.local.json`, `.claude/settings.loca.json` or `.env*` file is staged or tracked.
 
