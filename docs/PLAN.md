@@ -41,7 +41,7 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 - [x] Placeholders: the contact email (blocks deploy); the social links stay hidden until provided
 
 ## Phase 6: Homepage development (one cycle per line, each `/ew-plan` → approve → `/ew-implement` → `/ew-test` → `/ew-review` → commit)
-- [ ] 1. Shared UI and tokens: `--accent`, focus ring, scroll padding; `site.ts`; `Container`, `ButtonLink`, `SectionHeading`, `Wordmark`, `icons.tsx`; the page skeleton in `layout.tsx` and `page.tsx`
+- [x] 1. Shared UI and tokens: `--accent`, focus ring, scroll padding; `site.ts`; `Container`, `ButtonLink`, `SectionHeading`, `Wordmark`, `icons.tsx`; the page skeleton in `layout.tsx` and `page.tsx`
 - [ ] 2. Header: wordmark, nav, secondary CTA, skip link, `MobileNav`
 - [ ] 3. Hero: eyebrow, H1, supporting line, two CTAs, code panel
 - [ ] 4. Services: 4 cards on a light band
@@ -67,6 +67,7 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 
 ## Phase 10: Deployment
 - [ ] Host chosen (to be decided), env vars set on the host
+- [ ] No placeholders left: the `/ew-test` `example.com` sweep is clean (the real contact email is in)
 - [ ] Deployed; live smoke test on mobile and desktop
 
 ## Phase 11: Future pages (only after explicit approval)
@@ -116,14 +117,14 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
      ```
 3. **Services**
    - `SectionHeading`, then 4 cards: an icon (`text-accent`, which is black on the band), an H3 and one line.
-   - The data comes from `site.ts` (`services`) and is shared with the Footer.
+   - The data comes from `site.ts` (`servicesSection.items`) and is shared with the Footer.
 4. **Why ecommercewisers**
    - `SectionHeading`, then 4 items. Each has a `border-t border-border pt-6`, a check icon (`text-accent`, gold), an H3 and one line. No cards and no metrics.
 5. **Process**
    - `SectionHeading`, then an `<ol>` of 4 steps. Each has a number `01`–`04` (`font-mono text-accent`, black on the band), an H3 and one line.
 6. **Portfolio Preview**
    - `SectionHeading` (eyebrow "Work", H2 "Selected projects"), then project cards. Each card is a top-of-page crop (`aspect-[4/5]`, `rounded-lg`, `next/image` with `sizes`), a label (eyebrow style) and the project name (H3). There are no external links unless you provide live URLs.
-   - The data comes from `site.ts` (`projects`). **If the list is empty, the section renders nothing and the "Work" nav link is hidden.**
+   - The data comes from `site.ts` (`workSection.projects`). **If the list is empty, the section renders nothing and the "Work" nav link is hidden.**
    - The images go in `public/images/work/`. Crop and resize them before committing (see `DESIGN.md` → Images). No new dependency: do the resizing outside the project.
    - **Candidates. Confirm each one's name, label and image in cycle 7, before anything is built:**
 
@@ -152,7 +153,7 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 | Footer | "E-commerce development: Shopify, WordPress, Next.js and Figma to Web." · © line |
 
 ### Files (Phase 6)
-- `src/content/site.ts`: typed `site` (name, description), `nav`, `services`, `whyPoints`, `processSteps`, `projects`, `contact` (email placeholder), `socials` (empty)
+- `src/content/site.ts`: typed `site`, `contact` (placeholder email), `contactHref`, `socials` (empty), `startProject`, `nav` (Work hidden while there are no projects), and one object per section: `heroSection`, `servicesSection`, `whySection`, `processSection`, `workSection`, `ctaSection`
 - `src/components/ui/`: `Container.tsx`, `ButtonLink.tsx` (variant and size map; `next/link` for `/…` hrefs, `<a>` for `mailto:`), `SectionHeading.tsx`, `Wordmark.tsx`, `icons.tsx`
 - `src/components/sections/`: `Header.tsx`, `MobileNav.tsx`, `Hero.tsx`, `Services.tsx`, `WhyUs.tsx`, `Process.tsx`, `PortfolioPreview.tsx`, `Cta.tsx`, `Footer.tsx`
 - `src/app/`: `globals.css` (`--accent`, focus ring, scroll), `layout.tsx` (Header and Footer), `page.tsx` (`main` and the sections)

@@ -99,7 +99,7 @@ One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anch
 | Variant | Classes | Use |
 |---|---|---|
 | Primary | `bg-primary text-primary-foreground hover:bg-primary/90` | The main CTA. One per view. The same on dark and light bands. |
-| Secondary | `border border-border text-foreground hover:bg-surface` | The header CTA and the second hero CTA |
+| Secondary | `border border-border text-foreground hover:border-muted hover:bg-surface` | The header CTA and the second hero CTA. The border brightens on hover, because #111 on #000 alone is barely visible (changed in Phase 6 cycle 1, approved). |
 | Text link | `text-foreground underline-offset-4 hover:underline` | Inline, nav and footer links |
 
 | Size | Classes | Where |
@@ -170,14 +170,23 @@ Everything lives in **`src/app/globals.css`** (Tailwind 4.3, CSS-first, no `tail
 | `:root { … }` | The guide §4 semantic variables, with dark values; `color-scheme: dark` | The one place to change the theme |
 | `.theme-light { … }` (in `@layer components`) | The same variables with light values, plus the band's own background and text colour | One class turns a section into a light band. Utilities still override it. |
 | `@theme inline { … }` | Maps `--color-background: var(--background)` and the rest, plus `--font-sans`/`--font-mono` → Geist | `inline` makes `.bg-background` compile to `background-color: var(--background)`, which resolves per element, so it flips inside `.theme-light`. |
-| `@layer base` | The `body` background and colour; the `prefers-reduced-motion` guard | Tailwind's preflight applies Geist to `html` through `--font-sans`. |
+| `@layer base` | `html` scroll padding and smooth scrolling; the `body` background and colour; the global `:focus-visible` outline (`var(--accent)`); the `prefers-reduced-motion` guard | Tailwind's preflight applies Geist to `html` through `--font-sans`. |
+
+- `--accent` is set in `:root` (`var(--color-primary)`) and in `.theme-light` (`var(--color-black)`), and mapped by `--color-accent: var(--accent)` in `@theme inline`. Added in Phase 6, cycle 1.
+- `<html data-scroll-behavior="smooth">` in `layout.tsx` tells Next 16 to switch smooth scrolling off during route changes, so they stay instant once other pages exist.
 
 Because the mapping is `inline`, the `--color-background` variables don't appear in the built CSS. The utilities point straight at `var(--background)` and the other variables. For custom CSS, use `var(--background)`, `var(--muted)` and so on.
 
-**Added in Phase 6, cycle 1 (shared UI and tokens):**
-- `--accent` in `:root` (`var(--color-primary)`) and in `.theme-light` (`var(--color-black)`), plus `--color-accent: var(--accent)` in `@theme inline`
-- the global `:focus-visible` outline
-- `html { scroll-padding-top: 4rem; scroll-behavior: smooth }`
+### Shared UI (`src/components/ui/`, Phase 6 cycle 1)
+| Component | API |
+|---|---|
+| `Container` | `children`, `className?`: the page container |
+| `ButtonLink` | `href`, `variant?: "primary" \| "secondary"` (default `primary`), `size?: "md" \| "lg"` (default `lg`), plus any `<a>` prop. `/…` hrefs use `next/link`; others (`mailto:`) use `<a>`. |
+| `SectionHeading` | `eyebrow`, `title`, `intro?`, `id?`. The `id` goes on the `h2`, for the section's `aria-labelledby`. |
+| `Wordmark` | `className?`: renders `site.name` |
+| `icons.tsx` | `BagIcon`, `LayoutIcon`, `CodeIcon`, `PenIcon`, `CheckIcon`, `MenuIcon`, `CloseIcon`, and `serviceIcons[name]`. They're `aria-hidden` by default and have **no default size**: always pass `size-5` or `size-6`. |
+
+`cn()` (`src/lib/cn.ts`) only joins classes. It doesn't resolve conflicts, so don't pass a class that fights a component's own class (e.g. a second `h-*` to `ButtonLink`).
 
 ### How components use the tokens
 Use the semantic utilities with any colour prefix (`bg-`, `text-`, `border-`, `outline-`, `ring-`, `fill-`, `stroke-`): `background`, `foreground`, `surface`, `surface-muted`, `primary`, `primary-foreground`, `muted`, `border`, `accent`. Opacity modifiers work, for example `hover:bg-primary/90`.

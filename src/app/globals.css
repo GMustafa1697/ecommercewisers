@@ -4,7 +4,8 @@
 /*
  * ecommercewisers design tokens. See docs/DESIGN.md.
  * Raw hex lives only in this file. Components use the semantic utilities
- * (bg-background, bg-surface, text-muted, border-border, bg-primary, ...).
+ * (bg-background, bg-surface, text-muted, border-border, bg-primary, text-accent, ...).
+ * Gold text only through text-accent.
  */
 
 /* 1. Official palette (guide §3). The first line wipes Tailwind's default
@@ -18,7 +19,6 @@
   --color-dark-surface: #111111;
   --color-secondary-text: #8a8a8a;
   --color-dark-border: #2a2a2a;
-  /* Proposed, confirmed in Phase 5: type scale (--text-*), --radius-*, --container-page */
 }
 
 /* 2. Semantic variables (guide §4). The site is dark-first. */
@@ -32,6 +32,8 @@
   --primary-foreground: var(--color-black);
   --muted: var(--color-secondary-text);
   --border: var(--color-dark-border);
+  /* Gold text and the focus ring. Always use text-accent, never text-primary. */
+  --accent: var(--color-primary);
 }
 
 /* 3. Light band: <section className="theme-light">. Same names, light values.
@@ -45,6 +47,7 @@
     /* #8A8A8A is 3.1:1 on #F3F3F3, which fails AA; black at 70% is about 8.1:1 */
     --muted: color-mix(in oklab, var(--color-black) 70%, transparent);
     --border: color-mix(in oklab, var(--color-black) 12%, transparent);
+    --accent: var(--color-black);
     background-color: var(--background);
     color: var(--foreground);
   }
@@ -60,15 +63,28 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @layer base {
+  /* Anchor links clear the sticky h-16 header. The reduced-motion guard below turns smooth scrolling off. */
+  html {
+    scroll-padding-top: 4rem;
+    scroll-behavior: smooth;
+  }
+
   /* Font: Tailwind's preflight applies --font-sans (Geist) to html. */
   body {
     background: var(--background);
     color: var(--foreground);
+  }
+
+  /* Gold on dark, black on light bands: at least 3:1 everywhere (docs/DESIGN.md). */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   @media (prefers-reduced-motion: reduce) {

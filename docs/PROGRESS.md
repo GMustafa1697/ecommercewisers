@@ -3,9 +3,9 @@
 _Last updated: 2026-09-29_
 
 ## Now
-- **Current phase:** Phase 6, Homepage development. **Waiting for your approval to start.**
-- **Current task:** none. Phases 0–5 are done and committed.
-- **Next task:** cycle 1, shared UI and tokens. Start it with `/ew-plan "Phase 6 cycle 1: shared UI and tokens"` (see `docs/PLAN.md` → Phase 6 and Homepage plan).
+- **Current phase:** Phase 6, Homepage development
+- **Current task:** none. Cycle 1 (shared UI and tokens) is reviewed, fixed and committed.
+- **Next task:** cycle 2, Header. Start it with `/ew-plan "Phase 6 cycle 2: Header"`.
 
 ## Completed
 - **Phase 0, Project understanding:** see the Project snapshot below. Nothing changed.
@@ -37,9 +37,26 @@ _Last updated: 2026-09-29_
   - Every `DESIGN.md` item is now Locked, adding `--accent`, the focus ring, button sizes, the wordmark, icons and images.
   - `CLAUDE.md`: `text-accent` rule, `preload` instead of the deprecated `priority`, anchor-only nav, `site.ts`.
   - `/ew-test`: new sweeps for `text-primary` text and `priority`.
+- **Phase 6, cycle 1, Shared UI and tokens:**
+  - `globals.css`: `--accent`, `text-accent`, the global focus ring, scroll padding and smooth scrolling
+  - `layout.tsx`: `data-scroll-behavior="smooth"`
+  - `page.tsx`: `<main id="main">` with `Container`
+  - `src/content/site.ts`: all the approved copy and data; section objects are named `…Section`, so nothing shadows the global `process`
+  - `src/lib/cn.ts`
+  - `src/components/ui/`: `Container`, `ButtonLink`, `SectionHeading`, `Wordmark`, `icons.tsx`
+  - Review fixes:
+    - secondary `hover:border-muted`
+    - an `example.com` placeholder sweep in `/ew-test`
+    - the CTA label reuses `startProject.label`
+    - the `globals.css` comment now names `text-accent`
+  - Deferred review nits:
+    - cycle 2: define the header height once (`--header-height`), shared by `scroll-padding-top` and the Header
+    - cycle 3: drop the redundant `bg-background text-foreground` on `main`
+    - when a section first uses an intro: add `max-w-prose` to the `SectionHeading` intro
+    - `ButtonLink`: don't treat `//` hrefs as internal
 
 ## In progress
-- Nothing. Stopped before Phase 6, as planned.
+- Nothing.
 
 ## Decisions log
 | Date | Area | Decision |
@@ -59,6 +76,7 @@ _Last updated: 2026-09-29_
 | 2026-09-29 | Hero | The visual is a decorative code panel (`store.config.ts` snippet), not an image |
 | 2026-09-29 | Nav | In-page anchors only (`/#services`, `/#why`, `/#process`, `/#work`, `/#contact`); no links to future pages |
 | 2026-09-29 | Design | New semantic token `--accent` (gold on dark, black on light bands) for all gold text and the focus ring. Header CTA is secondary, so only one gold button shows above the fold. Text wordmark as the logo. Generic SVG icons, no brand marks. |
+| 2026-09-29 | Buttons | A Locked value changed after the cycle 1 review: the secondary button also gets `hover:border-muted`, because `hover:bg-surface` alone (#111 on #000, 1.1:1) is barely perceptible. |
 | 2026-09-29 | Old-repo images | Only the portfolio shots are used. The brand marks (off-palette), the "ecomwisers" logos and `reviews/*` (the milestone has no reviews section) are not. |
 
 ## Known issues
