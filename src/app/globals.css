@@ -1,26 +1,84 @@
-@import "tailwindcss";
+/* Scan src/ only. Otherwise class names quoted in docs/ and CLAUDE.md become CSS. */
+@import "tailwindcss" source("..");
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * ecommercewisers design tokens. See docs/DESIGN.md.
+ * Raw hex lives only in this file. Components use the semantic utilities
+ * (bg-background, bg-surface, text-muted, border-border, bg-primary, ...).
+ */
+
+/* 1. Official palette (guide §3). The first line wipes Tailwind's default
+ *    colours, so blue, zinc and the other palette utilities generate nothing. */
+@theme {
+  --color-*: initial;
+  --color-primary: #e6ac0e;
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-light-gray: #f3f3f3;
+  --color-dark-surface: #111111;
+  --color-secondary-text: #8a8a8a;
+  --color-dark-border: #2a2a2a;
+  /* Proposed, confirmed in Phase 5: type scale (--text-*), --radius-*, --container-page */
 }
 
+/* 2. Semantic variables (guide §4). The site is dark-first. */
+:root {
+  color-scheme: dark;
+  --background: var(--color-black);
+  --foreground: var(--color-white);
+  --surface: var(--color-dark-surface);
+  --surface-muted: var(--color-light-gray);
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-black);
+  --muted: var(--color-secondary-text);
+  --border: var(--color-dark-border);
+}
+
+/* 3. Light band: <section className="theme-light">. Same names, light values.
+ *    Gold stays a fill only here: gold text on #F3F3F3 is 1.8:1. */
+@layer components {
+  .theme-light {
+    color-scheme: light;
+    --background: var(--color-light-gray);
+    --foreground: var(--color-black);
+    --surface: var(--color-white);
+    /* #8A8A8A is 3.1:1 on #F3F3F3, which fails AA; black at 70% is about 8.1:1 */
+    --muted: color-mix(in oklab, var(--color-black) 70%, transparent);
+    --border: color-mix(in oklab, var(--color-black) 12%, transparent);
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
+
+/* 4. Semantic utilities. `inline` makes them resolve var(--background) and the
+ *    rest per element, so .theme-light overrides take effect. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  /* Font: Tailwind's preflight applies --font-sans (Geist) to html. */
+  body {
+    background: var(--background);
+    color: var(--foreground);
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }

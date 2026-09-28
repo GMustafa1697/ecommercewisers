@@ -45,7 +45,7 @@ This file loads every session, so it stays short. Details live in `docs/`.
 **Theme rule:** the site is dark-first. The page is `bg-background` (#000) and surfaces are `bg-surface` (#111). A light band is a `<section className="theme-light">`, and inside it the same semantic utilities switch to light values.
 
 Hard rules:
-- Use the semantic utilities only: `bg-background`, `bg-surface`, `bg-surface-muted`, `text-foreground`, `text-muted`, `border-border`, `bg-primary text-primary-foreground`, `text-primary`.
+- Use the semantic utilities only: `bg-background`, `bg-surface`, `bg-surface-muted`, `text-foreground`, `text-muted`, `border-border`, `bg-primary text-primary-foreground`, `text-primary`. Don't use the raw palette utilities (`bg-black`, `text-white`, …), because they don't flip in light bands.
 - Raw hex belongs only in `src/app/globals.css`. No arbitrary colour values (`bg-[#…]`), no gradients, no blue, purple, green, red or any other hue. `globals.css` wipes Tailwind's default palette.
 - **Gold text never goes on a light band** (it is only 1.8:1 there). On light bands, gold appears only as a fill with black text on it.
 - No `dark:` variants. The theme comes from tokens.

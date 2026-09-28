@@ -3,9 +3,12 @@
 _Last updated: 2026-09-29_
 
 ## Now
-- **Current phase:** Phase 3, Documentation
-- **Current task:** write the four docs and cross-check them against `CLAUDE.md`
-- **Next task:** Phase 4, Design system: tokens in `src/app/globals.css`
+- **Current phase:** Phase 5, Homepage planning. **Waiting for your approval to start.**
+- **Current task:** none. Phases 0–4 are done and committed.
+- **Next task:** `/ew-plan "homepage sections"`
+  - Confirm the Proposed items in `DESIGN.md`.
+  - Plan the 8 sections.
+  - Decide the nav behaviour for future pages and the image list.
 
 ## Completed
 - **Phase 0, Project understanding:** see the Project snapshot below. Nothing changed.
@@ -20,9 +23,21 @@ _Last updated: 2026-09-29_
   - the `/ew-plan`, `/ew-implement`, `/ew-test`, `/ew-review` and `/ew-status` commands
   - empty `.claude/agents/` and `.claude/skills/`
   - read-only and check permissions in `.claude/settings.json`
+- **Phase 3, Documentation:**
+  - `GUIDE.md`, `PLAN.md`, `DESIGN.md`, `PROGRESS.md`
+  - Cross-checked them against `CLAUDE.md`. That aligned the `/ew-plan` breakpoints with `DESIGN.md`.
+- **Phase 4, Design system:** `src/app/globals.css` now holds:
+  - the raw palette in `@theme`, with the default palette wiped
+  - the semantic tokens in `:root`
+  - the `.theme-light` band
+  - the `@theme inline` utilities
+  - the reduced-motion guard
+  - Tailwind scanning `src/` only
+
+  The body font is Geist, replacing Arial, and the placeholder page uses the tokens. Built CSS: the 7 palette variables and no default palette; the semantic utilities resolve to `var(--…)`.
 
 ## In progress
-- Phase 3, Documentation: `GUIDE.md`, `PLAN.md`, `DESIGN.md`, `PROGRESS.md`
+- Nothing. Stopped before Phase 5, as planned.
 
 ## Decisions log
 | Date | Area | Decision |
@@ -36,6 +51,7 @@ _Last updated: 2026-09-29_
 | 2026-09-29 | Git | Local repo on `main`, one commit per phase, no remote, no Co-Authored-By trailer |
 | 2026-09-29 | Location | The project root is this folder, not a subfolder |
 | 2026-09-29 | Tooling | `typecheck` = `next typegen && tsc --noEmit` (Next 16 generates `LayoutProps`). No extra dependencies; `clsx` and `tailwind-merge` wait until Phase 6 needs them. |
+| 2026-09-29 | Tokens | `.theme-light` also sets its own background and text colour (one class makes a band) and sits in `@layer components` so utilities can override it. Tailwind scans `src/` only (`source("..")`). The light-band muted and border colours are black at 70% and 12% (same palette, AA-safe). |
 
 ## Known issues
 - **Exposed API key (your action):** the old repo pushed an OpenRouter key (in `.claude/settings.loca.json`) to GitHub. **Rotate it.** That file does not exist in this folder, and it is gitignored here anyway.

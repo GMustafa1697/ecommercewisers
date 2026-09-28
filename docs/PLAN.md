@@ -26,11 +26,12 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 - [x] Cross-check the docs against `CLAUDE.md` → commit `Phase 3: documentation`
 
 ## Phase 4: Design system
-- [ ] Raw palette in `@theme`, default palette wiped
-- [ ] Semantic tokens in `:root`, `.theme-light` light band, `@theme inline` utilities
-- [ ] Reduced-motion guard
-- [ ] Placeholder page uses the semantic utilities
-- [ ] `DESIGN.md` updated with the implementation and usage → commit `Phase 4: design system tokens`
+- [x] Raw palette in `@theme`, default palette wiped
+- [x] Semantic tokens in `:root`, `.theme-light` light band, `@theme inline` utilities
+- [x] Reduced-motion guard
+- [x] Tailwind scans `src/` only
+- [x] Placeholder page uses the semantic utilities
+- [x] `DESIGN.md` updated with the implementation and usage → commit `Phase 4: design system tokens`
 
 ## Phase 5: Homepage planning (next, needs approval)
 - [ ] Confirm the Proposed design items (type scale, spacing, radius, buttons, cards, icons, focus ring)

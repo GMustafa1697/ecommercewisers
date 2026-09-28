@@ -130,5 +130,41 @@ WCAG 2.2 AA needs 4.5:1 for body text, and 3:1 for large text and UI.
 - Images get meaningful `alt` text, or `alt=""` if they are decorative. Icon-only controls get an `aria-label`.
 - Tap targets are at least 44×44px, and `prefers-reduced-motion` is respected.
 
-## Implementation
-The tokens are implemented in Phase 4 in `src/app/globals.css`. Phase 4 fills in this section with where each token lives and how components use it.
+## Implementation (Phase 4)
+Everything lives in **`src/app/globals.css`** (Tailwind 4.3, CSS-first, no `tailwind.config`).
+
+| Block | What it holds | Why |
+|---|---|---|
+| `@import "tailwindcss" source("..")` | Tailwind, scanning `src/` only | Otherwise class names quoted in `docs/` and `CLAUDE.md` would be turned into CSS. |
+| `@theme { --color-*: initial; … }` | The 7 raw palette colours (`--color-primary`, `--color-black`, …) | `initial` wipes Tailwind's default palette, so `bg-blue-500` generates nothing. |
+| `:root { … }` | The guide §4 semantic variables, with dark values; `color-scheme: dark` | The one place to change the theme |
+| `.theme-light { … }` (in `@layer components`) | The same variables with light values, plus the band's own background and text colour | One class turns a section into a light band. Utilities still override it. |
+| `@theme inline { … }` | Maps `--color-background: var(--background)` and the rest, plus `--font-sans`/`--font-mono` → Geist | `inline` makes `.bg-background` compile to `background-color: var(--background)`, which resolves per element, so it flips inside `.theme-light`. |
+| `@layer base` | The `body` background and colour; the `prefers-reduced-motion` guard | Tailwind's preflight applies Geist to `html` through `--font-sans`. |
+
+Because the mapping is `inline`, the `--color-background` variables don't appear in the built CSS. The utilities point straight at `var(--background)` and the other variables. For custom CSS, use `var(--background)`, `var(--muted)` and so on.
+
+### How components use the tokens
+Use the semantic utilities with any colour prefix (`bg-`, `text-`, `border-`, `outline-`, `ring-`, `fill-`, `stroke-`): `background`, `foreground`, `surface`, `surface-muted`, `primary`, `primary-foreground`, `muted`, `border`. Opacity modifiers work, for example `hover:bg-primary/90`.
+
+```tsx
+// Dark section (the default): nothing to add
+<section className="py-16 md:py-24">
+  <div className="rounded-lg border border-border bg-surface p-6">
+    <h3 className="text-xl font-semibold">Shopify Development</h3>
+    <p className="text-muted">…</p>
+  </div>
+</section>
+
+// Light band: the same utilities, light values (#F3F3F3 background, white cards, black text)
+<section className="theme-light py-16 md:py-24">
+  <div className="rounded-lg border border-border bg-surface p-6">…</div>
+</section>
+
+// Primary CTA: gold fill with black text. It works on dark and on light bands.
+<a href="#" className="bg-primary text-primary-foreground hover:bg-primary/90">Start a project</a>
+```
+
+- **Don't** use the raw palette utilities (`bg-black`, `text-white`, `bg-light-gray`, `text-secondary-text`, …) in components. They exist because the palette sits in `@theme`, but they don't flip inside `.theme-light`.
+- **Don't** use `text-primary` inside `.theme-light` (1.8:1).
+- The placeholder `src/app/page.tsx` uses `bg-background`, `text-foreground` and `text-muted`. It is the smoke test showing that the tokens compile.
