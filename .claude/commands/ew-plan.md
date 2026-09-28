@@ -15,7 +15,7 @@ This is the Analyze and Plan step of the controlled workflow. **Do not create, e
    - **Goal**: one or two sentences.
    - **Files**: each file to create or change, with one line on why.
    - **Reuse**: existing components, tokens and utilities to use. Name any new dependency and why it is needed (the default is none).
-   - **Responsive**: behaviour at mobile (≤640px), tablet (641–1024px) and desktop (≥1025px).
+   - **Responsive**: behaviour at mobile (<640px), tablet (640–1023px, `sm`/`md`) and desktop (≥1024px, `lg`+).
    - **Accessibility**: landmarks, heading order, focus, keyboard, labels, contrast (which tokens, on which background).
    - **Risks**: what could break, and open questions.
    - **Verification**: the checks you will run after implementing.
