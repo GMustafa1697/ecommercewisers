@@ -42,14 +42,14 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 
 ## Phase 6: Homepage development (one cycle per line, each `/ew-plan` → approve → `/ew-implement` → `/ew-test` → `/ew-review` → commit)
 - [x] 1. Shared UI and tokens: `--accent`, focus ring, scroll padding; `site.ts`; `Container`, `ButtonLink`, `SectionHeading`, `Wordmark`, `icons.tsx`; the page skeleton in `layout.tsx` and `page.tsx`
-- [ ] 2. Header: wordmark, nav, secondary CTA, skip link, `MobileNav`
-- [ ] 3. Hero: eyebrow, H1, supporting line, two CTAs, code panel
-- [ ] 4. Services: 4 cards on a light band
-- [ ] 5. Why ecommercewisers: 4 value points
-- [ ] 6. Process: Discover, Design, Develop, Launch on a light band
-- [ ] 7. Portfolio Preview: confirm each project, crop and resize the images, then build
-- [ ] 8. CTA: surface panel, `mailto:` button (placeholder email)
-- [ ] 9. Footer: wordmark, nav, services, contact, copyright
+- [x] 2. Header: wordmark, nav, secondary CTA, skip link, `MobileNav`
+- [x] 3. Hero: eyebrow, H1, supporting line, two CTAs (the code panel was removed at your request)
+- [x] 4. Services: 4 cards on a light band
+- [x] 5. Why ecommercewisers: 4 value points
+- [x] 6. Process: Discover, Design, Develop, Launch on a light band
+- [x] 7. Portfolio Preview: confirm each project, crop and resize the images, then build
+- [x] 8. CTA: surface panel, `mailto:` button (placeholder email)
+- [x] 9. Footer: wordmark, nav, services, contact, copyright
 
 ## Phase 7: Testing
 - [ ] `npm run check` and the `/ew-test` sweeps are clean
@@ -82,7 +82,7 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 | # | Section | Component | `id` | Theme | Columns (mobile / `sm` / `lg`) |
 |---|---|---|---|---|---|
 | 1 | Header | `Header` + `MobileNav` | | dark, sticky `h-16`, `border-b border-border` | nav inline from `md` |
-| 2 | Hero | `Hero` | | dark | 1 / 1 / 2 (text 7 : panel 5) |
+| 2 | Hero | `Hero` | | dark | 1 (text only, `max-w-3xl`) |
 | 3 | Services | `Services` | `services` | **light band** | 1 / 2 / 4 |
 | 4 | Why ecommercewisers | `WhyUs` | `why` | dark | 1 / 2 / 4 |
 | 5 | Process | `Process` | `process` | **light band** | 1 / 2 / 4 |
@@ -101,20 +101,7 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
    - Below `md`, `MobileNav` (the only `"use client"` component) adds a 44px icon button with `aria-label`, `aria-expanded` and `aria-controls`. Its panel sits under the header with the links stacked, then the CTA. It closes on a link click or Escape.
 2. **Hero**
    - Eyebrow, H1, supporting line, then a primary `lg` button "Start a project" (`/#contact`) and a secondary `lg` button "Explore services" (`/#services`).
-   - The **code panel** is `bg-surface border border-border rounded-lg`, in Geist Mono with `aria-hidden="true"`. Keys are `text-foreground`, strings `text-accent` and comments `text-muted`. Lines are ≤ 36 characters.
-     ```ts
-     // store.config.ts
-     export const store = {
-       platform: "shopify",
-       // or "wordpress", "nextjs"
-       design: "figma-to-web",
-       priorities: [
-         "speed",
-         "reliability",
-         "clean code",
-       ],
-     };
-     ```
+   - One left-aligned text column (`max-w-3xl`). The decorative code panel that was planned beside it was removed in cycle 3 at your request.
 3. **Services**
    - `SectionHeading`, then 4 cards: an icon (`text-accent`, which is black on the band), an H3 and one line.
    - The data comes from `site.ts` (`servicesSection.items`) and is shared with the Footer.
@@ -123,17 +110,18 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 5. **Process**
    - `SectionHeading`, then an `<ol>` of 4 steps. Each has a number `01`–`04` (`font-mono text-accent`, black on the band), an H3 and one line.
 6. **Portfolio Preview**
-   - `SectionHeading` (eyebrow "Work", H2 "Selected projects"), then project cards. Each card is a top-of-page crop (`aspect-[4/5]`, `rounded-lg`, `next/image` with `sizes`), a label (eyebrow style) and the project name (H3). There are no external links unless you provide live URLs.
+   - `SectionHeading` (eyebrow "Work", H2 "Selected projects"), then project cards. Each card is a top-of-page crop (`aspect-4/5`, `rounded-lg`, `next/image` with `sizes`), a label (eyebrow style) and the project name (H3). There are no external links unless you provide live URLs.
    - The data comes from `site.ts` (`workSection.projects`). **If the list is empty, the section renders nothing and the "Work" nav link is hidden.**
    - The images go in `public/images/work/`. Crop and resize them before committing (see `DESIGN.md` → Images). No new dependency: do the resizing outside the project.
-   - **Candidates. Confirm each one's name, label and image in cycle 7, before anything is built:**
+   - **Confirmed by you in cycle 7 (2026-09-30), one by one, as your work.** All 5 are shown, so the fifth card sits alone on a second row on desktop (your choice).
 
-     | Project | Label (from the old site) | Source image in `ecomwiser/public/work/` | To check |
+     | Project | Label | Image (`public/images/work/`) | Source in `ecomwiser/public/work/` |
      |---|---|---|---|
-     | Ella — Jewelry store | Shopify theme customisation | `screencapture-new-ella-demo-07-…png` (12 MB) or `ella-shopify-7.0-home-jewelery.jpg` (370px wide) | which image |
-     | Ecomus — Activewear store | Shopify theme customisation | `screencapture-ecomusnext-themesflat-vercel-app-…png` (6.7 MB) | the capture is a Next.js demo on vercel.app, so is the label right? |
-     | Home Gym | Custom development | `ella-7-home-gym.jpg` (370px wide) | the old label said "Work example"; low-res |
-     | Layout 22 | UI / Layout system | `layout-22.png` (540px wide) | low-res |
+     | Ella — Auto parts store | Shopify theme customisation | `ella-auto-parts.webp`, 800×1000 | `screencapture-new-ella-demo-07-…png` (the 12 MB capture is an auto-parts store, not the jewelry one) |
+     | Ella — Jewelry store | Shopify theme customisation | `ella-jewelry.webp`, 370×463 (low-res) | `ella-shopify-7.0-home-jewelery.jpg` |
+     | Ecomus — Activewear store | Shopify theme customisation | `ecomus-activewear.webp`, 800×1000 | `screencapture-ecomusnext-themesflat-vercel-app-…png` |
+     | Home Gym | Custom development | `home-gym.webp`, 370×463 (low-res) | `ella-7-home-gym.jpg` |
+     | Layout 22 | UI / Layout system | `layout-22.webp`, 540×675 (low-res) | `layout-22.png` |
 7. **CTA**
    - A `bg-surface border border-border rounded-lg p-8 md:p-12` panel with an H2, one line and a primary `lg` button "Start a project" that goes to `mailto:{contact.email}?subject=Project%20enquiry`.
    - The email is a **placeholder**, `hello@example.com`, marked `// PLACEHOLDER` in `site.ts`. It **blocks deploy**.

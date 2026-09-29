@@ -34,6 +34,8 @@
   --border: var(--color-dark-border);
   /* Gold text and the focus ring. Always use text-accent, never text-primary. */
   --accent: var(--color-primary);
+  /* Layout: the sticky header's height, shared by the Header (h-(--header-height)) and scroll padding. */
+  --header-height: 4rem;
 }
 
 /* 3. Light band: <section className="theme-light">. Same names, light values.
@@ -69,9 +71,9 @@
 }
 
 @layer base {
-  /* Anchor links clear the sticky h-16 header. The reduced-motion guard below turns smooth scrolling off. */
+  /* Anchor links clear the sticky header. The reduced-motion guard below turns smooth scrolling off. */
   html {
-    scroll-padding-top: 4rem;
+    scroll-padding-top: var(--header-height);
     scroll-behavior: smooth;
   }
 

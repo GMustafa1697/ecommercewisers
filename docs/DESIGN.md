@@ -71,6 +71,7 @@ WCAG 2.2 AA needs 4.5:1 for body text, and 3:1 for large text and UI.
 ## Logo: Locked
 - The logo is a **text wordmark**: `ecommercewisers` in Geist, `font-semibold tracking-tight`, `text-foreground`. It lives in one `Wordmark` component, used in the Header and Footer.
 - The old SVG logos say "ecomwisers" and are not used. Swap in a real logo only through `Wordmark`.
+- The Header links the wordmark to **`/#top`**. On the homepage, a plain `/` keeps the scroll position (that's how Next's router behaves), while `#top` scrolls to the top in Next and in browsers.
 
 ## Typography: Locked
 - Geist (sans) for all text and Geist Mono for technical accents, both via `next/font`. There are no other fonts and no external font links.
@@ -83,15 +84,16 @@ WCAG 2.2 AA needs 4.5:1 for body text, and 3:1 for large text and UI.
 | H3 (card title) | `text-xl font-semibold` | |
 | Body | `text-base lg:text-lg leading-relaxed` | measure ≤ 65ch (`max-w-prose`) |
 | Small / meta | `text-sm text-muted` | |
-| Eyebrow / label | `font-mono text-xs uppercase tracking-widest text-accent` | gold on dark, black on light bands (automatic) |
-| Code panel (hero) | `font-mono text-xs sm:text-sm` | lines ≤ 36 characters, so nothing scrolls at 320px |
+| Eyebrow / label | `font-mono text-xs uppercase tracking-widest text-accent` | gold on dark, black on light bands (automatic). Always through the `Eyebrow` component. |
 
 ## Spacing and layout: Locked
 - Tailwind's 4px spacing scale, with no custom spacing tokens.
 - **`Container` component:** `mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8`. There is no `--container-page` token.
 - Sections use `py-16 md:py-24`. The hero uses `py-20 md:py-32`.
 - Grids are `grid gap-6 md:gap-8`. The column counts per section are in `docs/PLAN.md`.
-- The header is sticky, `h-16`. Anchor targets clear it through `scroll-padding-top: 4rem` on `html`.
+- The section heading sits `mt-12` above the section's content (grid or list).
+- The hero is one left-aligned text column, capped at `max-w-3xl` so the H1 wraps to two or three lines. There is no visual beside it (the code panel was removed in Phase 6 cycle 3).
+- The header is sticky, with height `h-(--header-height)`. `--header-height: 4rem` is set once in `:root`, and `html` uses it for `scroll-padding-top`, so anchor targets clear the header.
 
 ## Buttons: Locked
 One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anchor or `mailto:`.
@@ -112,9 +114,13 @@ One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anch
 
 ## Cards: Locked
 - `bg-surface border border-border rounded-lg p-6`. On a light band this becomes a white card with a light border automatically.
-- The icon is `text-accent`, then a title (H3), then body text in `text-muted`.
+- The icon is `size-6 text-accent`, then the title (H3, `mt-4 text-xl font-semibold`), then the body (`mt-2 text-base leading-relaxed text-muted`). Card body text stays `text-base` at every width, because 4-column cards are only about 200px wide inside.
 - No shadows on dark. On light bands a subtle `shadow-sm` is optional.
+- **CTA panel:** `flex flex-col gap-8 rounded-lg border border-border bg-surface p-8 md:flex-row md:items-center md:justify-between md:p-12`. It holds `SectionHeading` (title and intro, no eyebrow) and the primary `lg` button (`shrink-0`), which is full width on phones and beside the text from `md`.
+- **Footer:** `<footer className="border-t border-border bg-surface">` with `py-12 md:py-16` and a `grid gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8`. The first column is the `Wordmark` plus `site.description` (`text-sm text-muted`), then three `FooterColumn`s: an H2 title (`text-sm text-muted`) over a list of text links (`inline-flex min-h-11 min-w-11 items-center text-sm text-foreground underline-offset-4 hover:underline`, for a 44×44px target). A bottom row sits on `border-t border-border`: "© {year} ecommercewisers. All rights reserved." The year is set at build time.
 - **Why ecommercewisers** deliberately doesn't use cards. Its items sit on a top border (`border-t border-border pt-6`), which sets it apart from Services.
+- **Process** uses the same top border as Why, on its light band, so its four steps read as a sequence and don't look like a second Services. Its marker is the step number (`01`–`04`: `block font-mono text-sm leading-6 text-accent`, `aria-hidden` because the `<ol>` already gives the order). `leading-6` makes it 24px tall, like the icons, so titles line up across sections.
+- All three render through `FeatureItem`; only the wrapper `className` and the marker differ.
 
 ## Borders: Locked
 - 1px `border-border`. Use them for dividers, card outlines, the header's bottom edge and the footer's top edge.
@@ -133,9 +139,11 @@ One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anch
 
 ## Images: Locked
 - Use `next/image` with `width`/`height` (or `fill`) and `sizes`.
-- **`priority` is deprecated in Next 16.** Use `preload` only for an above-the-fold image. The hero is a code panel, so the homepage preloads nothing.
+- **`priority` is deprecated in Next 16.** Use `preload` only for an above-the-fold image. The hero has no image, so the homepage preloads nothing.
 - The only raster images are the portfolio shots in `public/images/work/`. They are cropped (top of the page) and resized before they're committed: at most about 1200px wide, WebP or JPEG, roughly 300 KB or less each. The 6.7 MB and 12 MB screen captures are never committed.
 - Alt text names the project and what is shown, e.g. "Ella jewelry store homepage".
+- **How the crops are made (Phase 6 cycle 7):** headless Chrome, which is already on the machine, renders each source image at the output width, captures the top 4:5 region and saves it as WebP at 80% quality. The script lives outside the project, so no dependency is added. The output is at most 800×1000 and 11–57 KB. Smaller sources are kept at their own width and never upscaled.
+- **Portfolio card:** an image frame (`overflow-hidden rounded-lg border border-border bg-surface`) holding `next/image` with the data's `width`/`height`, `className="aspect-4/5 w-full object-cover object-top"` and `sizes="(min-width: 1024px) 248px, (min-width: 640px) 50vw, 100vw"`. Then the label (`Eyebrow`, `mt-4`) and the name (H3, `mt-2 text-xl font-semibold`). Cards don't link anywhere. The images lazy-load (the default) and are never preloaded, because they're below the fold.
 
 ## Animation: Locked
 - Transitions are limited to colour, background and border (`transition-colors`), at 150ms or less, ease-out.
@@ -144,6 +152,7 @@ One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anch
 - The global `prefers-reduced-motion: reduce` guard turns off transitions, animations and smooth scrolling.
 
 ## Responsive: Locked
+- Header nav links are `min-w-11 justify-center`, so short labels such as "Work" still get a 44×44px target (Phase 6 cycle 7).
 - Build mobile-first, using Tailwind's default breakpoints:
   - Mobile is the base, below 640px.
   - Tablet is `sm`/`md`, from 640 to 1023px.
@@ -154,10 +163,11 @@ One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anch
 ## Accessibility: Locked
 - WCAG 2.2 AA; follow the contrast table above.
 - Use the landmarks `header`, `nav` (`aria-label="Main"` / `"Footer"`), `main` (`id="main"`) and `footer`, with exactly one `h1` and headings in order (h1 → h2 per section → h3).
-- A skip link, "Skip to content", goes to `#main`. It stays visually hidden until it gets focus.
+- A skip link, "Skip to content", goes to `#main`. It's the first focusable element on the page, placed before `<header>`. It stays visually hidden until it gets focus, then shows as a gold pill at the top left, above the sticky header.
 - Everything must work by keyboard, and focus must stay visible.
+- **Anchor targets get no `tabIndex`.** The cycle 3 idea was `tabIndex={-1}` on each section a nav link points to, so Next's router, which calls `focus()` on the hash target after scrolling, would move keyboard focus into it. A Chrome test in cycle 4 showed that `focus()` scrolls again and centres any section shorter than the viewport, instead of placing it under the header (201px instead of 64px at 1440). So anchor sections stay unfocusable. Keyboard focus stays on the clicked link, or returns to the top of the page from the mobile menu. That is a known issue in `docs/PROGRESS.md`, with a proposed fix for Phase 8.
 - **Focus ring:** `:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }` is set once in `globals.css`. It is gold on dark and black on light bands.
-- Images get meaningful `alt` text, or `alt=""` if they are decorative. Icon-only controls get an `aria-label`. The hero code panel is decorative (`aria-hidden="true"`), because the same information is in the text.
+- Images get meaningful `alt` text, or `alt=""` if they are decorative. Icon-only controls get an `aria-label`.
 - Tap targets are at least 44×44px, and `prefers-reduced-motion` is respected.
 
 ## Implementation
@@ -167,7 +177,7 @@ Everything lives in **`src/app/globals.css`** (Tailwind 4.3, CSS-first, no `tail
 |---|---|---|
 | `@import "tailwindcss" source("..")` | Tailwind, scanning `src/` only | Otherwise class names quoted in `docs/` and `CLAUDE.md` would be turned into CSS. |
 | `@theme { --color-*: initial; … }` | The 7 raw palette colours (`--color-primary`, `--color-black`, …) | `initial` wipes Tailwind's default palette, so `bg-blue-500` generates nothing. |
-| `:root { … }` | The guide §4 semantic variables, with dark values; `color-scheme: dark` | The one place to change the theme |
+| `:root { … }` | The guide §4 semantic variables, with dark values; `--accent`; the `--header-height` layout variable; `color-scheme: dark` | The one place to change the theme |
 | `.theme-light { … }` (in `@layer components`) | The same variables with light values, plus the band's own background and text colour | One class turns a section into a light band. Utilities still override it. |
 | `@theme inline { … }` | Maps `--color-background: var(--background)` and the rest, plus `--font-sans`/`--font-mono` → Geist | `inline` makes `.bg-background` compile to `background-color: var(--background)`, which resolves per element, so it flips inside `.theme-light`. |
 | `@layer base` | `html` scroll padding and smooth scrolling; the `body` background and colour; the global `:focus-visible` outline (`var(--accent)`); the `prefers-reduced-motion` guard | Tailwind's preflight applies Geist to `html` through `--font-sans`. |
@@ -182,7 +192,9 @@ Because the mapping is `inline`, the `--color-background` variables don't appear
 |---|---|
 | `Container` | `children`, `className?`: the page container |
 | `ButtonLink` | `href`, `variant?: "primary" \| "secondary"` (default `primary`), `size?: "md" \| "lg"` (default `lg`), plus any `<a>` prop. `/…` hrefs use `next/link`; others (`mailto:`) use `<a>`. |
-| `SectionHeading` | `eyebrow`, `title`, `intro?`, `id?`. The `id` goes on the `h2`, for the section's `aria-labelledby`. |
+| `SectionHeading` | `eyebrow?`, `title`, `intro?`, `id?`. The `id` goes on the `h2`, for the section's `aria-labelledby`. Without an eyebrow the H2 has no top margin (the CTA). The intro is `max-w-prose`. |
+| `Eyebrow` | `children`, `className?`: the eyebrow/label style above. Used by `SectionHeading` and the Hero, and later the portfolio card labels (added in cycle 3). |
+| `FeatureItem` | `marker` (icon or step number), `title`, `description`, `className?` (the wrapper: card or top border). Renders an `<li>` with the marker, the H3 and one line, so use it inside `<ul>`/`<ol>`. Used by Services and Why, and later Process (added in cycle 5). |
 | `Wordmark` | `className?`: renders `site.name` |
 | `icons.tsx` | `BagIcon`, `LayoutIcon`, `CodeIcon`, `PenIcon`, `CheckIcon`, `MenuIcon`, `CloseIcon`, and `serviceIcons[name]`. They're `aria-hidden` by default and have **no default size**: always pass `size-5` or `size-6`. |
 

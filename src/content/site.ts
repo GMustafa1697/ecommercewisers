@@ -108,14 +108,67 @@ export const processSection = {
 export const workSection = {
   eyebrow: "Work",
   title: "Selected projects",
-  // Filled in cycle 7, only with projects the user confirms one by one.
-  projects: [] as Project[],
+  // Each project confirmed by the user, one by one, as their work (cycle 7). Images are 4:5 top-of-page crops.
+  projects: [
+    {
+      name: "Ella — Auto parts store",
+      label: "Shopify theme customisation",
+      image: {
+        src: "/images/work/ella-auto-parts.webp",
+        width: 800,
+        height: 1000,
+        alt: "Ella auto parts store homepage",
+      },
+    },
+    {
+      name: "Ella — Jewelry store",
+      label: "Shopify theme customisation",
+      image: {
+        src: "/images/work/ella-jewelry.webp",
+        width: 370,
+        height: 463,
+        alt: "Ella jewelry store homepage",
+      },
+    },
+    {
+      name: "Ecomus — Activewear store",
+      label: "Shopify theme customisation",
+      image: {
+        src: "/images/work/ecomus-activewear.webp",
+        width: 800,
+        height: 1000,
+        alt: "Ecomus activewear store homepage",
+      },
+    },
+    {
+      name: "Home Gym",
+      label: "Custom development",
+      image: { src: "/images/work/home-gym.webp", width: 370, height: 463, alt: "Home Gym store homepage" },
+    },
+    {
+      name: "Layout 22",
+      label: "UI / Layout system",
+      image: {
+        src: "/images/work/layout-22.webp",
+        width: 540,
+        height: 675,
+        alt: "Layout 22 bike store homepage",
+      },
+    },
+  ] satisfies Project[],
 };
 
 export const ctaSection = {
   title: "Have a store to build or improve?",
   text: "Tell us what you're working on and we'll reply with next steps.",
   button: { label: startProject.label, href: contactHref } satisfies Cta,
+};
+
+export const footerSection = {
+  navTitle: "Navigation",
+  servicesTitle: "Services",
+  contactTitle: "Contact",
+  rights: "All rights reserved.",
 };
 
 const allNav: NavItem[] = [
