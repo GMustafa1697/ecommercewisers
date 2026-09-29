@@ -3,9 +3,8 @@
 _Last updated: 2026-09-30_
 
 ## Now
-- **Current phase:** Phase 6, Homepage development
-- **Current task:** **all 8 homepage sections are built** (cycles 2–9: Header, Hero, Services, Why ecommercewisers, Process, Portfolio Preview, CTA, Footer). `npm run check` passes and the rule sweeps are clean. None is committed. They will share one commit, `Phase 6: homepage sections`. **Waiting for `/ew-review` of cycles 3–9, the open cycle 2 review items (see In progress), and your commit approval.**
-- **Next task:** close Phase 6: `/ew-review`, fix, then commit. Then Phase 7 (Testing).
+- **Current phase:** Phase 8, Review and polish (you asked to run all phases: Phase 6 committed, Phase 7 done)
+- **Next task:** Phase 8 fixes, then Phase 9. Phase 10 (deploy) is blocked on a host choice and the real email; Phase 11 needs your explicit approval and content.
 
 ## Completed
 - **Phase 0, Project understanding:** see the Project snapshot below. Nothing changed.
@@ -157,8 +156,21 @@ _Last updated: 2026-09-30_
   - no console warnings or errors
   - rule sweeps clean: no "premium", no raw hex in TS/TSX, no gradients, `dark:` or palette classes, no `text-primary` text, no `priority`, no old brand spelling, no tracked secrets; `example.com` only in `site.ts` (the placeholder)
 
+- **Phase 6 committed** as `Phase 6: homepage sections` (2026-09-30), staged by path. Your `.gitignore` edit and `.claude/plans/` were left out.
+- **Phase 7, Testing** (2026-09-30), on the **production build** (`next start`) in headless Chrome:
+  - Performance, on a Lighthouse-like mobile profile (412px, 150 ms RTT, 1.6 Mbps, 4× CPU, cold cache):
+    - first contentful paint = largest contentful paint = **1.5 s** (the hero H1)
+    - cumulative layout shift **0**
+    - about 770 ms of long tasks (React and the Next runtime starting up; see Known issues)
+    - 240 KB in 15 requests: 143 KB scripts, 52 KB fonts, 5 KB CSS, 0 KB images on load (the portfolio images lazy-load)
+  - Contrast: every visible text element (67 at 375, 73 at 1440) passes WCAG AA. The lowest is 5.47:1 (muted on #111).
+  - A11y basics: no duplicate IDs, every link and button has a name, every image has `alt`, the `aria-controls` target exists, `lang="en"`, the title is set
+  - Keyboard: the full-page Tab order with focus rings (21 stops); the mobile menu opens with Enter or Space, Tab goes into its links, and Escape closes it and returns focus to the toggle
+  - No console warnings or errors, in dev or production
+  - Lighthouse itself wasn't run: it needs the `lighthouse` package, and adding it needs your OK
+
 ## In progress
-- Phase 6, cycles 2–9: waiting for review and commit (one shared commit, your choice).
+- Phase 8, Review and polish.
 - Open from the cycle 2 (Header) review, not fixed yet:
   - minor: the mobile menu panel has no max height, so on short screens its CTA can sit below the viewport (`MobileNav.tsx`)
   - minor: the mobile menu doesn't close when focus or a tap moves outside it (needs your approval; the plan said link click or Escape only)
@@ -204,6 +216,7 @@ _Last updated: 2026-09-30_
 - **Placeholder email (blocks deploy):** the CTA and Footer use `hello@example.com` until you send the real address. Social links stay hidden until you provide them.
 - **Low-res portfolio images:** Ella — Jewelry store and Home Gym (370px wide) and Layout 22 (540px) look soft on phones and high-resolution screens. Send larger screenshots, about 1600px wide, and I'll recrop them the same way.
 - **In-page links don't move keyboard focus:** after "Services", "Explore services" and the other in-page links, focus stays on the clicked link (desktop) or returns to the top of the page (mobile menu), so the next Tab doesn't go into the section. Proposed fix, for Phase 8 and only with your approval: use plain `<a href="/#…">` for in-page links in the Header, `MobileNav` and `ButtonLink`, instead of `next/link`. The browser then moves focus without re-scrolling. This needs an exception to the CLAUDE.md "next/link for internal links" rule.
+- **JavaScript start-up cost:** on a throttled phone, about 770 ms of long tasks run while React and the Next.js runtime start (143 KB of script). The homepage itself has one small client component. It doesn't delay content (LCP 1.5 s), but Lighthouse would likely score Total Blocking Time as "needs improvement". Measure again with real Lighthouse after deploy.
 - **Boilerplate README:** `README.md` is still the create-next-app text.
 - **Tooling warnings:**
   - npm flags ESLint 9.39.5 as deprecated. It is the version `eslint-config-next` 16.3.6 uses; leave it until Next supports ESLint 10.

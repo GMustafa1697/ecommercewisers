@@ -52,10 +52,10 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 - [x] 9. Footer: wordmark, nav, services, contact, copyright
 
 ## Phase 7: Testing
-- [ ] `npm run check` and the `/ew-test` sweeps are clean
-- [ ] Responsive at 320 / 375 / 768 / 1024 / 1440
-- [ ] Keyboard, focus, landmarks and contrast
-- [ ] No console errors; Lighthouse performance and a11y checked
+- [x] `npm run check` and the `/ew-test` sweeps are clean
+- [x] Responsive at 320 / 375 / 768 / 1024 / 1440
+- [x] Keyboard, focus, landmarks and contrast
+- [x] No console errors; performance and a11y checked on the production build. Lighthouse itself was **not** run: it needs the `lighthouse` package (your OK). Equivalent checks were done in headless Chrome (see `PROGRESS.md` → Phase 7).
 
 ## Phase 8: Review and polish
 - [ ] `/ew-review` with no open blocker or major findings
