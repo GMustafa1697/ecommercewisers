@@ -3,8 +3,8 @@
 _Last updated: 2026-09-30_
 
 ## Now
-- **Current phase:** Phase 8, Review and polish (you asked to run all phases: Phase 6 committed, Phase 7 done)
-- **Next task:** Phase 8 fixes, then Phase 9. Phase 10 (deploy) is blocked on a host choice and the real email; Phase 11 needs your explicit approval and content.
+- **Current phase:** Phase 9, Git (you asked to run all phases: Phases 6, 7 and 8 are done and committed)
+- **Next task:** your decisions: the `homepage-v1` tag and a remote (Phase 9); the host and the real email (Phase 10, deploy); approval and content for the future pages (Phase 11).
 
 ## Completed
 - **Phase 0, Project understanding:** see the Project snapshot below. Nothing changed.
@@ -169,14 +169,19 @@ _Last updated: 2026-09-30_
   - No console warnings or errors, in dev or production
   - Lighthouse itself wasn't run: it needs the `lighthouse` package, and adding it needs your OK
 
+- **Phase 8, Review and polish** (2026-09-30). A review of the whole committed homepage plus the open cycle 2 items found no blocker or major issues. Fixed:
+  - duplicate markup: new `ui/Section.tsx` (anchor, label, padding, container; used by 5 sections) and `ui/SectionGrid.tsx` (the 1/2/4 list; used by 4). The rendered `<main>` HTML was byte-for-byte identical before and after the refactor.
+  - `MobileNav`: the panel is capped at the viewport height minus the header and scrolls (the CTA is reachable at 568×320). It now also closes on a tap outside and when focus Tabs out of it. **That extends the approved behaviour ("link click or Escape"); say if you want it reverted.**
+  - `Header`: dropped the stray `rounded-sm` on the wordmark link; `MobileNav` is imported through `@/`
+  - `ButtonLink`: `//host` URLs are no longer treated as internal (the cycle 1 deferred nit)
+  - `FeatureItem`: `text-pretty` on the body, so no lone word sits on the last line
+  - `DESIGN.md`: the header and mobile nav link styles are documented (no visual change), the skip link is described as "button-style" instead of "pill", and the new components and menu behaviour are added
+  - Checked: `npm run check`, the rule sweeps, the whole-page check (no overflow, targets, headings, gold, anchors at 64px, 21 focus-ringed Tab stops, clean console) and the mobile menu (tap outside/inside, Tab out, link tap, landscape scrolling)
+  - Left open for your decision: keyboard focus after in-page links (needs a CLAUDE.md exception). Logged, not built: a 404 page (outside the milestone).
+
 ## In progress
-- Phase 8, Review and polish.
-- Open from the cycle 2 (Header) review, not fixed yet:
-  - minor: the mobile menu panel has no max height, so on short screens its CTA can sit below the viewport (`MobileNav.tsx`)
-  - minor: the mobile menu doesn't close when focus or a tap moves outside it (needs your approval; the plan said link click or Escape only)
-  - minor: the header and mobile nav link styles aren't the DESIGN.md text-link style (document them, needs approval)
-  - nits: `rounded-sm` only on the wordmark link; "gold pill" wording in DESIGN.md Accessibility; the relative `./MobileNav` import; ~~recheck the header at 768 and the "Work" link width in cycle 7~~ done in cycle 7; the skip link has no `#main` on Next's default 404
-  - scope: `.gitignore` no longer ignores `.claude/plans/`, which is not part of these cycles. Stage by path at commit time.
+- Phase 9, Git: commits done per phase; the tag and a remote need your decision.
+- Your `.gitignore` edit (it no longer ignores `.claude/plans/`) and `.claude/plans/` are still uncommitted, because they aren't part of any phase. Tell me whether to commit them. If so, rename the plan file first, since its name has the old "ecomwiser" spelling.
 
 ## Decisions log
 | Date | Area | Decision |
@@ -216,6 +221,7 @@ _Last updated: 2026-09-30_
 - **Placeholder email (blocks deploy):** the CTA and Footer use `hello@example.com` until you send the real address. Social links stay hidden until you provide them.
 - **Low-res portfolio images:** Ella — Jewelry store and Home Gym (370px wide) and Layout 22 (540px) look soft on phones and high-resolution screens. Send larger screenshots, about 1600px wide, and I'll recrop them the same way.
 - **In-page links don't move keyboard focus:** after "Services", "Explore services" and the other in-page links, focus stays on the clicked link (desktop) or returns to the top of the page (mobile menu), so the next Tab doesn't go into the section. Proposed fix, for Phase 8 and only with your approval: use plain `<a href="/#…">` for in-page links in the Header, `MobileNav` and `ButtonLink`, instead of `next/link`. The browser then moves focus without re-scrolling. This needs an exception to the CLAUDE.md "next/link for internal links" rule.
+- **Skip link on the 404 page:** the Header (with its "Skip to content" → `#main` link) also renders on Next's default 404 page, which has no `#main`. Fixing it needs a custom `not-found.tsx`, which is outside the homepage milestone.
 - **JavaScript start-up cost:** on a throttled phone, about 770 ms of long tasks run while React and the Next.js runtime start (143 KB of script). The homepage itself has one small client component. It doesn't delay content (LCP 1.5 s), but Lighthouse would likely score Total Blocking Time as "needs improvement". Measure again with real Lighthouse after deploy.
 - **Boilerplate README:** `README.md` is still the create-next-app text.
 - **Tooling warnings:**

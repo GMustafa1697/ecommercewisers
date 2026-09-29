@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { Wordmark } from "@/components/ui/Wordmark";
+import { MobileNav } from "@/components/sections/MobileNav";
 import { nav, startProject } from "@/content/site";
-import { MobileNav } from "./MobileNav";
 
 export function Header() {
   return (
@@ -18,7 +18,7 @@ export function Header() {
       <header className="sticky top-0 z-50 border-b border-border bg-background">
         <Container className="flex h-(--header-height) items-center justify-between gap-6">
           {/* "/#top": a plain "/" keeps the scroll position when already on the homepage. */}
-          <Link href="/#top" className="flex h-11 items-center rounded-sm">
+          <Link href="/#top" className="flex h-11 items-center">
             <Wordmark />
           </Link>
 

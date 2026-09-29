@@ -58,12 +58,12 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 - [x] No console errors; performance and a11y checked on the production build. Lighthouse itself was **not** run: it needs the `lighthouse` package (your OK). Equivalent checks were done in headless Chrome (see `PROGRESS.md` → Phase 7).
 
 ## Phase 8: Review and polish
-- [ ] `/ew-review` with no open blocker or major findings
-- [ ] Duplication removed, spacing and type consistent with `DESIGN.md`
+- [x] `/ew-review` with no open blocker or major findings
+- [x] Duplication removed, spacing and type consistent with `DESIGN.md`
 
 ## Phase 9: Git and version control
-- [ ] Milestone committed, tree clean, no secrets tracked
-- [ ] Tag `homepage-v1` (proposed); decide on a remote
+- [x] Milestone committed (one commit per phase), no secrets tracked. Only your `.gitignore` edit and `.claude/plans/` are left uncommitted, pending your call.
+- [ ] Tag `homepage-v1` (proposed); decide on a remote. **Your decision.**
 
 ## Phase 10: Deployment
 - [ ] Host chosen (to be decided), env vars set on the host

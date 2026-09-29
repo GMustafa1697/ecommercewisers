@@ -18,7 +18,7 @@ type ButtonLinkProps = Omit<ComponentPropsWithoutRef<"a">, "href"> & {
   size?: keyof typeof sizes;
 };
 
-/** A link styled as a button. Internal hrefs ("/…") use next/link; mailto: and external ones use <a>. */
+/** A link styled as a button. Internal hrefs ("/…", not "//host") use next/link; mailto: and external ones use <a>. */
 export function ButtonLink({
   href,
   variant = "primary",
@@ -33,7 +33,7 @@ export function ButtonLink({
     className,
   );
 
-  if (href.startsWith("/")) {
+  if (href.startsWith("/") && !href.startsWith("//")) {
     return <Link href={href} className={classes} {...props} />;
   }
   return <a href={href} className={classes} {...props} />;

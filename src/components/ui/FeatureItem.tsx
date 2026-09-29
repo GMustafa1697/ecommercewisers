@@ -15,7 +15,7 @@ export function FeatureItem({ marker, title, description, className }: FeatureIt
     <li className={className}>
       {marker}
       <h3 className="mt-4 text-xl font-semibold">{title}</h3>
-      <p className="mt-2 text-base leading-relaxed text-muted">{description}</p>
+      <p className="mt-2 text-base leading-relaxed text-pretty text-muted">{description}</p>
     </li>
   );
 }

@@ -102,7 +102,9 @@ One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anch
 |---|---|---|
 | Primary | `bg-primary text-primary-foreground hover:bg-primary/90` | The main CTA. One per view. The same on dark and light bands. |
 | Secondary | `border border-border text-foreground hover:border-muted hover:bg-surface` | The header CTA and the second hero CTA. The border brightens on hover, because #111 on #000 alone is barely visible (changed in Phase 6 cycle 1, approved). |
-| Text link | `text-foreground underline-offset-4 hover:underline` | Inline, nav and footer links |
+| Text link | `text-foreground underline-offset-4 hover:underline` | Inline and footer links |
+| Header nav link | `inline-flex h-11 min-w-11 items-center justify-center text-sm text-muted hover:text-foreground` | Desktop header nav. Muted, so the header CTA stays the focal point (documented in Phase 8). |
+| Mobile menu link | `flex h-12 items-center text-base font-medium text-foreground` | Full-width rows in `MobileNav`, split by `divide-border` |
 
 | Size | Classes | Where |
 |---|---|---|
@@ -114,7 +116,7 @@ One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anch
 
 ## Cards: Locked
 - `bg-surface border border-border rounded-lg p-6`. On a light band this becomes a white card with a light border automatically.
-- The icon is `size-6 text-accent`, then the title (H3, `mt-4 text-xl font-semibold`), then the body (`mt-2 text-base leading-relaxed text-muted`). Card body text stays `text-base` at every width, because 4-column cards are only about 200px wide inside.
+- The icon is `size-6 text-accent`, then the title (H3, `mt-4 text-xl font-semibold`), then the body (`mt-2 text-base leading-relaxed text-pretty text-muted`; `text-pretty` avoids a lone word on the last line). Card body text stays `text-base` at every width, because 4-column cards are only about 200px wide inside.
 - No shadows on dark. On light bands a subtle `shadow-sm` is optional.
 - **CTA panel:** `flex flex-col gap-8 rounded-lg border border-border bg-surface p-8 md:flex-row md:items-center md:justify-between md:p-12`. It holds `SectionHeading` (title and intro, no eyebrow) and the primary `lg` button (`shrink-0`), which is full width on phones and beside the text from `md`.
 - **Footer:** `<footer className="border-t border-border bg-surface">` with `py-12 md:py-16` and a `grid gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8`. The first column is the `Wordmark` plus `site.description` (`text-sm text-muted`), then three `FooterColumn`s: an H2 title (`text-sm text-muted`) over a list of text links (`inline-flex min-h-11 min-w-11 items-center text-sm text-foreground underline-offset-4 hover:underline`, for a 44×44px target). A bottom row sits on `border-t border-border`: "© {year} ecommercewisers. All rights reserved." The year is set at build time.
@@ -158,12 +160,12 @@ One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anch
   - Tablet is `sm`/`md`, from 640 to 1023px.
   - Desktop is `lg`+, from 1024px up.
 - Check at 320, 375, 768, 1024 and 1440 px. There must be no horizontal scroll at any of these widths.
-- Nav: inline links from `md`, and a disclosure menu below `md` (`MobileNav`) with a toggle button that has `aria-expanded` and `aria-controls`. The menu closes on a link click or Escape.
+- Nav: inline links from `md`, and a disclosure menu below `md` (`MobileNav`) with a toggle button that has `aria-expanded` and `aria-controls`. The menu closes on a link click, Escape (focus returns to the toggle), a tap outside it, or focus Tabbing out of it (the last two were added in Phase 8). The panel is capped at `100dvh` minus the header and scrolls, so the whole menu is reachable on a phone in landscape.
 
 ## Accessibility: Locked
 - WCAG 2.2 AA; follow the contrast table above.
 - Use the landmarks `header`, `nav` (`aria-label="Main"` / `"Footer"`), `main` (`id="main"`) and `footer`, with exactly one `h1` and headings in order (h1 → h2 per section → h3).
-- A skip link, "Skip to content", goes to `#main`. It's the first focusable element on the page, placed before `<header>`. It stays visually hidden until it gets focus, then shows as a gold pill at the top left, above the sticky header.
+- A skip link, "Skip to content", goes to `#main`. It's the first focusable element on the page, placed before `<header>`. It stays visually hidden until it gets focus, then shows as a gold, button-style link (`rounded-md`) at the top left, above the sticky header.
 - Everything must work by keyboard, and focus must stay visible.
 - **Anchor targets get no `tabIndex`.** The cycle 3 idea was `tabIndex={-1}` on each section a nav link points to, so Next's router, which calls `focus()` on the hash target after scrolling, would move keyboard focus into it. A Chrome test in cycle 4 showed that `focus()` scrolls again and centres any section shorter than the viewport, instead of placing it under the header (201px instead of 64px at 1440). So anchor sections stay unfocusable. Keyboard focus stays on the clicked link, or returns to the top of the page from the mobile menu. That is a known issue in `docs/PROGRESS.md`, with a proposed fix for Phase 8.
 - **Focus ring:** `:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }` is set once in `globals.css`. It is gold on dark and black on light bands.
@@ -194,7 +196,9 @@ Because the mapping is `inline`, the `--color-background` variables don't appear
 | `ButtonLink` | `href`, `variant?: "primary" \| "secondary"` (default `primary`), `size?: "md" \| "lg"` (default `lg`), plus any `<a>` prop. `/…` hrefs use `next/link`; others (`mailto:`) use `<a>`. |
 | `SectionHeading` | `eyebrow?`, `title`, `intro?`, `id?`. The `id` goes on the `h2`, for the section's `aria-labelledby`. Without an eyebrow the H2 has no top margin (the CTA). The intro is `max-w-prose`. |
 | `Eyebrow` | `children`, `className?`: the eyebrow/label style above. Used by `SectionHeading` and the Hero, and later the portfolio card labels (added in cycle 3). |
-| `FeatureItem` | `marker` (icon or step number), `title`, `description`, `className?` (the wrapper: card or top border). Renders an `<li>` with the marker, the H3 and one line, so use it inside `<ul>`/`<ol>`. Used by Services and Why, and later Process (added in cycle 5). |
+| `FeatureItem` | `marker` (icon or step number), `title`, `description`, `className?` (the wrapper: card or top border). Renders an `<li>` with the marker, the H3 and one line, so use it inside `<ul>`/`<ol>`. Used by Services, Why and Process (added in cycle 5). |
+| `Section` | `id`, `light?`, `children`: a homepage section after the Hero. It renders `<section id aria-labelledby="{id}-title">` with `py-16 md:py-24` (plus `theme-light` when `light`) and the `Container`. The section's heading must carry `id="{id}-title"` (added in Phase 8). |
+| `SectionGrid` | `children`, `ordered?`: the `mt-12` 1 / 2 / 4-column list under a heading (`grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-4`), a `<ul>`, or an `<ol>` when `ordered` (Process). Used by Services, Why, Process and Portfolio (added in Phase 8). |
 | `Wordmark` | `className?`: renders `site.name` |
 | `icons.tsx` | `BagIcon`, `LayoutIcon`, `CodeIcon`, `PenIcon`, `CheckIcon`, `MenuIcon`, `CloseIcon`, and `serviceIcons[name]`. They're `aria-hidden` by default and have **no default size**: always pass `size-5` or `size-6`. |
 
