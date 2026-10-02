@@ -33,7 +33,7 @@ export function PortfolioPreview() {
           // One bordered card per project (your reference image): the screenshot edge to edge on top, then
           // the label and name. h-full keeps every card the same height. CSS-only hover scroll, so
           // Splide's loop clones get it too; motion-safe: none for reduced motion.
-          <div key={project.name} className="group h-full overflow-hidden rounded-lg border border-border bg-background">
+          <div key={project.name} className="group h-full overflow-hidden rounded-lg border border-border bg-background transition-all duration-300 ease-out hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg motion-reduce:transition-colors motion-reduce:hover:translate-y-0">
             <Image
               src={project.image.src}
               width={project.image.width}

@@ -109,6 +109,12 @@
     outline-offset: 2px;
   }
 
+  /* Gold text selection, matching the accent. */
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-black);
+  }
+
   /* Transitions are 0s, not the usual 0.01ms: with transition-property's default `all`, a duration
    * above 0 turns every style change on every element into a transition, so a script that sets a
    * style and measures at once reads the old value (Splide's phone carousel landed half a slide off).

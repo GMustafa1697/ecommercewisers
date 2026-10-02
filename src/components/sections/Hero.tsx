@@ -14,7 +14,7 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="theme-dark relative -mt-(--header-height) overflow-hidden pt-[calc(var(--header-height)+5rem)] pb-20 md:pt-[calc(var(--header-height)+8rem)] md:pb-32"
+      className="theme-dark relative -mt-(--header-height) overflow-hidden pt-[calc(var(--header-height)+6rem)] pb-24 md:pt-[calc(var(--header-height)+10rem)] md:pb-40"
     >
       {/* A faint dot grid: white at 10%, decorative, drawn with an SVG pattern. */}
       <svg aria-hidden="true" className="pointer-events-none absolute inset-0 size-full text-foreground/10">
@@ -27,6 +27,8 @@ export function Hero() {
       </svg>
       <Container className="relative">
         <div className="mx-auto max-w-5xl text-center">
+          {/* A hairline gold rule over the eyebrow: a quiet, confident mark. */}
+          <div aria-hidden="true" className="mx-auto mb-6 h-px w-12 bg-primary" />
           <Eyebrow className="mx-auto">{eyebrow}</Eyebrow>
           <h1
             id="hero-title"
@@ -38,7 +40,7 @@ export function Hero() {
           </h1>
           {/* 800px: on desktop the two lines break as in your reference, before the dash. */}
           <p className="mx-auto mt-6 max-w-200 text-base leading-relaxed text-muted lg:text-lg">{intro}</p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:justify-center">
             <ButtonLink href={startProject.href}>{startProject.label}</ButtonLink>
             <ButtonLink href={secondaryCta.href} variant="secondary">
               {secondaryCta.label}

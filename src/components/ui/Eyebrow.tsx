@@ -5,7 +5,7 @@ const variants = {
   // Every section eyebrow (SectionHeading) and the Hero's (2026-10-02, your screenshot): accent text on
   // a gold-tinted chip. Gold on the tint over the dark background is 5.8:1; on the white page the
   // accent is black.
-  chip: "w-fit rounded-md bg-primary/15 px-2.5 py-1 font-medium text-accent",
+  chip: "w-fit rounded-md bg-primary/15 px-2.5 py-1 font-medium text-accent ring-1 ring-inset ring-primary/25",
   // Small titles over a value or a list: the Contact email, the footer's column titles.
   label: "font-medium text-muted",
 } as const;

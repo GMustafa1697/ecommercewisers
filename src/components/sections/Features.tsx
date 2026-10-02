@@ -24,7 +24,7 @@ export function Features() {
             }
             title={item.title}
             description={item.description}
-            className="rounded-lg border border-border bg-surface p-6 sm:grid sm:grid-cols-[auto_1fr] sm:gap-x-6 md:p-8 sm:[&>h3]:mt-0 sm:[&>h3]:self-end sm:[&>p]:self-start"
+            className="rounded-lg border border-border bg-surface p-6 transition-all duration-300 ease-out hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg motion-reduce:transition-colors motion-reduce:hover:translate-y-0 sm:grid sm:grid-cols-[auto_1fr] sm:gap-x-6 md:p-8 sm:[&>h3]:mt-0 sm:[&>h3]:self-end sm:[&>p]:self-start"
           />
         ))}
       </ul>

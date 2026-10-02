@@ -3,8 +3,8 @@ import type { ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/cn";
 
 const variants = {
-  primary: "bg-primary text-primary-foreground hover:bg-primary/90",
-  secondary: "border border-border text-foreground hover:border-muted hover:bg-surface",
+  primary: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:shadow-md",
+  secondary: "border border-border bg-transparent text-foreground hover:border-muted hover:bg-surface",
 } as const;
 
 const sizes = {
@@ -20,7 +20,7 @@ type ButtonStyle = {
 /** The button classes, shared by ButtonLink and real <button>s (the contact form's submit). */
 export function buttonClass({ variant = "primary", size = "lg" }: ButtonStyle = {}) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors ease-out",
+    "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 ease-out hover:-translate-y-px active:translate-y-0 active:shadow-none motion-reduce:transition-colors motion-reduce:hover:translate-y-0",
     variants[variant],
     sizes[size],
   );

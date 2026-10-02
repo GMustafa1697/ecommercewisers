@@ -3,7 +3,19 @@
 _Last updated: 2026-10-02_
 
 ## Now
-- **Last task:** the first push to GitHub (2026-10-02, your request "push on github"). Before it came the error scan (reinstalled `node_modules`, moved the backup copy out of the project), the Portfolio at 4 cards per row, the Portfolio's bordered cards with arrows, the Services deck hold, the move of content to `src/data/` with flat sections, the second code audit, the logo, the Portfolio redesign, the first code audit, the design refinement pass and the eyebrow chips.
+- **Where we stopped (2026-10-02, your request "save all code we start tomorrow"):** a polish pass, saved as the work-in-progress commit `WIP: hover and spacing polish (unreviewed)`. `npm run check` passes, but it hasn't been through `/ew-test` or `/ew-review`, the hand check at 375 / 768 / 1024 / 1440, or DESIGN.md.
+  - The changes:
+    - a gold `::selection` (`globals.css`)
+    - a lift + shadow + accent border on hover for the Features and Portfolio cards
+    - a shadow and a 1px lift on the buttons (`ButtonLink`)
+    - a `ring-primary/25` on the eyebrow chip
+    - more Hero padding, a gold hairline over its eyebrow and wider CTA spacing
+  - **Check first tomorrow:**
+    - DESIGN.md says "No shadows inside `.theme-dark`", but the dark Portfolio cards and the Hero's primary button now have one.
+    - DESIGN.md's Buttons table still lists the old classes.
+    - The Features cards were "no shadow".
+    - Keep, change or revert each change, then update DESIGN.md.
+- **Before that:** the first push to GitHub (2026-10-02, your request "push on github"). Before it came the error scan (reinstalled `node_modules`, moved the backup copy out of the project), the Portfolio at 4 cards per row, the Portfolio's bordered cards with arrows, the Services deck hold, the move of content to `src/data/` with flat sections, the second code audit, the logo, the Portfolio redesign, the first code audit, the design refinement pass and the eyebrow chips.
 - **Committed and pushed:** everything since Phase 8 is one commit, `Homepage: new sections, contact form and review fixes` (one commit, because the docs, `globals.css` and `page.tsx` carry changes from several sections at once), pushed to `origin/main`, the private repo `GMustafa1697/ecommercewisers`. GitHub's own initial commit (a `.gitattributes` with `* text=auto`) was merged in, not overwritten. The commit holds:
   - the codebase review and its fixes, the Why cards' hover, the Contact section (it replaced the CTA), the cards centred on phones, the carousel dots
   - the Process work: the animation, the redesign in sync, the dashboard and final animations, the phone animation, the list removed on phones
@@ -11,7 +23,7 @@ _Last updated: 2026-10-02_
   - the inline data structure (every section owns its copy; `site.ts` removed), your `.gitignore` edit and `.claude/plans/` (one plan renamed from the old "ecomwiser" spelling to `claude-reference-old-repo-claude-code-async-music.md`)
   - the error scan's docs, the deletion of `.claude/reference/`'s guide from the tree (now gitignored; it stays in the Phase 2 commit's history)
   - Left out: `.claude/plans/CLAUDE.md`, a saved GitHub page holding your GitHub login, an email and session values (never commit secrets; now gitignored), and `ecommercewisers/`, an untracked clone of the GitHub repo that's no longer needed. Both stay on disk.
-- **Next task:** your decisions: the `homepage-v1` tag (Phase 9); the host, the real email and the real review videos (Phase 10, deploy); approval and content for the future pages (Phase 11).
+- **Next task:** review the WIP polish above. Then your decisions: the `homepage-v1` tag (Phase 9); the host, the real email and the real review videos (Phase 10, deploy); approval and content for the future pages (Phase 11).
 
 ## Completed
 - **Phase 0, Project understanding:** see the Project snapshot below. Nothing changed.
