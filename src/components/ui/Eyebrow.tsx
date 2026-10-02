@@ -1,16 +1,24 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
+const variants = {
+  // Every section eyebrow (SectionHeading) and the Hero's (2026-10-02, your screenshot): accent text on
+  // a gold-tinted chip. Gold on the tint over the dark background is 5.8:1; on the white page the
+  // accent is black.
+  chip: "w-fit rounded-md bg-primary/15 px-2.5 py-1 font-medium text-accent",
+  // Small titles over a value or a list: the Contact email, the footer's column titles.
+  label: "font-medium text-muted",
+} as const;
+
 type EyebrowProps = {
   children: ReactNode;
+  variant?: keyof typeof variants;
+  /** The element: a paragraph, or an h2 where the label titles a group (the footer columns). */
+  as?: "p" | "h2";
   className?: string;
 };
 
-/** The small label above a heading: gold on dark, black on light bands (text-accent). */
-export function Eyebrow({ children, className }: EyebrowProps) {
-  return (
-    <p className={cn("font-mono text-xs uppercase tracking-widest text-accent", className)}>
-      {children}
-    </p>
-  );
+/** A small uppercase label: a gold-tinted chip above a heading, or a muted title over a value or list. */
+export function Eyebrow({ children, variant = "chip", as: Tag = "p", className }: EyebrowProps) {
+  return <Tag className={cn("text-xs uppercase tracking-widest", variants[variant], className)}>{children}</Tag>;
 }

@@ -8,60 +8,80 @@
  * Gold text only through text-accent.
  */
 
-/* 1. Official palette (guide §3). The first line wipes Tailwind's default
- *    colours, so blue, zinc and the other palette utilities generate nothing. */
+/* 1. Official palette (guide §3; rebalanced 2026-09-30 around the softer #222 black).
+ *    The first line wipes Tailwind's default colours, so blue, zinc and the
+ *    other palette utilities generate nothing. */
 @theme {
   --color-*: initial;
   --color-primary: #e6ac0e;
-  --color-black: #000000;
+  --color-black: #222222;
   --color-white: #ffffff;
   --color-light-gray: #f3f3f3;
-  --color-dark-surface: #111111;
-  --color-secondary-text: #8a8a8a;
-  --color-dark-border: #2a2a2a;
+  /* The dark values, used inside .theme-dark (the dark sections and the footer): surfaces sit above
+   * the #222 background, borders about 1.5:1 against it, and muted text passes AA on both (6.1:1
+   * and 5.2:1). */
+  --color-dark-surface: #2e2e2e;
+  --color-secondary-text: #a0a0a0;
+  --color-dark-border: #3d3d3d;
 }
 
-/* 2. Semantic variables (guide §4). The site is dark-first. */
+/* 2. Semantic variables (guide §4). The page is white with light-grey surfaces (2026-09-30; it was
+ *    dark-first), alternating with dark sections (.theme-dark). Gold is a fill only on white: gold
+ *    text on white is 2.0:1. The same light values form .theme-light: a white element inside a
+ *    dark section (the Services cards). */
+:root,
+.theme-light {
+  color-scheme: light;
+  --background: var(--color-white);
+  --foreground: var(--color-black);
+  --surface: var(--color-light-gray);
+  /* Black (#222) at 70%: about 5.9:1 on white and 5.6:1 on light grey. */
+  --muted: color-mix(in oklab, var(--color-black) 70%, transparent);
+  --border: color-mix(in oklab, var(--color-black) 12%, transparent);
+  /* Accent text and icons, and the focus ring: black here, gold only inside .theme-dark.
+   * Always use text-accent, never text-primary. */
+  --accent: var(--color-black);
+}
+
 :root {
-  color-scheme: dark;
-  --background: var(--color-black);
-  --foreground: var(--color-white);
-  --surface: var(--color-dark-surface);
-  --surface-muted: var(--color-light-gray);
   --primary: var(--color-primary);
   --primary-foreground: var(--color-black);
-  --muted: var(--color-secondary-text);
-  --border: var(--color-dark-border);
-  /* Gold text and the focus ring. Always use text-accent, never text-primary. */
-  --accent: var(--color-primary);
-  /* Layout: the sticky header's height, shared by the Header (h-(--header-height)) and scroll padding. */
-  --header-height: 4rem;
+  /* Layout: the sticky header's total height (a 0.75rem gap above the 3.5rem glass bar), shared by
+   * the header (h-(--header-height)), scroll padding and the sticky offsets below it. */
+  --header-height: 4.25rem;
 }
 
-/* 3. Light band: <section className="theme-light">. Same names, light values.
- *    Gold stays a fill only here: gold text on #F3F3F3 is 1.8:1. */
+/* 3. Scopes. Each sets the same names, so the semantic utilities follow it. Dark sections
+ *    alternate with the white ones: the Hero, the Platforms strip, <Section dark> (Services, Process,
+ *    Portfolio, Reviews) and the footer.
+ *    #2E2E2E surfaces, #A0A0A0 muted text; gold text is allowed here (7.8:1). */
 @layer components {
+  .theme-dark {
+    color-scheme: dark;
+    --background: var(--color-black);
+    --foreground: var(--color-white);
+    --surface: var(--color-dark-surface);
+    --muted: var(--color-secondary-text);
+    --border: var(--color-dark-border);
+    --accent: var(--color-primary);
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+
+  /* A white element inside a dark section: the light values (section 2) plus its own
+   * background and text colour. */
   .theme-light {
-    color-scheme: light;
-    --background: var(--color-light-gray);
-    --foreground: var(--color-black);
-    --surface: var(--color-white);
-    /* #8A8A8A is 3.1:1 on #F3F3F3, which fails AA; black at 70% is about 8.1:1 */
-    --muted: color-mix(in oklab, var(--color-black) 70%, transparent);
-    --border: color-mix(in oklab, var(--color-black) 12%, transparent);
-    --accent: var(--color-black);
     background-color: var(--background);
     color: var(--foreground);
   }
 }
 
 /* 4. Semantic utilities. `inline` makes them resolve var(--background) and the
- *    rest per element, so .theme-light overrides take effect. */
+ *    rest per element, so the scopes' overrides take effect. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
-  --color-surface-muted: var(--surface-muted);
   --color-primary-foreground: var(--primary-foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
@@ -83,20 +103,111 @@
     color: var(--foreground);
   }
 
-  /* Gold on dark, black on light bands: at least 3:1 everywhere (docs/DESIGN.md). */
+  /* Black on the white page, gold inside .theme-dark: at least 3:1 everywhere (docs/DESIGN.md). */
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
 
+  /* Transitions are 0s, not the usual 0.01ms: with transition-property's default `all`, a duration
+   * above 0 turns every style change on every element into a transition, so a script that sets a
+   * style and measures at once reads the old value (Splide's phone carousel landed half a slide off).
+   * Nothing here listens for transitionend, and Splide skips transitions under reduced motion. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition-duration: 0s !important;
       scroll-behavior: auto !important;
     }
+  }
+}
+
+/* 5. Services card stack (docs/DESIGN.md → Cards). The cards are sticky (Services.tsx). Here a covered
+ *    card shrinks 5% for each card that lands on it, so the stack reads as a deck. The list's view
+ *    timeline drives it, inset so it starts on the cards' sticky line. Scroll-driven, no JS; off for
+ *    reduced motion, on short viewports (no sticky there) and where unsupported (plain stack). */
+@layer components {
+  .services-stack {
+    /* The gap between cards (Services.tsx uses gap-(--stack-gap)), and how long the finished deck holds. */
+    --stack-gap: 1.5rem;
+    --stack-hold: 30vh;
+    /* The list's length after the last card: the gap plus the hold spacer below. */
+    --stack-tail: calc(var(--stack-gap) + var(--stack-hold));
+  }
+
+  @media (width >= 48rem) {
+    .services-stack {
+      --stack-gap: 2rem;
+    }
+  }
+
+  /* The hold (2026-10-02, your request): a spacer after the last card keeps the list, and so its sticky
+   * cards, on screen a little longer, so the finished deck stays pinned (front card, three strips
+   * above) before the section scrolls away. Only where the cards are sticky. */
+  @media (min-height: 36rem) {
+    .services-stack::after {
+      content: "";
+      flex: none;
+      height: var(--stack-hold);
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) and (min-height: 36rem) {
+      .services-stack {
+        view-timeline: --services-stack block;
+        view-timeline-inset: calc(var(--header-height) + 2rem) 0;
+      }
+      /* The ranges are fractions of the cards' length only (the list minus --stack-tail), so each card
+       * still shrinks as the next one lands, and the last landing ends the shrink, before the hold. */
+      .services-stack > li {
+        transform-origin: top;
+        animation: services-stack-shrink linear both;
+        animation-timeline: --services-stack;
+        animation-range:
+          exit-crossing calc(var(--stack-index) / var(--stack-count) * (100% - var(--stack-tail)))
+          exit-crossing calc((var(--stack-count) - 1) / var(--stack-count) * (100% - var(--stack-tail)));
+      }
+    }
+  }
+}
+
+@keyframes services-stack-shrink {
+  to {
+    scale: calc(1 - (var(--stack-count) - 1 - var(--stack-index)) * 0.05);
+  }
+}
+
+/* 6. The glass header (ScrollHeader.tsx). While scrolling down it slides up and fades out
+ *    (data-hidden); scrolling up brings it back. It stays shown while focus is inside it (keyboard
+ *    users) or the mobile menu is open. The reduced-motion guard makes the change instant. */
+@layer components {
+  .site-header {
+    transition:
+      translate 300ms ease-out,
+      opacity 300ms ease-out;
+  }
+
+  .site-header[data-hidden]:not(:focus-within):not(:has(#mobile-menu:not([hidden]))) {
+    translate: 0 -100%;
+    opacity: 0;
+  }
+
+  /* Focus entering a hidden header shows it at once: with the transition it would still be off-screen
+   * when the browser scrolls the focused link into view, and the page would jump. */
+  .site-header:focus-within {
+    transition: none;
+  }
+
+  /* The bar's own links and buttons sit inside html's scroll-padding band (the top --header-height),
+   * so focusing one made the browser scroll the page towards the top to "reveal" it, which it never
+   * can while the header is stuck. Shifting their scroll box just below the band stops the jump. The
+   * mobile menu's links already sit below the bar. */
+  .site-header :is(a, button):not(#mobile-menu *) {
+    scroll-margin-top: calc(-1 * var(--header-height));
+    scroll-margin-bottom: var(--header-height);
   }
 }

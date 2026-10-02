@@ -1,5 +1,4 @@
-import type { ComponentProps, ComponentType } from "react";
-import type { ServiceIconName } from "@/content/site";
+import type { ComponentProps } from "react";
 
 // The one file allowed to hold several components (CLAUDE.md). Generic line icons,
 // no brand marks. Callers always set the size (size-5 or size-6) and colour (text-accent).
@@ -58,6 +57,24 @@ export function PenIcon(props: IconProps) {
   );
 }
 
+export function BoltIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z" />
+    </Icon>
+  );
+}
+
+export function RouteIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="6" cy="6" r="2.25" />
+      <circle cx="18" cy="18" r="2.25" />
+      <path d="M8.25 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.75" />
+    </Icon>
+  );
+}
+
 export function CheckIcon(props: IconProps) {
   return (
     <Icon {...props}>
@@ -82,10 +99,52 @@ export function CloseIcon(props: IconProps) {
   );
 }
 
-/** Looks up a service's icon by the name stored in src/content/site.ts. */
-export const serviceIcons: Record<ServiceIconName, ComponentType<IconProps>> = {
-  bag: BagIcon,
-  layout: LayoutIcon,
-  code: CodeIcon,
-  pen: PenIcon,
-};
+export function ChevronLeftIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="m15 5-7 7 7 7" />
+    </Icon>
+  );
+}
+
+export function ChevronRightIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="m9 5 7 7-7 7" />
+    </Icon>
+  );
+}
+
+export function PlayIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M8 5.5v13a.5.5 0 0 0 .77.42l10-6.5a.5.5 0 0 0 0-.84l-10-6.5A.5.5 0 0 0 8 5.5Z" />
+    </Icon>
+  );
+}
+
+export function PauseIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M8 5v14M16 5v14" />
+    </Icon>
+  );
+}
+
+export function VolumeIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z" />
+      <path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11" />
+    </Icon>
+  );
+}
+
+export function VolumeOffIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z" />
+      <path d="m16 9.5 5 5M21 9.5l-5 5" />
+    </Icon>
+  );
+}

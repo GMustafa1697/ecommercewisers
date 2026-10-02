@@ -9,9 +9,12 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+// Not preloaded: it only sets the Process list's step numbers (shown from 640 to 1279px), so it loads
+// where it's used instead of on every visit.
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  preload: false,
 });
 
 export const metadata: Metadata = {

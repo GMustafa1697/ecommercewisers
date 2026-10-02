@@ -11,6 +11,8 @@
     "check": "npm run typecheck && npm run lint && npm run build"
   },
   "dependencies": {
+    "@lottiefiles/dotlottie-react": "0.19.16",
+    "@splidejs/splide": "4.1.4",
     "next": "16.3.6",
     "react": "19.2.8",
     "react-dom": "19.2.8"

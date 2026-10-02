@@ -5,18 +5,22 @@ import { useEffect, useRef, useState, type FocusEvent } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { CloseIcon, MenuIcon } from "@/components/ui/icons";
-import type { Cta, NavItem } from "@/content/site";
+import { atLeast } from "@/lib/breakpoints";
+
+type NavLink = { label: string; href: string };
 
 type MobileNavProps = {
-  items: NavItem[];
-  cta: Cta;
+  items: NavLink[];
+  cta: NavLink;
+  /** The toggle button's accessible name (data/header.ts). */
+  label: string;
 };
 
 /**
  * Disclosure menu below md. Closes on a link click, Escape (focus returns to the toggle),
- * a tap outside it, or focus moving out of it.
+ * a tap outside it, focus moving out of it, or the window widening past md.
  */
-export function MobileNav({ items, cta }: MobileNavProps) {
+export function MobileNav({ items, cta, label }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -32,11 +36,19 @@ export function MobileNav({ items, cta }: MobileNavProps) {
     function onPointerDown(event: PointerEvent) {
       if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
     }
+    // Widening past md hides the menu (md:hidden) but would leave it "open", which keeps the header
+    // from ever hiding on scroll (globals.css → .site-header). So it closes.
+    const desktop = window.matchMedia(atLeast("md"));
+    function onDesktop() {
+      if (desktop.matches) setOpen(false);
+    }
     document.addEventListener("keydown", onKeyDown);
     document.addEventListener("pointerdown", onPointerDown);
+    desktop.addEventListener("change", onDesktop);
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("pointerdown", onPointerDown);
+      desktop.removeEventListener("change", onDesktop);
     };
   }, [open]);
 
@@ -53,7 +65,7 @@ export function MobileNav({ items, cta }: MobileNavProps) {
       <button
         ref={toggleRef}
         type="button"
-        aria-label="Menu"
+        aria-label={label}
         aria-expanded={open}
         aria-controls="mobile-menu"
         onClick={() => setOpen((value) => !value)}
@@ -65,9 +77,9 @@ export function MobileNav({ items, cta }: MobileNavProps) {
       <div
         id="mobile-menu"
         hidden={!open}
-        className="absolute inset-x-0 top-full max-h-[calc(100dvh-var(--header-height))] overflow-y-auto overscroll-contain border-b border-border bg-background"
+        className="absolute inset-x-0 top-full mt-2 max-h-[calc(100dvh-var(--header-height)-1.25rem)] overflow-y-auto overscroll-contain rounded-lg border border-border bg-background"
       >
-        <Container className="pb-6">
+        <Container className="pt-2 pb-6">
           <nav aria-label="Main">
             <ul className="divide-y divide-border">
               {items.map((item) => (

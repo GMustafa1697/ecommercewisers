@@ -43,4 +43,8 @@ next-env.d.ts
 # claude code: local settings (may hold secrets) and session plans
 .claude/settings.local.json
 .claude/settings.loca.json
-.claude/plans/
+# a saved GitHub page holding your login, an email and session values
+.claude/plans/CLAUDE.md
+# .claude/plans/
+# your reference files (screenshots, recordings, source animations): kept locally, never committed
+/.claude/reference/

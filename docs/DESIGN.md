@@ -13,97 +13,117 @@ The guide's official palette. **No other colours, no gradients.**
 
 | Palette name | Hex | Role |
 |---|---|---|
-| `primary` | #E6AC0E | Golden yellow accent: primary buttons, highlights, active states, icons, key UI. Use it sparingly. |
-| `black` | #000000 | Main background |
-| `light-gray` | #F3F3F3 | Light band background |
-| `white` | #FFFFFF | Text on dark; surfaces on light bands |
-| `dark-surface` | #111111 | Cards and raised areas on dark |
-| `secondary-text` | #8A8A8A | Muted text on dark |
-| `dark-border` | #2A2A2A | Borders and dividers on dark |
+| `primary` | #E6AC0E | Golden yellow accent: primary buttons, the animation's gold circle, and as a 15% tint the eyebrow chips and icon tiles. On the light page it's a fill (with black text) or a decorative line, never text. Use it sparingly. |
+| `black` | #222222 | Text on the white page, and the background of the dark sections and the footer (`.theme-dark`). A soft black (changed from #000000 on 2026-09-30, your edit). |
+| `light-gray` | #F3F3F3 | Surfaces (cards, panels, image frames) on the white page |
+| `white` | #FFFFFF | The page background (since 2026-09-30), and text inside the dark sections (`.theme-dark`) |
+| `dark-surface` | #2E2E2E | Surfaces (cards, panels) inside the dark sections (was #111111) |
+| `secondary-text` | #A0A0A0 | Muted text inside `.theme-dark`: #8A8A8A would fail AA on the dark surface, at 3.9:1 (was #8A8A8A) |
+| `dark-border` | #3D3D3D | Borders and dividers inside `.theme-dark`, ≈1.5:1 against #222 (was #2A2A2A) |
 
 - Gold is an accent, not a theme. Roughly one gold element per view: the primary CTA, an icon set, or an active state.
+- **Tint versus solid** (2026-10-02, the refinement pass): the **gold tint** (`bg-primary/15`) marks labels and icons (the eyebrow chips, the Services and Why icon tiles); **solid gold** (`bg-primary`) marks actions and active states (the primary buttons, the current carousel dot on dark, the Why tile on hover, the Process bars).
 - **Only one gold button above the fold:** the hero's "Start a project". The header CTA is secondary (outlined).
-- No blue, purple, green, red or any other hue. Tailwind's default palette is removed, so those classes do not exist.
-- No gradients unless explicitly approved.
+- No blue, purple, green, red or any other hue. Tailwind's default palette is removed, so those classes do not exist. The one exception is the platform logo SVGs in the Platforms strip, which keep their brand colours inside the files (2026-10-01, your request).
+- No gradients unless explicitly approved. (Approved: the gold gradients inside your Process animation file, 2026-10-01, kept in the final file of 2026-10-02. See Animation.)
 
 ## Theme: Locked
-- **Dark-first.** The page is `#000`, and surfaces (cards, the CTA panel, the footer) are `#111`.
-- **Light bands** (`#F3F3F3`) are used between dark sections for rhythm. A band is a section with `className="theme-light"`. Inside it, the same semantic utilities switch to light values.
-- **Homepage rhythm:** Header (dark) → Hero (dark) → Services (**light**) → Why ecommercewisers (dark) → Process (**light**) → Portfolio Preview (dark) → CTA (dark, surface panel) → Footer (surface).
+- **White and dark, alternating** (2026-09-30, your requests). It was dark-first, then briefly all light with grey bands: "change all sections colors and make white background", then "not all section white, add dark sections". The page is white, and surfaces on it (cards, the CTA panel, image frames, carousel arrows) are light grey `#F3F3F3`. Every component uses the semantic utilities, so a section's theme is one class.
+- **Dark sections** are `<Section dark>`, which renders `className="theme-dark"`: #222 background, white text, #2E2E2E surfaces, #A0A0A0 muted, #3D3D3D borders, gold accent. Services, Process, **Portfolio Preview** (since 2026-10-02, your request "use dark colour") and Video reviews are dark, and so are the **Hero** (since 2026-10-01, your reference: its own `<section className="theme-dark">`, reaching up under the floating header), the Platforms strip (its own full-bleed `<section className="theme-dark">`, not `Section`, with a top border against the Hero) and the footer (`<footer className="theme-dark">`). The other sections are white.
+- **White inside dark:** `className="theme-light"` re-applies the white page's values to one element inside a dark section, with its own white background and black text. The Services cards use it: white cards stacking on the dark section, as in your `ser1`/`ser2` reference (your request, 2026-09-30). `:root` and `.theme-light` share one rule in `globals.css`, so the light values exist once. (Until then `.theme-light` was the grey band, removed with the switch to alternating white/dark. Light grey remains the surface colour on white.)
+- **Homepage rhythm:** Header (dark glass bar, over the dark Hero) → Hero (**dark**, a faint dot grid) → Platforms (**dark**, the logo strip, a `border-t` between them) → Features (white, light-grey cards) → Services (**dark**) → Why ecommercewisers (white) → Process (**dark**) → Portfolio Preview (**dark**, a `border-y` divider, #3D3D3D, above and below, since 2026-10-02) → Video reviews (**dark**) → Contact (white, light-grey panel) → Footer (**dark**).
 - No `prefers-color-scheme` switching and no `dark:` variants. The site always looks the same.
 
 ## Semantic variables: Locked
 These are the guide §4 names, plus `--accent`, which was added in Phase 5. Components use only these, through their utilities.
 
-| Variable | Utility | Dark (default) | Light band (`.theme-light`) |
+| Variable | Utility | Default: the white page (`:root`) | Dark (`.theme-dark`: dark sections, the footer) |
 |---|---|---|---|
-| `--background` | `bg-background` | black #000 | light-gray #F3F3F3 |
-| `--foreground` | `text-foreground` | white #FFF | black #000 |
-| `--surface` | `bg-surface` | dark-surface #111 | white #FFF |
-| `--surface-muted` | `bg-surface-muted` | light-gray #F3F3F3 | light-gray #F3F3F3 |
-| `--primary` | `bg-primary` | #E6AC0E | #E6AC0E (as a fill only) |
-| `--primary-foreground` | `text-primary-foreground` | black #000 | black #000 |
-| `--muted` | `text-muted` | secondary-text #8A8A8A | black at 70% (≈ #494949) |
-| `--border` | `border-border` | dark-border #2A2A2A | black at 12% (≈ #D6D6D6) |
-| `--accent` | `text-accent`, `outline-accent` | **gold #E6AC0E** | **black #000** |
+| `--background` | `bg-background` | white #FFF | black #222 |
+| `--foreground` | `text-foreground` | black #222 | white #FFF |
+| `--surface` | `bg-surface` | light-gray #F3F3F3 | dark-surface #2E2E2E |
+| `--primary` | `bg-primary` | #E6AC0E (a fill) | #E6AC0E |
+| `--primary-foreground` | `text-primary-foreground` | black #222 | black #222 |
+| `--muted` | `text-muted` | black at 70% (≈ #646464 on white) | secondary-text #A0A0A0 |
+| `--border` | `border-border` | black at 12% | dark-border #3D3D3D |
+| `--accent` | `text-accent`, `outline-accent` | **black #222** | **gold #E6AC0E** |
 
-- **`--accent` is the only way to get gold text.** Use `text-accent` for eyebrows, icons and step numbers, and for the focus ring. It turns black inside `.theme-light`, so the design system itself enforces "no gold text on light bands". Never use `text-primary` for text.
-- On a light band, #8A8A8A is only 3.1:1 against #F3F3F3, which fails AA for body text. That is why `--muted` switches to black at 70% there. It is the same colour at a different opacity, so no new colour is added.
+- **`--accent` is the only way to get gold text,** and only inside `.theme-dark`. Use `text-accent` for eyebrows, icons and step numbers, and for the focus ring. It's black on the white page, so the design system itself enforces "no gold text on light". Never use `text-primary` for text.
+- On white, the dark muted grey (#A0A0A0) would be only 2.6:1, so `--muted` is black at 70% there: the same colour at a different opacity, so no new colour is added.
 
 ## Contrast: Locked
-WCAG 2.2 AA needs 4.5:1 for body text, and 3:1 for large text and UI.
+WCAG 2.2 AA needs 4.5:1 for body text, and 3:1 for large text and UI. "Measured" values come from the in-browser check (every text element, colours resolved through a canvas and alpha-composited over the real background); the lowest on the page is 5.19:1 (muted text on the dark cards).
 
 | Foreground | Background | Ratio | Verdict |
 |---|---|---|---|
-| white #FFF | black #000 | 21:1 | ✅ all text |
-| white #FFF | dark-surface #111 | 18.9:1 | ✅ all text |
-| gold #E6AC0E | black #000 | 10.3:1 | ✅ all text, focus ring |
-| gold #E6AC0E | dark-surface #111 | 9.2:1 | ✅ all text, focus ring |
-| black #000 | gold #E6AC0E | 10.3:1 | ✅ button labels |
-| secondary-text #8A8A8A | black #000 | 6.1:1 | ✅ body text |
-| secondary-text #8A8A8A | dark-surface #111 | 5.5:1 | ✅ body text |
-| black #000 | light-gray #F3F3F3 | 18.9:1 | ✅ all text, light-band accent and focus ring |
-| light-band muted (black 70%) | light-gray #F3F3F3 | ≈ 8.1:1 | ✅ body text |
-| secondary-text #8A8A8A | light-gray #F3F3F3 | 3.1:1 | ❌ never use it for text on light bands |
-| **gold #E6AC0E** | **light-gray #F3F3F3** | **1.8:1** | ❌ **never gold text on light bands.** Gold only as a fill with black text. |
-| dark-border #2A2A2A | black #000 | 1.5:1 | ⚠️ decorative dividers only (see Borders) |
+| black #222 | white #FFF (the page) | 15.9:1 | ✅ all text, accent and focus ring |
+| black #222 | light-gray #F3F3F3 (surfaces) | 14.3:1 | ✅ all text, accent and focus ring |
+| muted: black at 70% | white #FFF | 5.93:1 (measured) | ✅ body text |
+| muted: black at 70% | light-gray #F3F3F3 | 5.64:1 (measured) | ✅ body text |
+| black #222 | gold #E6AC0E | 7.8:1 | ✅ button labels |
+| white #FFF | black #222 (dark sections, the footer) | 15.9:1 | ✅ all text |
+| header nav link (white at 70%) | the dark glass bar (#222 at 80%) over white content: renders #4E4E4E | 5.08:1 (measured from screenshot pixels) | ✅ the worst case. `text-muted` (#A0A0A0) would be only 3.2:1 here ❌, so the bar's links use `text-foreground/70` |
+| header nav link (white at 70%) | the dark glass bar over a #222 section: renders #222 | 8.47:1 (measured) | ✅ |
+| white #FFF (wordmark, CTA label) | the dark glass bar over white content (#4E4E4E) | 8.32:1 (measured) | ✅ |
+| secondary-text #A0A0A0 | black #222 | 6.08:1 (measured) | ✅ body text (dark sections, footer) |
+| gold #E6AC0E | black #222 | 7.8:1 | ✅ accent text and focus ring inside `.theme-dark` |
+| white #FFF | dark-surface #2E2E2E | 13.6:1 | ✅ all text (inside `.theme-dark`) |
+| secondary-text #A0A0A0 | dark-surface #2E2E2E | 5.19:1 (measured) | ✅ body text (dark cards: Services, Reviews) |
+| **gold #E6AC0E** | **white #FFF** | **2.0:1** | ❌ **never gold text on the light page.** Gold only as a fill with black text, or a decorative line or ring. |
+| **gold #E6AC0E** | **light-gray #F3F3F3** | **1.8:1** | ❌ **never gold text on light-grey surfaces** either |
+| secondary-text #A0A0A0 | light-gray #F3F3F3 | 2.4:1 | ❌ never use it for text on light |
+| black #222 (icon) | the gold tint tile (15% gold over white: #FBF3DB) | 14.3:1 (calculated) | ✅ the Services and Why icons |
+| black #222 (icon) | gold #E6AC0E (the Why tile on hover) | 7.8:1 | ✅ |
+| light-gray #F3F3F3 | white #FFF | 1.1:1 | ⚠️ surfaces on the white page are told apart by their border and spacing, not by colour alone |
+| dark-border #3D3D3D | black #222 | 1.5:1 | ⚠️ decorative dividers only (see Borders) |
 
 ## Logo: Locked
-- The logo is a **text wordmark**: `ecommercewisers` in Geist, `font-semibold tracking-tight`, `text-foreground`. It lives in one `Wordmark` component, used in the Header and Footer.
-- The old SVG logos say "ecomwisers" and are not used. Swap in a real logo only through `Wordmark`.
+- The logo is **your wordmark SVG** (2026-10-02, your request "use logo from img, not text"; it replaced the Geist text wordmark), in one `Wordmark` component used by the Header and Footer.
+  - It's inlined: the file's single path, copied unchanged into `Wordmark.tsx`, with `fill="currentColor"`. It takes the theme's text colour (white in the dark header and footer, 15.9:1 on #222) and stays visible in forced-colours mode. An `<img>` can't inherit colour, so it would render black there.
+  - Size: `block h-5 w-auto` (157×20px; the viewBox is 7.86:1). The header link around it keeps a 44px-tall target.
+  - `role="img"` with `aria-label="ecommercewisers"`, the brand name, as in the rest of the copy.
+- **Spelling:** the drawn letters read "eCom Wisers", not "ecommercewisers". You chose to use it anyway; it's the one exception to the brand rule. The spoken name (ecommercewisers) therefore differs from the visible letters, so a speech-input user saying "eCom Wisers" won't match the link (WCAG 2.5.3). Both resolve when the logo spells the brand. See PROGRESS.md → Known issues.
+- The lockup file in `public/logo/` (wordmark plus tagline) isn't used.
 - The Header links the wordmark to **`/#top`**. On the homepage, a plain `/` keeps the scroll position (that's how Next's router behaves), while `#top` scrolls to the top in Next and in browsers.
 
 ## Typography: Locked
 - Geist (sans) for all text and Geist Mono for technical accents, both via `next/font`. There are no other fonts and no external font links.
+- Geist is preloaded. Geist Mono is **not** (`preload: false`, 2026-10-02): it only sets the Process list's step numbers, shown from 640 to 1279px, so it loads where it's used. Phones and wide desktops fetch one font file (29 KB) instead of two (+23 KB).
 - The scale uses Tailwind's defaults, so there are no custom `--text-*` tokens:
 
 | Role | Classes | Notes |
 |---|---|---|
-| H1 (hero only) | `text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight` | exactly one per page |
-| H2 (section title) | `text-3xl lg:text-4xl font-semibold tracking-tight` | |
+| H1 (hero only) | `text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-balance` (36 / 48 / 60 / 72px; `lg:text-7xl` added 2026-10-01 for your reference) | exactly one per page. Its highlighted words ("your way") are a `text-accent` span: gold, because the Hero is dark. From `md` it breaks as in the reference: "Tailor-made stores built / your way, from scratch." |
+| H2 (section title) | `text-3xl md:text-4xl xl:text-5xl font-semibold tracking-tight text-balance` (30 / 36 / 48px; 2026-10-02, your choice; was `text-3xl lg:text-4xl`) | Through `SectionHeading`. 48px only from `xl`: at `lg` the Services heading column is about 360px, where 48px broke the title one word a line. `text-balance` keeps a word from sitting alone on the last line (it fixed "store" on the Services title at 375). Checked at 320–1440: every title balanced. |
 | H3 (card title) | `text-xl font-semibold` | |
 | Body | `text-base lg:text-lg leading-relaxed` | measure ≤ 65ch (`max-w-prose`) |
 | Small / meta | `text-sm text-muted` | |
-| Eyebrow / label | `font-mono text-xs uppercase tracking-widest text-accent` | gold on dark, black on light bands (automatic). Always through the `Eyebrow` component. |
+| Eyebrow / label | Base: `text-xs uppercase tracking-widest`. **`chip`** (the default; every section eyebrow, i.e. `SectionHeading`, and the Hero's) adds `w-fit rounded-md bg-primary/15 px-2.5 py-1 font-medium text-accent`: Geist text on a gold-tinted chip. **`label`** adds `font-medium text-muted`: a small title over a value or list (the Contact email, the footer's column titles). The `plain` mono variant of the portfolio labels was removed on 2026-10-02 with the browser-frame cards, whose labels are plain `text-sm text-muted` under the name. | Every eyebrow is the chip since 2026-10-02 (your screenshot of the Contact chip), Features included ("Included", 2026-10-02, your choice). In dark sections the text is gold on the tint, ≈5.8:1 (calculated: #E6AC0E on 15% gold over #222); on the white page and the grey Contact panel the accent is black, 13.1:1 (measured on the Contact panel), so there's no gold text on light. History: a muted label between a gold dot and a short gold line (2026-09-30, after a grey tint, a gold tint and a surface chip), with chips only on the Hero (2026-10-01) and Contact (2026-10-02). Always through `Eyebrow`. |
 
 ## Spacing and layout: Locked
 - Tailwind's 4px spacing scale, with no custom spacing tokens.
-- **`Container` component:** `mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8`. There is no `--container-page` token.
-- Sections use `py-16 md:py-24`. The hero uses `py-20 md:py-32`.
+- **`Container` component:** `mx-auto w-full max-w-360 px-4 sm:px-6 lg:px-8`. **Max width 1440px** (`max-w-360` = 90rem on Tailwind 4's spacing scale; was `max-w-6xl`, 1152px, until 2026-09-30), padding included, so the content is up to 1376px wide. Every section, the header and the footer use it. There is no `--container-page` token.
+- Sections use `py-16 md:py-24 lg:py-28` (`lg:py-28` added 2026-10-02, for air around the larger titles). The hero has the same visible `py-20 md:py-32`, but it starts under the header: `-mt-(--header-height)`, with the header's height added to its top padding (`pt-[calc(var(--header-height)+5rem)] md:pt-[calc(var(--header-height)+8rem)]`), so the glass bar floats over dark from the very top (2026-10-01).
 - Grids are `grid gap-6 md:gap-8`. The column counts per section are in `docs/PLAN.md`.
-- The section heading sits `mt-12` above the section's content (grid or list).
-- The hero is one left-aligned text column, capped at `max-w-3xl` so the H1 wraps to two or three lines. There is no visual beside it (the code panel was removed in Phase 6 cycle 3).
-- The header is sticky, with height `h-(--header-height)`. `--header-height: 4rem` is set once in `:root`, and `html` uses it for `scroll-padding-top`, so anchor targets clear the header.
+- The section heading sits `mt-12 lg:mt-16` above the section's content (grid, list, carousel, or the Reviews notice; `lg:mt-16` added 2026-10-02). Services keeps its own column gap (`gap-12 lg:gap-16`).
+- The hero is one **centred** text column (`mx-auto max-w-5xl text-center`, since 2026-10-02, your choice: left-aligned, its right half stood empty on desktop), capped at `max-w-5xl` so the 72px H1 wraps to two lines (`max-w-3xl` until 2026-10-01). The chip and the intro are `mx-auto`, and the buttons `sm:justify-center` (full width and stacked on phones). The intro is `max-w-200` (800px), wider than the 65ch body measure, so on desktop it's two lines as in your reference. There is no visual beside it (the code panel was removed in Phase 6 cycle 3). Behind it is a faint dot grid: an `aria-hidden` SVG `<pattern>` (a 1px dot every 24px) in `text-foreground/10`, white at 10%. It's a pattern, not a gradient.
+- The header is sticky, with height `h-(--header-height)`. `--header-height: 4.25rem` (a 0.75rem gap above the 3.5rem bar; 4rem until the floating bar) is set once in `:root`, and `html` uses it for `scroll-padding-top`, so anchor targets clear the header.
+- **Dark glass bar, hides on scroll** (2026-09-30, your requests: "navbar sticky and glass; on scroll down fade up, on scroll up fade down", then "make navbar dark glassy and 1440px"):
+  - `ScrollHeader` (client) renders the `<header className="site-header pointer-events-none sticky top-0 z-50 h-(--header-height) pt-3">`: a transparent wrapper, so clicks in its margins reach the page. The `Header` stays a Server Component and passes the bar in as children.
+  - The bar sits in the `Container`, so it's as wide as the content (1376px inside the 1440px container, aligned with the content edges; 343px on a 375 phone): `theme-dark pointer-events-auto relative flex h-full items-center justify-between gap-6 rounded-lg border border-border bg-background/80 px-4 backdrop-blur-md sm:px-6`. That's #222 at 80% with a 12px blur, a white wordmark, white-at-70% links (`hover:text-foreground`) and the outlined secondary CTA. Over white content the glass renders #4E4E4E; over the dark sections, #222. (It was a full-width white glass bar for one step before this.)
+  - Scrolling down (past the header's own 68px, in steps of 8px or more) sets `data-hidden`; scrolling up, or returning near the top, clears it. A passive scroll listener runs once per animation frame and updates state only when the direction flips.
+  - `.site-header` in `globals.css` does the motion: with `data-hidden` the header slides up (`translate: 0 -100%`) and fades out (`opacity: 0`), over a 300 ms `ease-out` transition. It stays shown while focus is inside it (`:focus-within`, with no transition, so the browser never scrolls to a still-hidden link) or while the mobile menu is open (`:has(#mobile-menu:not([hidden]))`). Under reduced motion the change is instant.
+  - The bar's own links and buttons get `scroll-margin-top: calc(-1 * var(--header-height))` and `scroll-margin-bottom: var(--header-height)`. They sit inside the `scroll-padding-top` band, and before this fix focusing one scrolled the page towards the top (a jump from y 1400 to 950, measured). It was an existing issue, found while testing this change.
 
 ## Buttons: Locked
-One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anchor or `mailto:`.
+One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anchor or `mailto:`. The one real `<button>` with the same look is the contact form's submit, through the shared `buttonClass()`.
 
 | Variant | Classes | Use |
 |---|---|---|
-| Primary | `bg-primary text-primary-foreground hover:bg-primary/90` | The main CTA. One per view. The same on dark and light bands. |
-| Secondary | `border border-border text-foreground hover:border-muted hover:bg-surface` | The header CTA and the second hero CTA. The border brightens on hover, because #111 on #000 alone is barely visible (changed in Phase 6 cycle 1, approved). |
+| Primary | `bg-primary text-primary-foreground hover:bg-primary/90` | The main CTA. One per view. The same on white and dark sections. |
+| Secondary | `border border-border text-foreground hover:border-muted hover:bg-surface` | The header CTA and the second hero CTA. The border brightens on hover, because the surface fill alone is barely visible against the page (changed in Phase 6 cycle 1, approved). |
 | Text link | `text-foreground underline-offset-4 hover:underline` | Inline and footer links |
-| Header nav link | `inline-flex h-11 min-w-11 items-center justify-center text-sm text-muted hover:text-foreground` | Desktop header nav. Muted, so the header CTA stays the focal point (documented in Phase 8). |
+| Header nav link | `inline-flex h-11 min-w-11 items-center justify-center text-sm text-foreground/70 hover:text-foreground` | Desktop header nav on the dark glass bar. Softened (white at 70%), so the header CTA stays the focal point. Not `text-muted`: see Contrast. |
 | Mobile menu link | `flex h-12 items-center text-base font-medium text-foreground` | Full-width rows in `MobileNav`, split by `divide-border` |
 
 | Size | Classes | Where |
@@ -115,43 +135,140 @@ One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anch
 - The label is a verb, e.g. "Start a project" or "Explore services".
 
 ## Cards: Locked
-- `bg-surface border border-border rounded-lg p-6`. On a light band this becomes a white card with a light border automatically.
+- `bg-surface border border-border rounded-lg p-6`. On the white page this is a light-grey card; in a dark section it becomes a #2E2E2E card with a dark border automatically.
 - The icon is `size-6 text-accent`, then the title (H3, `mt-4 text-xl font-semibold`), then the body (`mt-2 text-base leading-relaxed text-pretty text-muted`; `text-pretty` avoids a lone word on the last line). Card body text stays `text-base` at every width, because 4-column cards are only about 200px wide inside.
-- No shadows on dark. On light bands a subtle `shadow-sm` is optional.
-- **CTA panel:** `flex flex-col gap-8 rounded-lg border border-border bg-surface p-8 md:flex-row md:items-center md:justify-between md:p-12`. It holds `SectionHeading` (title and intro, no eyebrow) and the primary `lg` button (`shrink-0`), which is full width on phones and beside the text from `md`.
-- **Footer:** `<footer className="border-t border-border bg-surface">` with `py-12 md:py-16` and a `grid gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8`. The first column is the `Wordmark` plus `site.description` (`text-sm text-muted`), then three `FooterColumn`s: an H2 title (`text-sm text-muted`) over a list of text links (`inline-flex min-h-11 min-w-11 items-center text-sm text-foreground underline-offset-4 hover:underline`, for a 44×44px target). A bottom row sits on `border-t border-border`: "© {year} ecommercewisers. All rights reserved." The year is set at build time.
-- **Why ecommercewisers** deliberately doesn't use cards. Its items sit on a top border (`border-t border-border pt-6`), which sets it apart from Services.
-- **Process** uses the same top border as Why, on its light band, so its four steps read as a sequence and don't look like a second Services. Its marker is the step number (`01`–`04`: `block font-mono text-sm leading-6 text-accent`, `aria-hidden` because the `<ol>` already gives the order). `leading-6` makes it 24px tall, like the icons, so titles line up across sections.
-- All three render through `FeatureItem`; only the wrapper `className` and the marker differ.
+- No shadows inside `.theme-dark`. On white a subtle `shadow-sm` is optional (the open mobile menu panel).
+- **Contact** (2026-10-02, your screenshot; it replaced the CTA panel, which held a heading and a `mailto:` button): `<Section id="contact">` on the white page, with one light-grey panel, `grid gap-10 rounded-lg border border-border bg-surface p-6 md:p-12 lg:grid-cols-2 lg:gap-16`. Stacked below `lg`, two columns from `lg`.
+  - **Left:** `SectionHeading` with the **chip** eyebrow "Contact", the H2 "Get in touch" and the intro "Have a project in mind? Tell us about it and we'll reply with next steps." (your copy without its "within one business day" promise, your choice). Then a contact block (`mt-8`, 2026-10-02): the label "Email" (`text-xs font-medium uppercase tracking-widest text-muted`, like the footer's column titles) over the placeholder address, a `mailto:` link (`mt-1 inline-flex min-h-11 items-center text-lg font-medium`, underline on hover). Until then it was one small `Email: …` line.
+  - Only the email: the screenshot's WhatsApp number and London address look like sample data, so they wait for real ones (your choice).
+  - **Right: the form** (`ContactForm`, client): "All fields are required." (`text-sm text-muted`, 5.67:1 on the panel), then Name, Email and Message, then a status line and the button, in a `flex flex-col gap-5`.
+    - Each field has a visible `<label>` (`text-sm font-medium`, 14.3:1) and is `required`, with `maxLength` 100 / 254 / 5000; Name and Email have `autoComplete`. Fields: `mt-2 block w-full rounded-md border border-muted bg-background px-4 text-base text-foreground`, `h-12` (the textarea `rows={6} resize-y py-3`, 170px). The border is `border-muted` (5.67:1 on the panel, 5.92:1 on the field), the rule for a boundary users need to find a control. The text is 16px, so iOS doesn't zoom. The focus ring is the global one.
+    - The submit is "Send message", `buttonClass()` (primary `lg`): full width on phones, `sm:self-start` after. While the action runs it's `disabled` and reads "Sending…".
+    - **Errors without colour:** the server's message under its field (`mt-2 text-sm font-medium`), linked with `aria-invalid` and `aria-describedby`, and "Check the fields marked above." in the status line. They only show if the browser's own checks (`required`, `type="email"`) were bypassed.
+    - **Status:** a `role="status"` element, always rendered so it's announced. After a valid submit it holds a white note (`rounded-md border border-border bg-background p-4 text-sm`): "Sending isn't set up yet, so your message wasn't sent. Please email us at" and the address as a link. **No SMTP yet** (your choice): it never claims a message was sent (blocks deploy).
+- **Footer:** `<footer className="theme-dark">` (#222, white text, gold focus ring) with `py-12 md:py-16` and a `grid gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8`. The first column is the `Wordmark` plus its one-line description (`text-sm text-muted`), then three `FooterColumn`s: an H2 title, a small label (`text-xs font-medium uppercase tracking-widest text-muted`, since 2026-10-02; was `text-sm text-muted`), `mt-3` over a list of text links (`inline-flex min-h-11 min-w-11 items-center text-sm text-foreground underline-offset-4 hover:underline`, for a 44×44px target). A bottom row sits on `border-t border-border`: "© {year} ecommercewisers. All rights reserved." The year is set at build time.
+- **Review card (video reviews):** `overflow-hidden rounded-lg border border-border bg-surface`, containing:
+  - a `relative aspect-9/16` frame holding the `<video>` (`object-cover`, `preload="none"`, `playsInline`, no native controls, a captions `<track>` when provided) and, until first play, a lazy `next/image` poster
+  - the controls, bottom-center over the video: two `size-11 rounded-md bg-background/70 text-foreground hover:bg-background` buttons, Play/Pause (`aria-label` "Play video: …" / "Pause video: …") and Mute (`aria-pressed`, "Mute video: …"). Sound starts muted.
+  - the caption, `p-4 font-semibold`
+- **Arrows: Portfolio only** (2026-10-02, your reference image; earlier that day they'd been removed from both carousels). `Carousel`'s `arrows` prop renders our own prev/next buttons, which Splide finds by their `splide__arrow--prev`/`--next` classes and wires up: it adds the labels ("Previous slide", "Next slide", "Go to last slide" on the first card) and `aria-controls`.
+  - The buttons are round, 44px (`size-11 rounded-full`), a #222 chevron (`ChevronLeftIcon`/`ChevronRightIcon`, `size-5`) on white (`bg-foreground text-background` in the dark section), with a #3D3D3D ring (`border-border`), so they show over light and dark screenshots alike.
+  - They're centred on the track (`top-1/2 -translate-y-1/2`), 12px in from its edges (`left-3`/`right-3`).
+  - They're hidden until Splide adds `is-initialized` (`hidden in-[.is-initialized]:block`), so there are never buttons that do nothing.
+  - The video reviews stay dots-only (`arrows` defaults to false), and the dots, drag, swipe and arrow keys move both carousels.
+- **Before JavaScript** (2026-10-02, from the review): both carousels and the logo strip carry Splide's `is-rendered` class, so they're visible before Splide mounts and without JavaScript (its core CSS hides `.splide` until then). The pre-mount slide widths and gap match Splide's (`mr-6!`: the important modifier beats the core CSS's unlayered `margin: 0`), so the first slide stays in place when Splide mounts (checked to the pixel at 375 and 1440, with and without reduced motion).
+- **Carousel dots** (Splide pagination, 2026-10-02, your request "pagination not show"; Splide's core CSS leaves its buttons unstyled, so they were 0×0):
+  - Under the track, centred, in a `mt-8 h-6` box that holds their height before Splide mounts (the same section height with and without JS).
+  - One per page: 2 from `lg`, 3 on tablets, one per slide on phones (5 projects, 6 videos). On desktop, dot 2 brings the last slide to the front (Splide's loop pages).
+  - Each is a 24×24 `rounded-full` button (Splide's `classes.page`) around an 8px round `::after` dot (your requests: "pagination must be dots", over short bars; then tight, over 44px apart). The dots are round, though DESIGN.md has no fully rounded controls, because you asked for dots.
+    - The other pages: a ring, `border-[1.5px] border-muted` with no fill (5.9:1 on white, 6.1:1 on #222), `hover:border-foreground`. Chrome draws the ring 1px on standard screens and 1.5px on high-density ones.
+    - The current page (`aria-selected`): filled, `border-accent bg-accent`, gold on both carousels, which are on dark sections since 2026-10-02 (black on the white page). Filled versus ring tells them apart without colour, at the same size. The colours change over 300 ms (instant under reduced motion).
+  - **Tap targets: 24×24, the one exception to the 44×44 rule** (2026-10-02, your choice, so the dots sit close: 24px centre to centre, a 16px gap). It's the WCAG 2.5.8 AA minimum, with the targets side by side. Swipe, drag and the keyboard move the carousel too.
+  - Splide's tabs: `role="tablist"` ("Select a slide to show"), "Go to page n" ("Go to slide n" on phones), only the current dot in the Tab order, arrow keys move between them. The focus ring is the global one.
+- **Platforms** (the logo strip after the Hero, 2026-10-01, your request from the old site's screenshot):
+  - `<section aria-labelledby="platforms-title" className="theme-dark border-t border-border py-12 md:py-16">`, **full-bleed** (no `Container`, so the logos run to the screen edges as in the screenshot). It's slimmer than `Section`'s `py-16 md:py-24`: 136px tall on phones and 176px from `md`. The `border-t` (#3D3D3D) separates it from the dark Hero, as in the old site's screenshot.
+  - **No visible heading** (your choice): `<h2 id="platforms-title" className="sr-only">Platforms we build on</h2>` names the region.
+  - Each slide is fixed-width and centres its logo: 10rem on phones, 12rem from `sm`, 15rem from `lg` (Splide `fixedWidth`, with matching `w-40 sm:w-48 lg:w-60` before mount, so nothing shifts).
+  - The logos are the **original brand-colour SVGs** (your request, after a first monochrome version): `public/images/platforms/*.svg`, copied unchanged from the old repo's `public/marks/`. Each is a `next/image` with its viewBox size as `width`/`height`, `alt` = the platform's name, and `h-10 w-auto md:h-12` (40px, 48px from `md`), so Woo comes out wider (80×48) and Figma narrower (32×48). Next serves `.svg` unoptimised, so there's no srcset and no `sizes`. They lazy-load; Splide's clones copy the `<img>`.
+  - No controls: no arrows, no pagination, no drag, and no pause button (your request).
+  - Order (the screenshot's): WooCommerce, WordPress, Next.js, Figma, Shopify. WooCommerce isn't a fifth service; it's shown as part of WordPress Development.
+- **Services (stacking cards, 2026-09-30, your request after reference `ser1`/`ser2`):** two columns from `lg` (`grid gap-12 lg:grid-cols-[2fr_3fr] lg:gap-16`); one column below.
+  - Left: `SectionHeading` (eyebrow, H2, intro) and the primary `lg` "Start a project" button (`mt-8 w-full sm:w-auto`). From `lg` the column is `sticky` at `top: calc(var(--header-height) + 2rem)` (`self-start`), so it stays in view beside the cards.
+  - Right: a `<ul className="services-stack flex flex-col gap-(--stack-gap)">` (1.5rem, 2rem from `md`, set in `globals.css`) of **white** cards on the dark section: `theme-light rounded-lg border border-border p-6 md:p-8`. `.theme-light` gives each card a white background and the light values, so its text is black, its muted text black at 70% (5.93:1) and its accent black. The border (black at 12%) separates the white-on-white strips of the stack. The marker is an `IconTile` (since 2026-10-02, your choice; it was a `size-14 rounded-full border border-primary` gold ring): the icon (`size-6 text-accent`, black on the white card) on a `size-12 rounded-md bg-primary/15` gold-tint tile, 14.3:1. The heading's eyebrow is the chip, like every section's (since 2026-10-02). After the one-line description comes a checklist: `mx-auto mt-6 w-fit space-y-3 text-left sm:mx-0 sm:w-auto`, rows `flex gap-3 text-sm text-muted` with `CheckIcon size-5 shrink-0 text-accent`. On phones the list is **centred as a block** (as wide as its longest row) with its rows left-aligned and the ticks in one column (your request: "ul centred, li left"). A list whose longest row wraps fills the card width, so it reads left-aligned: all four fit on one line from about 418px wide (Shopify from 386, Figma to Web from 407, WordPress from 418; Next.js always).
+  - **Stacking:** each card is `position: sticky` at `top: calc(var(--header-height) + 2rem + index × 1rem)` (the index is the inline `--stack-index` variable), so each card slides over the previous one and the stack shows a 16px strip of every earlier card. Later cards paint above earlier ones by DOM order, and the header (`z-50`) stays on top. Guarded by `[@media(min-height:36rem)]:sticky`: on shorter viewports (phones in landscape) a stuck card could hide its own checklist, so there it's a plain list.
+  - **Shrink (2026-09-30, your request from the reference video):** a covered card shrinks 5% for each card that lands on it (`scale`, `transform-origin: top`), so the finished stack reads as a deck of narrower strips: 0.85 / 0.90 / 0.95 / 1. It's a CSS scroll-driven animation in `globals.css` (`.services-stack`): the list has a named view timeline (`view-timeline-inset` = the sticky line), and card *i* animates over `exit-crossing` *i*/*n* → (*n*−1)/*n*, with `--stack-count` set inline on the list. No JS. It's inside `@supports (animation-timeline: view())` and `@media (prefers-reduced-motion: no-preference) and (min-height: 36rem)`, so unsupported browsers, reduced motion and short viewports get the plain stack. As in the reference, the strips slide under the front card when the section scrolls away.
+  - **Hold (2026-10-02, your request "don't cover all cards on scroll", with the reference image):** until then the section ended before the last cards stuck, so the finished deck never showed: each card slid over the last and the stack scrolled away half-built.
+    - A `.services-stack::after` spacer (`--stack-hold: 30vh`, only where the cards are sticky) keeps the list, and so its sticky cards and the sticky heading column, on screen longer. Once the fourth card lands, the finished deck (the front card, three narrowing strips above) stays pinned for about 320px of scroll at 1440×900 (240px at 375×800), then the section scrolls away.
+    - The shrink ranges are fractions of the cards' length only, `(100% − --stack-tail)` with `--stack-tail` = the gap plus the hold, so each card still shrinks as the next lands and the shrink ends with the last landing (widths 669/708/748/787px at 1440, i.e. 0.85/0.90/0.95/1).
+    - The section stays dark (your choice; the reference image is light grey).
+- **Why ecommercewisers** (a bento, 2026-09-30, after your "change colors … better UI" requests): the heading, then `mt-12 grid gap-6 md:gap-8 xl:grid-cols-2`, holding a `<ul className="grid gap-6 sm:grid-cols-2 md:gap-8">` of four cards and the animation panel. They share one gap, so it reads as one grid. Side by side only from `xl`, with the panel on the left; below it the panel sits above the 2×2 cards (your edit, 2026-10-02).
+  - Cards: **light grey** (since 2026-10-02, your choice, so every card on a white section matches Features and Contact), `rounded-lg border border-border bg-surface p-6 md:p-8`, with no shadow. The black icon on its tint tile is 13.1:1 on the grey (calculated). (Earlier: white with a `shadow-sm`, your request of 2026-09-30; before that a gold highlight plus light-grey cards, and while the section was dark, gold / dark / dark / light.)
+  - Each point has its own icon (`BoltIcon`, `BagIcon`, `RouteIcon`, `CodeIcon`, set in `WhyUs.tsx`'s data) on an `IconTile` (`size-12 rounded-md bg-primary/15`, a black `size-6` icon, 14.3:1), the same tile as Services (since 2026-10-02, your choice; it was a black `size-11` tile with a white `size-5` icon).
+  - **Hover** (2026-10-02, your request "on hover the background, text and icon colours change"): the card inverts to black, `hover:bg-foreground hover:border-foreground hover:text-background`, so the title is white (15.9:1) and the line `hover:[&>p]:text-background/70` (white at 70%, 8.5:1). The tile turns from the tint to solid gold with a black icon (`group-hover:bg-primary group-hover:text-primary-foreground`, passed to `IconTile`; 7.8:1, and the tile is 7.8:1 against the card). Colours change over 300 ms (instant under reduced motion). Pointer devices only: Tailwind 4 puts `hover:` inside `@media (hover: hover)`, so a tap on a phone never leaves a card stuck dark. The cards aren't links, so there's no focus state.
+  - The panel: open on the white section, `flex items-center p-6 sm:p-8` (no border or shadow since your edit, 2026-10-02; its `rounded-lg bg-background`, invisible on white, were dropped in the refinement pass), holding a `LottieAnimation` of `code-dark.lottie` (`fit="cover"`, `mx-auto aspect-4/3 w-full max-w-140`, at most 560px), as tall as the 2×2 cards.
+  - History: no cards (points on a top border) → surface cards with gold check tiles → a toned bento → this white bento.
+- **Features** (after the hero; added 2026-09-30 from your reference screenshot, redesigned 2026-10-01 at your request): `<Section id="features">` on the white page, because the animations are drawn for a light background (near-black outlines that vanished on #222). A visible `SectionHeading` (the chip "Included", since 2026-10-02, your choice, then the title "What every project includes"), then a `mt-12 grid gap-6 md:gap-8 lg:mt-16 lg:grid-cols-2` list of four `FeatureItem` cards: `rounded-lg border border-border bg-surface p-6 md:p-8` (light grey). Each `LottieAnimation` marker is a white tile (`aspect-square rounded-md bg-background`, 112px, 128px from `sm`, 160px from `xl`). On phones it sits above the H3 and line; from `sm` the card is a `grid-cols-[auto_1fr]` grid with the tile spanning both rows (`sm:row-span-2 sm:self-center`) and the title (`[&>h3]:self-end`, no top margin) and line (`[&>p]:self-start`) centred against it. One column up to `lg`, then 2×2. History: a dark centred 4-column strip of 96px animations (2026-09-30).
+- **Process** (since 2026-10-01, your requests; the final animation and its layout since 2026-10-02): the `SectionHeading`, then `ProcessPlayer` (client), a `mt-12 grid gap-8 lg:grid-cols-[2fr_3fr] lg:items-center lg:gap-16 xl:grid-cols-1 xl:gap-0`. Three layouts:
+  - **Phones (below `sm`, 640px; 2026-10-02, your choice):** your **portrait animation** (`process-flow-mobile.lottie`, whole, `fit="contain"`) in an `aspect-20/37` box (`mx-auto w-full max-w-100`: 288×533 at 320, 343×635 at 375, at most 400×740), **on its own** (2026-10-02, your request "remove on mobile"; the step list showed under it at first). The interactive list is `hidden … sm:flex`, and the static copy below is `sr-only` there for screen readers. **Under reduced motion** the still shows only one step's text (Launch), so phones keep the list then (`motion-reduce:flex`, and the copy is `motion-reduce:hidden`).
+  - **Tablets (`sm` to `lg`, 640–1023):** the desktop animation on top, then the HTML steps under it.
+  - **`lg` (1024–1279):** the HTML steps (2fr) on the left, the animation (3fr) on the right.
+  - On tablets and at `lg`, the animation box is `aspect-5/3` with `fit="cover"` and `align={[1, 0.5]}`, which shows exactly canvas x 270–1270: the tiles and store panel, with the animation's own step column cut off. The canvas text would be too small there. Sizes: 592×355 at 640, 705×423 at 768, 529×317 at 1024.
+  - **From `xl` (1280px), your choice:** the whole animation (`xl:aspect-127/60`, 1201×567 at 1280, 1361×643 at 1440, 1376×650 at 1920), with its own drawn step column. The interactive list is `xl:hidden`, so no hidden button can take focus. A static copy, `<ol className="sr-only motion-reduce:hidden sm:hidden xl:block">` with an H3 and a `<p>` per step and no buttons, gives screen readers and search the same words the animation draws (checked word for word), here and on phones. Only one list is ever exposed.
+  - Each HTML step is a card `relative rounded-lg py-5 pr-5 pl-10`: the step number (`font-mono text-sm leading-6 text-accent`, `aria-hidden`), the H3 and the line. The step whose scene is playing is `bg-surface` (#2E2E2E; muted text 5.19:1 on it), the others `hover:bg-surface/50`, with `aria-current="step"` on the current one.
+  - Down each card's left edge (`absolute inset-y-5 left-5 w-0.5 rounded-full bg-border`) a gold bar (`bg-primary origin-top scale-y-(--fill)`) fills as its scene plays, and stays full once done, like the animation's own cards. `--fill` is written straight to the DOM on each animation frame, so only the step index goes through React state.
+  - The H3 holds a `<button>` stretched over the whole card (`after:absolute after:inset-0`): choosing a step jumps the animation to its `start` frame and keeps playing. Under reduced motion nothing plays: the default still has every step done (all bars full, Launch current), and choosing a step shows its own still (`still`) with the bars up to it full.
+  - History: the four steps on a top border in a 1 / 2 / 4 grid (`SectionGrid`, removed); then the animation above them; then side by side at every width with the earlier animations (2026-10-01).
+- Features, Services and Why render through `FeatureItem`; only the wrapper `className` and the marker differ (Services also passes the stack `style` and its checklist as `children`).
+- **Centred on phones** (2026-10-02, your request "make them center on mobile"): below `sm` (640px) every `FeatureItem` card is `text-center`, and each marker (the Features tile, the Services ring, the Why tile) is `mx-auto`. From `sm` they're left-aligned again (`sm:text-left`, `sm:mx-0`), where Features puts the tile beside the text and Why goes to two columns. Process has its own markup in `ProcessPlayer`, because its titles are buttons.
 
 ## Borders: Locked
-- 1px `border-border`. Use them for dividers, card outlines, the header's bottom edge and the footer's top edge.
-- `dark-border` is 1.5:1 against black, so it is **decorative only**. A boundary that users need in order to find a control, such as a form input, uses `border-muted` (6.1:1) instead.
+- 1px `border-border` (black at 12% on light, `dark-border` inside `.theme-dark`). Use them for dividers, card outlines, the header's bottom edge and the footer's bottom row.
+- Borders are **decorative only** (black at 12% is about 1.2:1 on white; `dark-border` is 1.5:1 against #222). A boundary that users need in order to find a control, such as a form input, uses `border-muted` (about 5.9:1 on white) instead.
 
 ## Radius: Locked
 - `rounded-md` (6px) for buttons and inputs, `rounded-lg` (8px) for cards, panels and images. These are Tailwind's defaults, so there are no custom `--radius-*` tokens.
 - No pill buttons and no fully rounded cards.
 
 ## Icons: Locked
-- Generic inline SVG line icons, all in `src/components/ui/icons.tsx` (the one file allowed to hold several components). Each has a 24px viewBox, a 1.5px stroke and `currentColor`, sized `size-5` or `size-6`.
-- **No brand marks.** The Shopify, WordPress, WooCommerce, Figma and Next.js logos are off-palette and trademarked.
-- The set is: bag (Shopify), layout (WordPress), code (Next.js), pen (Figma to Web), check (Why), menu and close (mobile nav).
+- Generic inline SVG line icons, all in `src/components/ui/icons.tsx` (the one file allowed to hold several components). Each has a 24px viewBox, a 1.5px stroke and `currentColor`, sized `size-5` or `size-6`. Card markers sit on an `IconTile`: `size-6` on a `size-12` gold-tint tile (Services and Why, since 2026-10-02).
+- **No brand marks** in the icon set. The Shopify, WordPress, WooCommerce, Figma and Next.js logos are off-palette and trademarked.
+  - **Exception: the Platforms strip** (2026-10-01, your request) shows those five logos in their original colours. They are image files (`public/images/platforms/`), not icons, so `icons.tsx` stays generic. See Cards → Platforms. They name the platforms we work with, never clients or partners.
+- The set is: bag (Shopify), layout (WordPress), code (Next.js), pen (Figma to Web), bolt, bag, route and code (the Why points), check (the Services checklist), menu and close (mobile nav), play, pause, volume and volume-off (video reviews), and chevron left and right (the Portfolio's arrows; removed and restored on 2026-10-02).
 - Decorative icons get `aria-hidden="true"`. Icon-only buttons get an `aria-label`.
 - There is no icon library. Adding one needs approval.
 
 ## Images: Locked
 - Use `next/image` with `width`/`height` (or `fill`) and `sizes`.
 - **`priority` is deprecated in Next 16.** Use `preload` only for an above-the-fold image. The hero has no image, so the homepage preloads nothing.
-- The only raster images are the portfolio shots in `public/images/work/`. They are cropped (top of the page) and resized before they're committed: at most about 1200px wide, WebP or JPEG, roughly 300 KB or less each. The 6.7 MB and 12 MB screen captures are never committed.
+- The raster images are the portfolio shots in `public/images/work/` and the review posters. The portfolio shots are **full-length homepage screenshots** (since 2026-09-30, for the hover-scroll), resized before they're committed: at most 800px wide, WebP, roughly 300 KB or less each. The 6.7 MB and 12 MB screen captures are never committed.
+- **Changed image, new filename.** Next 16 caches optimised images for 4 hours, and browsers and CDNs cache by URL. Replacing a file under the same name serves the old version, as happened with the 4:5 crops. The full-length shots are therefore `*-full.webp`.
 - Alt text names the project and what is shown, e.g. "Ella jewelry store homepage".
-- **How the crops are made (Phase 6 cycle 7):** headless Chrome, which is already on the machine, renders each source image at the output width, captures the top 4:5 region and saves it as WebP at 80% quality. The script lives outside the project, so no dependency is added. The output is at most 800×1000 and 11–57 KB. Smaller sources are kept at their own width and never upscaled.
-- **Portfolio card:** an image frame (`overflow-hidden rounded-lg border border-border bg-surface`) holding `next/image` with the data's `width`/`height`, `className="aspect-4/5 w-full object-cover object-top"` and `sizes="(min-width: 1024px) 248px, (min-width: 640px) 50vw, 100vw"`. Then the label (`Eyebrow`, `mt-4`) and the name (H3, `mt-2 text-xl font-semibold`). Cards don't link anywhere. The images lazy-load (the default) and are never preloaded, because they're below the fold.
+- **How the shots are made:** ffmpeg (a system tool, installed with winget; not a project dependency), with `scale=W:-2:flags=lanczos`, `libwebp`, quality 72. Widths are 800 for the two full captures and native (370/540) for the smaller sources, which are never upscaled. The output is 800×4200, 370×2400, 800×3336, 370×1352 and 540×1512, at 51–227 KB. (Cycle 7's first 4:5 crops were made in headless Chrome.)
+- **Portfolio card** (a slide in the shared `Carousel`: **4 per view from `lg`**, like the video reviews (your request, 2026-10-02; 3 per view earlier that day), 2 on tablets, 1 plus a peek on phones):
+  - **Bordered card** (2026-10-02, your reference image "make these cards like in image"; earlier the same day a browser frame on the page, before that a grey card holding a smaller frame, and first a bare 4:5 screenshot):
+    - The card is `group h-full overflow-hidden rounded-lg border border-border bg-background`: on the dark section, #222 with a #3D3D3D border. `h-full` keeps every slide the same height.
+    - The screenshot fills the top edge to edge (no browser bar): `next/image` with the data's `width`/`height` and `sizes="(min-width: 1440px) 324px, (min-width: 1024px) 23vw, (min-width: 640px) 45vw, 72vw"`, classes `aspect-3/4 w-full object-cover object-top transition-[object-position] duration-700 ease-in-out motion-safe:group-hover:object-bottom motion-safe:group-hover:duration-(--scroll-duration)`. That's 324×432 at 1440, 220×293 at 1024, 346×461 at 768, 272×363 at 375 (the 370px-wide sources are no longer stretched at 1440).
+    - Below it, `p-5`: the label first (`text-sm text-muted`, #A0A0A0, 6.1:1; your confirmed service label, e.g. "Shopify theme customisation", where the image had a "Homepage › …" breadcrumb), then the name (H3, `mt-2 text-xl font-semibold text-balance`, white).
+    - Prev/next arrows over the track's edges; see Cards → Arrows.
+  - **Hover-scroll:** at rest the 3:4 frame shows the top of the full-length screenshot. On hover (devices with a pointer only, since Tailwind 4's `hover:` needs `(hover: hover)`) it glides to the bottom in `--scroll-duration`, set inline per project as 1 s per frame-width of travel, at least 1.5 s: 3.9 s for the 800×4200 Ella page, 1.5–5.2 s across the five. On leave it returns in 0.7 s. It's CSS only, so Splide's loop clones get it too. `motion-safe:` switches it off for reduced motion.
+  - The review posters keep their own `sizes` (`326px` / `23vw` / `50vw` / `80vw`), since a review card has no border to subtract.
+  - Three sources are small (Ella Jewelry and Home Gym 370px wide, Layout 22 540px), so they look a little soft at 441px. You'll send ~1600px screenshots; they'll be cropped the same way, under new `*-full` file names.
+  - Cards don't link anywhere. The images lazy-load (the default) and are never preloaded, because they're below the fold.
 
 ## Animation: Locked
 - Transitions are limited to colour, background and border (`transition-colors`), at 150ms or less, ease-out.
 - Anchor links scroll smoothly (`scroll-behavior: smooth` on `html`).
-- No scroll-triggered animation, parallax, auto-playing carousels or animation libraries.
-- The global `prefers-reduced-motion: reduce` guard turns off transitions, animations and smooth scrolling.
+- No scroll-triggered animation, parallax, auto-playing carousels (except the Platforms strip's continuous scroll, below) or animation libraries.
+- **Approved exceptions (2026-09-30):**
+  - **The portfolio hover-scroll:** an `object-position` transition of 1.5–6 s on hover (1.5–5.2 s with the 3:4 frames of 2026-10-02), 0.7 s back. It's user-triggered, never scroll-triggered, and off under reduced motion (`motion-safe:`).
+  - **The two carousels** (video reviews and portfolio) use Splide through the shared `ui/Carousel.tsx`. Slide moves are a 300 ms transform. It loops endlessly (`type: "loop"`, your request) but never autoplays, and Splide's `reducedMotion` (together with the global guard) makes moves instant for `prefers-reduced-motion`. Only `@splidejs/splide/css/core` is imported, so every visible style comes from the tokens.
+  - **The Platforms strip** (2026-10-01, your requests: "using Splide, make the loop infinite", then "make smooth scrolling, remove the pause button") is the **only auto-moving carousel**, through `ui/LogoStrip.tsx`:
+    - A **continuous scroll** at 48 px/s (one 15rem slide every 5 s), on core Splide with no extension: Splide `type: "loop"` (no autoplay, arrows, pagination, drag or keyboard) lays out the slides and clones, and a `requestAnimationFrame` loop moves the track by `speed × elapsed` through `Move.translate`, which wraps the loop seamlessly. The step is capped at 50 ms, so a dropped frame or a background tab never jumps it. It also keeps Splide's index in step (`Controller.setIndex` + `Slides.update`), so `aria-hidden` follows the visible slides.
+    - It **pauses while hovered** (`mouseenter`/`mouseleave`) and **while off-screen** (an `IntersectionObserver`), and stays **still under reduced motion**, following the setting live (`matchMedia` change). Switching reduced motion on mid-scroll snaps it to the nearest slide (Splide re-applies its options).
+    - **No pause button** (your request, 2026-10-01; the first version had one). WCAG 2.2.2 asks for a way to pause motion that starts by itself and lasts over 5 s; hover only covers mouse users. See `PROGRESS.md` → Known issues.
+    - Checked over 27 s of animation frames at 375, 1440 and 1920: a steady 48 px/s, never backwards, at most 0.83 px per 60 Hz frame, one seamless wrap, all five logos in order, and no frame where the slides leave a gap. With fixed slide widths, Splide makes enough clones to fill even a 1920 track: 16 for five logos.
+  - **The Services stacking cards** (your request): the stacking is `position: sticky` layout. The **shrink** of covered cards is a scroll-driven CSS animation (`scale`, tied directly to the user's scroll, no JS, no library), added from your reference video. It's off for `prefers-reduced-motion` and in browsers without `animation-timeline`. See Cards.
+  - **The code animation** (your request, spec `.claude/plans/lottie-integration.md`): a dotLottie animation (`public/animations/code-dark.lottie`, 19,922 B, 1080×1080, 16 s loop, vector only). Its colours are greys, white and our gold #E6AC0E, with no other hues, fonts or logos. It's in Why ecommercewisers and in the Features strip, through `ui/LottieAnimation.tsx` (client), which is decorative (`aria-hidden`) and has no background.
+  - **The Features animations** (2026-09-30, your request): three more dotLottie files replace the reference screenshot's icons: `laptop-ui.lottie` (1,331 B), `speed-gauge.lottie` (1,523 B) and `search-results.lottie` (1,445 B), each 512×512 and a 3–5 s loop, vector only. Their colours are greys, white, #282727 and our gold, with no fonts or logos. The first card reused `code-dark.lottie` until 2026-10-01, when it got `code-brackets.lottie` (your file, 1,540 B, 400×400, a 3.2 s loop: gold brackets open, `/code` pops in between them, and they close again; recoloured to the palette, #F5B800 → gold #E6AC0E and #000000 → black #222222; still 52, inside 42–62 where every letter is shown). `code-dark.lottie` stays in Why ecommercewisers. Since 2026-10-01 each loops seamlessly: the base (laptop, dial, search bar) stays on screen and only the details come and go, so the last frame equals the first (the laptop loop is 4 s). Each has its own reduced-motion still inside its fully built hold (laptop 48–80 → 64, gauge needle 49–66 → 60, search 50–116 → 80). The WASM loads once for all six players.
+    - **Lazy player** (2026-10-02, the code audit): `DotLottieReact` is a `next/dynamic` import (`ssr: false`), so the player's JS (34 KB gzipped) is its own chunk, not part of the first load. `LottieAnimation` mounts it only once its box comes within 400px of the viewport (an `IntersectionObserver` that then disconnects), and the player then fetches the WASM. The first load's JS went from 234.5 to 202.5 KB gzipped. On 375×800, 768×1024 and 1440×900 the first Features tile is within those 400px, so the chunk and WASM still arrive right after hydration; the other animations load as you scroll. The reserved box keeps layout shift at 0 (production build, checked at all three sizes).
+    - It freezes off-screen (`renderConfig.freezeOnOffscreen`).
+    - It starts playing from its `load` event, not `autoplay`. Under `prefers-reduced-motion: reduce` it pauses on frame 360 (the full scene: phone, code lines, bubbles), and it follows the setting live.
+    - Its `aspect-4/3` wrapper reserves the space, so there is no layout shift. The canvas is square, but the scene spans only ~20–78% of its height, so `layout={{ fit: "cover" }}` crops the empty top and bottom (checked across the whole loop: nothing is clipped; the bubbles keep ~8% margin at the top).
+    - The 1.24 MB WASM renderer is self-hosted (`public/lottie/`, via `setWasmUrl`), so there's no third-party request.
+  - **The Process animation** (your file `.claude/reference/process-animation-final.json`, 2026-10-02, the third and final version after the timeline and the dashboard of 2026-10-01): `public/animations/process-flow.lottie` (52,115 B packed; 450 KB of JSON), 1270×600 at 30 fps, a 474-frame (15.8 s) loop, vector only, no fonts or images.
+    - **Left, x 0–270: a drawn step column.** Four cards (x 6–262, 256×114, y 37–559) with the number, the title and the description, the same words as `Process.tsx`. In turn, each card's number turns gold, its title white, its card lights, and its gold bar fills (frames 24–114, 120–210, 216–306, 312–440).
+    - **Right, x 270–1270: the dashboard.** A 3×4 grid of tiles, one row per step (Store audit, Customers, Goals & scope / Site structure, UI design, Figma files / Clean code, Device testing, Progress updates / Go live, Live checks, Handover). The rows light up gold and connectors feed a "Your store" panel that builds to a LIVE sales chart.
+    - Markers: discover 24, design 120, develop 216, launch 312 (the steps' `start` frames, Discover from 0). Stills: 104, 208, 306 and 440, each with its card and row lit; 440 has everything done and is the default reduced-motion still.
+    - Colours: gold, neutral greys and white, with no other hues. The file's gold was rounded to 0.9 / 0.7 / 0.1 (#E6B31A, visibly yellower); all 87 uses (70 fills and strokes, 17 gradient stops) were set to the palette's #E6AC0E by walking the JSON's colour values only. The name became "ecommercewisers-process-flow" (the brand rule). Nothing else changed.
+    - **Gradients (in your file, kept as delivered):** gold-to-white tile borders, and gold-to-transparent fills on the hero and the sales chart. Approved as an exception inside this animation only.
+    - **Loop:** the canvas fades out at 446–464 and is blank for about 0.8 s, then fades back in (0–14), as delivered.
+    - **Canvas text:** the step column's descriptions draw at about 12–13px at 1440 and 11px at 1280, which is why it's shown only from `xl`. Contrast on #222: the not-yet-reached titles 2.77:1 and descriptions 1.87:1; the active description on its card 4.43:1; done steps 5.58:1. See PROGRESS.md → Known issues.
+  - **The Process animation for phones** (your file `.claude/reference/process-mobile-b.json`, 2026-10-02): `public/animations/process-flow-mobile.lottie` (55,392 B packed; 467 KB of JSON), 400×740, the same 474 frames and step markers as the desktop file, so the same step frames and stills work for both.
+    - Top to bottom: a tracker of four numbered nodes (each turns gold and pulses at its marker), then **one step at a time**: "STEP 0n", the title and the description (the same words as `Process.tsx`, checked), and its row of three tiles. Each slides in from the right and out to the left at the next marker; Launch stays. Feed lines run into the same "Your store" panel, which builds to the LIVE chart.
+    - The same fixes as the desktop file: all 91 gold values (74 colours, 17 gradient stops) were set from #E6B31A to #E6AC0E, and the name became "ecommercewisers-process-flow-mobile". It has the same gold gradients and the same fade-out loop. The stills (104 / 208 / 306 / 440) each show their step.
+    - Text on a 375 phone (scale 0.86): the titles are about 22px and the descriptions about 12px. Contrast: descriptions 5.58:1 on #222, lit tile labels 12.6:1. The not-yet-reached tracker numbers are 2.2:1 and the unlit tile labels 2.05:1 (dimmed by design). Each step's text is on screen for about 3 s; screen readers get the `sr-only` copy.
+  - **The header hide/show** (your request): a 300 ms `translate` + `opacity` transition, driven by scroll direction (`ScrollHeader`, a small client component with a passive, rAF-throttled listener). It's instant under reduced motion. See Spacing and layout.
+- The global `prefers-reduced-motion: reduce` guard turns off transitions, animations and smooth scrolling. Transitions are `0s`, not the common `0.01ms` (fixed 2026-10-02): with `transition-property`'s default `all`, any duration above 0 made every style change on every element a transition, so Splide measured the old layout when it mounted and the phone carousels started half a slide off (24px off on desktop). Nothing listens for `transitionend`.
 
 ## Responsive: Locked
 - Header nav links are `min-w-11 justify-center`, so short labels such as "Work" still get a 44×44px target (Phase 6 cycle 7).
@@ -160,7 +277,7 @@ One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anch
   - Tablet is `sm`/`md`, from 640 to 1023px.
   - Desktop is `lg`+, from 1024px up.
 - Check at 320, 375, 768, 1024 and 1440 px. There must be no horizontal scroll at any of these widths.
-- Nav: inline links from `md`, and a disclosure menu below `md` (`MobileNav`) with a toggle button that has `aria-expanded` and `aria-controls`. The menu closes on a link click, Escape (focus returns to the toggle), a tap outside it, or focus Tabbing out of it (the last two were added in Phase 8). The panel is capped at `100dvh` minus the header and scrolls, so the whole menu is reachable on a phone in landscape.
+- Nav: inline links from `md`, and a disclosure menu below `md` (`MobileNav`) with a toggle button that has `aria-expanded` and `aria-controls`. The menu closes on a link click, Escape (focus returns to the toggle), a tap outside it, or focus Tabbing out of it (the last two were added in Phase 8). The panel is a floating dark dropdown under the bar (`absolute inset-x-0 top-full mt-2 rounded-lg border border-border bg-background`, dark via the bar's `theme-dark`). It's capped at `100dvh` minus the header and 1.25rem, and scrolls, so the whole menu is reachable on a phone in landscape.
 
 ## Accessibility: Locked
 - WCAG 2.2 AA; follow the contrast table above.
@@ -168,9 +285,9 @@ One `ButtonLink` component. Every CTA on the homepage is a link: an in-page anch
 - A skip link, "Skip to content", goes to `#main`. It's the first focusable element on the page, placed before `<header>`. It stays visually hidden until it gets focus, then shows as a gold, button-style link (`rounded-md`) at the top left, above the sticky header.
 - Everything must work by keyboard, and focus must stay visible.
 - **Anchor targets get no `tabIndex`.** The cycle 3 idea was `tabIndex={-1}` on each section a nav link points to, so Next's router, which calls `focus()` on the hash target after scrolling, would move keyboard focus into it. A Chrome test in cycle 4 showed that `focus()` scrolls again and centres any section shorter than the viewport, instead of placing it under the header (201px instead of 64px at 1440). So anchor sections stay unfocusable. Keyboard focus stays on the clicked link, or returns to the top of the page from the mobile menu. That is a known issue in `docs/PROGRESS.md`, with a proposed fix for Phase 8.
-- **Focus ring:** `:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }` is set once in `globals.css`. It is gold on dark and black on light bands.
+- **Focus ring:** `:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }` is set once in `globals.css`. It is black on the white page, and gold inside `.theme-dark` (the dark sections and the footer).
 - Images get meaningful `alt` text, or `alt=""` if they are decorative. Icon-only controls get an `aria-label`.
-- Tap targets are at least 44×44px, and `prefers-reduced-motion` is respected.
+- Tap targets are at least 44×44px (the one exception: the carousel dots, 24×24), and `prefers-reduced-motion` is respected.
 
 ## Implementation
 Everything lives in **`src/app/globals.css`** (Tailwind 4.3, CSS-first, no `tailwind.config`).
@@ -179,12 +296,13 @@ Everything lives in **`src/app/globals.css`** (Tailwind 4.3, CSS-first, no `tail
 |---|---|---|
 | `@import "tailwindcss" source("..")` | Tailwind, scanning `src/` only | Otherwise class names quoted in `docs/` and `CLAUDE.md` would be turned into CSS. |
 | `@theme { --color-*: initial; … }` | The 7 raw palette colours (`--color-primary`, `--color-black`, …) | `initial` wipes Tailwind's default palette, so `bg-blue-500` generates nothing. |
-| `:root { … }` | The guide §4 semantic variables, with dark values; `--accent`; the `--header-height` layout variable; `color-scheme: dark` | The one place to change the theme |
-| `.theme-light { … }` (in `@layer components`) | The same variables with light values, plus the band's own background and text colour | One class turns a section into a light band. Utilities still override it. |
-| `@theme inline { … }` | Maps `--color-background: var(--background)` and the rest, plus `--font-sans`/`--font-mono` → Geist | `inline` makes `.bg-background` compile to `background-color: var(--background)`, which resolves per element, so it flips inside `.theme-light`. |
+| `:root, .theme-light { … }` + `:root { … }` | The guide §4 semantic variables. The shared rule holds the **light** values (white page, #F3F3F3 surfaces, black text, 70% muted, 12% borders, black accent, `color-scheme: light`); `:root` alone adds `--surface-muted`, `--primary`, `--primary-foreground` and the `--header-height` layout variable | The one place to change the theme (flipped from dark on 2026-09-30) |
+| `.theme-light { … }` (in `@layer components`) | The white background and black text of a light element inside a dark section (its variables come from the shared rule) | The Services cards |
+| `.theme-dark { … }` (in `@layer components`) | The former dark values (#222, white, #2E2E2E, #A0A0A0, #3D3D3D, gold accent), plus the background and text colour | One class makes a dark area: `<Section dark>` (Services, Process, Portfolio, Reviews), the Hero, the Platforms strip and the footer. |
+| `@theme inline { … }` | Maps `--color-background: var(--background)` and the rest, plus `--font-sans`/`--font-mono` → Geist | `inline` makes `.bg-background` compile to `background-color: var(--background)`, which resolves per element, so it flips inside `.theme-dark`. |
 | `@layer base` | `html` scroll padding and smooth scrolling; the `body` background and colour; the global `:focus-visible` outline (`var(--accent)`); the `prefers-reduced-motion` guard | Tailwind's preflight applies Geist to `html` through `--font-sans`. |
 
-- `--accent` is set in `:root` (`var(--color-primary)`) and in `.theme-light` (`var(--color-black)`), and mapped by `--color-accent: var(--accent)` in `@theme inline`. Added in Phase 6, cycle 1.
+- `--accent` is set in `:root` (`var(--color-black)`) and in `.theme-dark` (`var(--color-primary)`), and mapped by `--color-accent: var(--accent)` in `@theme inline`. Added in Phase 6, cycle 1.
 - `<html data-scroll-behavior="smooth">` in `layout.tsx` tells Next 16 to switch smooth scrolling off during route changes, so they stay instant once other pages exist.
 
 Because the mapping is `inline`, the `--color-background` variables don't appear in the built CSS. The utilities point straight at `var(--background)` and the other variables. For custom CSS, use `var(--background)`, `var(--muted)` and so on.
@@ -193,22 +311,34 @@ Because the mapping is `inline`, the `--color-background` variables don't appear
 | Component | API |
 |---|---|
 | `Container` | `children`, `className?`: the page container |
-| `ButtonLink` | `href`, `variant?: "primary" \| "secondary"` (default `primary`), `size?: "md" \| "lg"` (default `lg`), plus any `<a>` prop. `/…` hrefs use `next/link`; others (`mailto:`) use `<a>`. |
-| `SectionHeading` | `eyebrow?`, `title`, `intro?`, `id?`. The `id` goes on the `h2`, for the section's `aria-labelledby`. Without an eyebrow the H2 has no top margin (the CTA). The intro is `max-w-prose`. |
-| `Eyebrow` | `children`, `className?`: the eyebrow/label style above. Used by `SectionHeading` and the Hero, and later the portfolio card labels (added in cycle 3). |
-| `FeatureItem` | `marker` (icon or step number), `title`, `description`, `className?` (the wrapper: card or top border). Renders an `<li>` with the marker, the H3 and one line, so use it inside `<ul>`/`<ol>`. Used by Services, Why and Process (added in cycle 5). |
-| `Section` | `id`, `light?`, `children`: a homepage section after the Hero. It renders `<section id aria-labelledby="{id}-title">` with `py-16 md:py-24` (plus `theme-light` when `light`) and the `Container`. The section's heading must carry `id="{id}-title"` (added in Phase 8). |
-| `SectionGrid` | `children`, `ordered?`: the `mt-12` 1 / 2 / 4-column list under a heading (`grid gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-4`), a `<ul>`, or an `<ol>` when `ordered` (Process). Used by Services, Why, Process and Portfolio (added in Phase 8). |
-| `Wordmark` | `className?`: renders `site.name` |
-| `icons.tsx` | `BagIcon`, `LayoutIcon`, `CodeIcon`, `PenIcon`, `CheckIcon`, `MenuIcon`, `CloseIcon`, and `serviceIcons[name]`. They're `aria-hidden` by default and have **no default size**: always pass `size-5` or `size-6`. |
+| `ButtonLink` | `href`, `variant?: "primary" \| "secondary"` (default `primary`), `size?: "md" \| "lg"` (default `lg`), plus any `<a>` prop. `/…` hrefs use `next/link`; others (`mailto:`) use `<a>`. The same file exports `buttonClass({ variant?, size? })`, the classes alone, for a real `<button>` (the contact form's submit; 2026-10-02). |
+| `SectionHeading` | `eyebrow?` (always the chip; the `eyebrowVariant` prop was removed on 2026-10-02), `title`, `intro?`, `id?`. The `id` goes on the `h2`, for the section's `aria-labelledby`. The H2 is `mt-4` below the eyebrow (`mt-3` until 2026-10-02), and has no top margin without one. The H2 sizes are in Typography. The intro is `max-w-prose text-pretty`. |
+| `ContactForm` | Client, in `sections/`. `email`, `emailHref` (shown while the form can't send). `useActionState` with the `sendMessage` Server Action (`sections/sendMessage.ts`), which checks every field again (a public endpoint) and returns `idle`, `invalid` (errors and the values) or `not-sent` (the values). The values come back as `defaultValue`, so React's reset after the action doesn't clear a message that wasn't sent. See Cards → Contact. |
+| `Eyebrow` | `children`, `variant?: "chip" \| "label"` (default `chip`), `as?: "p" \| "h2"` (default `p`), `className?`: the eyebrow/label style above. Used by `SectionHeading` and the Hero (`chip`), and the small titles over a value or list (`label`, `font-medium text-muted`: the Contact email, and the footer's column titles with `as="h2"`; 2026-10-02, replacing two copies of the classes). The `section` variant (dot and line) and the portfolio's `plain` variant were removed on 2026-10-02. |
+| `IconTile` | `icon` (a component from `icons.tsx`), `className?` (e.g. the Why cards' hover): a card marker, a `size-6` icon in `text-accent` on a `size-12 rounded-md bg-primary/15` gold-tint tile, centred on phones (`mx-auto sm:mx-0`). Used by Services and Why (2026-10-02). |
+| `FeatureItem` | `marker` (icon or step number), `title`, `description`, `className?` (the wrapper: the card of Features, Services or Why), `style?` (inline, e.g. the Services `--stack-index`), `children?` (after the description, e.g. the Services checklist). Renders an `<li>` with the marker, the H3 and one line, so use it inside `<ul>`/`<ol>`. Centred below `sm`, left-aligned from `sm` (the marker centres itself: `mx-auto sm:mx-0`). Used by Features, Services and Why (added in cycle 5; Process until 2026-10-01; `style` and `children` on 2026-09-30). |
+| `ScrollHeader` | Client, in `sections/`. `children`: the header bar. It renders the transparent sticky `<header>` wrapper around the dark glass bar and sets `data-hidden` while scrolling down (see Spacing and layout → Dark glass bar). |
+| `Section` | `id`, `dark?`, `className?` (extra classes such as a divider; no padding or colour), `children`: a homepage section after the Hero. It renders `<section id aria-labelledby="{id}-title">` with `py-16 md:py-24 lg:py-28` (plus `theme-dark` when `dark`) and the `Container`. The section's heading must carry `id="{id}-title"` (added in Phase 8). |
+| `Reviews` / `ReviewsCarousel` / `ReviewCard` | In `sections/` (content in `data/reviews.ts`, including the `ReviewVideo` type and the buttons' labels). `ReviewsCarousel` (client) renders the shared `Carousel` and passes `wireVideos` as `onMounted`. Because a loop **clones slides as plain DOM** (no React handlers), the cards are driven by native listeners on the carousel root: a delegated `click` for `button[data-action="play"\|"mute"]`, and capture-phase `play`/`pause`/`ended`, which set `data-started`/`data-playing`/`data-unmuted` on the card, update the labels and pause every other video. `ReviewCard` is stateless markup; CSS (`group-data-*`) swaps the icons and hides the poster. Clones therefore behave exactly like the originals. |
+| `LottieAnimation` | Client. `src` (a `.lottie` in `public/animations/`), `stillFrame` (shown for reduced motion), `fit?: "contain" \| "cover"` (default `contain`), `align?: [x, y]` (which part stays in view when cropped; default centred, added 2026-10-02), `className` (must reserve the box: an aspect ratio and a width, so nothing shifts), `onPlayer?(player)` (receives the dotLottie player, e.g. to follow its frames; a stable function, added 2026-10-01). An `aria-hidden` wrapper around `DotLottieReact`, which it loads lazily (`next/dynamic`) and mounts once the box is within 400px of the viewport (2026-10-02): it loops, freezes off-screen, and starts playing from its `load` event (never `autoplay`). Reduced motion comes from `useMediaQuery(REDUCED_MOTION)`. It's the only file that imports the player and sets the self-hosted WASM URL (the `WASM_URL` const). It replaced `CodeAnimation` (2026-09-30). Used by Features (four 96px squares), Why (4:3, `cover`) and `ProcessPlayer` (5:3 kept right below `xl`, the whole 127:60 canvas from `xl`; `cover`, `align`, `onPlayer`). |
+| `ProcessPlayer` | Client, in `sections/`. `steps` (`ProcessStep[]` from `data/process.ts`: `title`, `description`, `start` and `still` frames) and `animation` (`src`, `mobileSrc`, `frames`). Phones (`(max-width: 639px)`, live) get `mobileSrc`; the player mounts only after hydration, once that's known, so each visitor downloads one file (an `aria-hidden` box of the same size stands in until then). The Process steps with the animation, kept in step with its `frame` events: the current card, its filling bar, and jump-to-step buttons; reduced motion shows stills per step. On phones (except under reduced motion) and from `xl` the interactive list is hidden and a static `sr-only` copy stands in, because the animation draws the steps itself. See Cards → Process. |
+| `Carousel` | Client. `label`, `slideLabel` (Splide's "%s of %s"), | 4` (slides per view from `lg`, default 4; 3 for the Portfolio since 2026-10-02, with a matching pre-mount slide width), `onMounted?(root, splide)` (a stable function, may return a cleanup), `className?`, and `children` (each child becomes a slide). With `LogoStrip`, one of the two files that import Splide: a looping `type: "loop"` carousel with 4 slides per view from `lg` (a `perPage` option, 3 for the Portfolio, existed briefly on 2026-10-02) (2 on tablets, 1 plus a 20% peek on phones), `role="group"`, page dots under it (styled through Splide's `classes.page`, 2026-10-02), drag and swipe, no autoplay, and with `arrows?: boolean` (default false; the Portfolio only, 2026-10-02) our own prev/next buttons, shown once Splide has mounted. Visible before mount (`is-rendered`). Loop clones are plain DOM, so slides must work without React handlers. Used by Portfolio and `ReviewsCarousel` (with `onMounted` wiring the videos). |
+| `LogoStrip` | Client. `label` (the group's name) and `children` (each child becomes a fixed-width slide, centred). The full-bleed Splide loop that scrolls continuously (48 px/s through `Move.translate` in a `requestAnimationFrame` loop), paused on hover and off-screen, still under reduced motion (live), with no controls. Visible before mount (`is-rendered`). See Animation → The Platforms strip. Used by `sections/Platforms.tsx` (added 2026-10-01). Its reduced-motion check reads `matchMedia(REDUCED_MOTION)` directly inside the rAF loop, since a React value there would remount Splide. |
+| `SplideTrack` | `slideClassName` (each slide's pre-mount width) and `children`: Splide's `splide__track > splide__list`, one `li.splide__slide` per child. Shared by `Carousel` and `LogoStrip` (2026-10-02, replacing the markup they each repeated). |
+| `breakpoints` | `src/lib/breakpoints.ts` (2026-10-02): Tailwind's default `sm`/`md`/`lg` (40/48/64rem) for scripts. `atLeast("md")` gives `(width >= 48rem)` (the condition of `md:`), `below("sm")` gives `(width < 40rem)`, and `maxPx("lg")` gives `1023` (Splide's pixel max-width keys). Used by `Carousel`, `LogoStrip`, `ProcessPlayer` and `MobileNav`, replacing four hand-typed copies. |
+| `src/data/*` | The content, one file per section (2026-10-02, your request): every text, link, image and Lottie path, label and message, plus the content types (`Feature`, `Service`, `Point`, `ProcessStep`, `Project`, `ReviewVideo`, `NavItem`, `Platform`). The components import them and hold only layout. See CLAUDE.md → Coding and component rules. |
+| `contactLimits` | `data/contact.ts` (2026-10-02; in `sections/contact/limits.ts` until the data folder): `{ name: 100, email: 254, message: 5000 }`, the one source for `ContactForm`'s `maxLength` and `sendMessage`'s server checks. It can't live in `sendMessage.ts`, because a `"use server"` module may export only async functions. |
+| `useMediaQuery` | `src/lib/useMediaQuery.ts`: `useMediaQuery(query)` returns a live boolean (`useSyncExternalStore`; `false` on the server and during hydration), and `REDUCED_MOTION` is the shared query. Used by `LottieAnimation` and `ProcessPlayer` (2026-10-02, replacing their own listeners). |
+| `Wordmark` | `className?` (sets the height; default `h-5`): the logo, your wordmark SVG inlined with `currentColor`, `role="img"`, `aria-label={brand}` (2026-10-02; it rendered the text before). Also exports `brand` ("ecommercewisers") for the Footer's copyright line. |
+| `icons.tsx` | `BagIcon`, `LayoutIcon`, `CodeIcon`, `PenIcon`, `BoltIcon`, `RouteIcon`, `CheckIcon`, `MenuIcon`, `CloseIcon`, the video and carousel icons, no name-to-icon maps (sections put the icon component in their own data, since 2026-09-30). They're `aria-hidden` by default and have **no default size**: always pass `size-5` or `size-6`. |
 
 `cn()` (`src/lib/cn.ts`) only joins classes. It doesn't resolve conflicts, so don't pass a class that fights a component's own class (e.g. a second `h-*` to `ButtonLink`).
 
 ### How components use the tokens
-Use the semantic utilities with any colour prefix (`bg-`, `text-`, `border-`, `outline-`, `ring-`, `fill-`, `stroke-`): `background`, `foreground`, `surface`, `surface-muted`, `primary`, `primary-foreground`, `muted`, `border`, `accent`. Opacity modifiers work, for example `hover:bg-primary/90`.
+Use the semantic utilities with any colour prefix (`bg-`, `text-`, `border-`, `outline-`, `ring-`, `fill-`, `stroke-`): `background`, `foreground`, `surface`, `primary`, `primary-foreground`, `muted`, `border`, `accent`. Opacity modifiers work, for example `hover:bg-primary/90`.
 
 ```tsx
-// Dark section (the default): nothing to add
+// White section (the default): nothing to add. Surfaces are light grey, the accent black
 <section className="py-16 md:py-24">
   <div className="rounded-lg border border-border bg-surface p-6">
     <BagIcon className="size-6 text-accent" aria-hidden="true" />
@@ -217,14 +347,14 @@ Use the semantic utilities with any colour prefix (`bg-`, `text-`, `border-`, `o
   </div>
 </section>
 
-// Light band: the same utilities, light values (#F3F3F3 background, white cards, black accent)
-<section className="theme-light py-16 md:py-24">
+// Dark section (<Section dark>): the same utilities, dark values (#222 background, #2E2E2E cards, gold accent)
+<section className="theme-dark py-16 md:py-24">
   <div className="rounded-lg border border-border bg-surface p-6">…</div>
 </section>
 
-// Primary CTA: gold fill with black text. It works on dark and on light bands.
+// Primary CTA: gold fill with black text. It works on white and dark sections.
 <ButtonLink href="/#contact" variant="primary" size="lg">Start a project</ButtonLink>
 ```
 
-- **Don't** use the raw palette utilities (`bg-black`, `text-white`, `bg-light-gray`, `text-secondary-text`, …) in components. They exist because the palette sits in `@theme`, but they don't flip inside `.theme-light`.
+- **Don't** use the raw palette utilities (`bg-black`, `text-white`, `bg-light-gray`, `text-secondary-text`, …) in components. They exist because the palette sits in `@theme`, but they don't flip inside the theme scopes.
 - **Don't** use `text-primary` for text. Use `text-accent`.

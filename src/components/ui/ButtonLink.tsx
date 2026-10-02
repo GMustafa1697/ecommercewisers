@@ -12,26 +12,25 @@ const sizes = {
   lg: "h-12 px-6 text-base",
 } as const;
 
-type ButtonLinkProps = Omit<ComponentPropsWithoutRef<"a">, "href"> & {
-  href: string;
+type ButtonStyle = {
   variant?: keyof typeof variants;
   size?: keyof typeof sizes;
 };
 
-/** A link styled as a button. Internal hrefs ("/…", not "//host") use next/link; mailto: and external ones use <a>. */
-export function ButtonLink({
-  href,
-  variant = "primary",
-  size = "lg",
-  className,
-  ...props
-}: ButtonLinkProps) {
-  const classes = cn(
+/** The button classes, shared by ButtonLink and real <button>s (the contact form's submit). */
+export function buttonClass({ variant = "primary", size = "lg" }: ButtonStyle = {}) {
+  return cn(
     "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors ease-out",
     variants[variant],
     sizes[size],
-    className,
   );
+}
+
+type ButtonLinkProps = Omit<ComponentPropsWithoutRef<"a">, "href"> & ButtonStyle & { href: string };
+
+/** A link styled as a button. Internal hrefs ("/…", not "//host") use next/link; mailto: and external ones use <a>. */
+export function ButtonLink({ href, variant, size, className, ...props }: ButtonLinkProps) {
+  const classes = cn(buttonClass({ variant, size }), className);
 
   if (href.startsWith("/") && !href.startsWith("//")) {
     return <Link href={href} className={classes} {...props} />;

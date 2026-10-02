@@ -1,16 +1,13 @@
 import Link from "next/link";
 import { FooterColumn } from "@/components/sections/FooterColumn";
 import { Container } from "@/components/ui/Container";
-import { Wordmark } from "@/components/ui/Wordmark";
-import {
-  contact,
-  contactHref,
-  footerSection,
-  nav,
-  servicesSection,
-  site,
-  socials,
-} from "@/content/site";
+import { brand, Wordmark } from "@/components/ui/Wordmark";
+import { contact, contactHref } from "@/data/contact";
+import { contactTitle, description, navTitle, rights, servicesTitle, socials } from "@/data/footer";
+import { nav } from "@/data/header";
+import { services } from "@/data/services";
+
+// Content: data/footer.ts.
 
 // Set when the page is built (it is static), so a rebuild updates it.
 const year = new Date().getFullYear();
@@ -20,15 +17,14 @@ const linkClass =
   "inline-flex min-h-11 min-w-11 items-center text-sm text-foreground underline-offset-4 hover:underline";
 
 export function Footer() {
-  const { navTitle, servicesTitle, contactTitle, rights } = footerSection;
-
   return (
-    <footer className="border-t border-border bg-surface">
+    // Dark, like the dark sections: .theme-dark flips the tokens inside it.
+    <footer className="theme-dark">
       <Container className="py-12 md:py-16">
         <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8">
           <div>
             <Wordmark />
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">{site.description}</p>
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">{description}</p>
           </div>
 
           <nav aria-label="Footer">
@@ -44,7 +40,7 @@ export function Footer() {
           </nav>
 
           <FooterColumn title={servicesTitle}>
-            {servicesSection.items.map((item) => (
+            {services.map((item) => (
               <li key={item.title}>
                 <Link href="/#services" className={linkClass}>
                   {item.title}
@@ -71,7 +67,7 @@ export function Footer() {
         </div>
 
         <p className="mt-12 border-t border-border pt-6 text-sm text-muted">
-          © {year} {site.name}. {rights}
+          © {year} {brand}. {rights}
         </p>
       </Container>
     </footer>

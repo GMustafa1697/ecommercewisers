@@ -17,7 +17,7 @@ Do not fix anything unless the user asks. Run each step even if an earlier one f
    - `gradient`, `dark:`, or Tailwind palette classes such as `blue-500`, `zinc-100` or `gray-700`
    - `text-primary` used for text (`text-primary([^-]|$)`). Gold text is `text-accent`; `text-primary-foreground` is fine.
    - the deprecated `priority` prop on `<Image>`. Use `preload`.
-   - placeholders: `example.com`. Until the real email arrives, report the hit in `src/content/site.ts` as **expected (blocks deploy)**. Any other hit is a fail.
+   - placeholders: `example.com`. Until the real email arrives, report the hit in `src/data/contact.ts` as **expected (blocks deploy)**. Any other hit is a fail.
    - the old brand spellings `Ecomwiser` or `ecomwisers`
 5. `git status`: confirm that no `.claude/settings.local.json`, `.claude/settings.loca.json` or `.env*` file is staged or tracked.
 
