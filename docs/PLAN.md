@@ -65,11 +65,11 @@ The milestone is the **homepage only**. Tick items as they are finished and comm
 
 ## Phase 9: Git and version control
 - [x] Milestone committed (one commit per phase), no secrets tracked. Only your `.gitignore` edit and `.claude/plans/` are left uncommitted, pending your call.
-- [x] Remote: `origin`, the private GitHub repo `GMustafa1697/ecommercewisers`. Everything since Phase 8 committed and pushed to `main` (2026-10-02).
+- [x] Remote: `origin`, the private GitHub repo `GMustafa1697/ecommercewisers`. Everything since Phase 8 committed and pushed to `main` (2026-10-02); the WIP polish and the 2026-10-03 work pushed too (`8096046`).
 - [ ] Tag `homepage-v1` (proposed). **Your decision.**
 
 ## Phase 10: Deployment
-- [ ] Host chosen (to be decided), env vars set on the host. It must run Next.js (the contact form's Server Action), not a static export
+- [ ] Host chosen, env vars set on the host. It must run Next.js (the contact form's Server Action), not a static export. **Host: Vercel** (2026-10-03, your request): project `ghulam-mustafas-projects-38b557bc/ecommercewisers`, CLI deploys only (not connected to GitHub), SMTP env vars on **Preview only**, a login-protected preview deployment. Production env vars and the production deploy wait for the blockers below.
 - [x] Security headers and `public/` caching in `next.config.ts` (2026-10-02). On the host: HSTS and HTTPS redirects, and rate limiting for the form once it sends
 - [ ] No placeholders left: the `/ew-test` `example.com` sweep is clean (the real contact email is in)
 - [ ] Deployed; live smoke test on mobile and desktop
