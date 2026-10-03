@@ -21,7 +21,9 @@ export const contactLimits = { name: 100, email: 254, message: 5000 } as const;
 export const requiredNote = "All fields are required.";
 export const submit = { label: "Send message", pending: "Sending…" };
 export const checkFields = "Check the fields marked above.";
-export const notSent = "Sending isn't set up yet, so your message wasn't sent. Please email us at";
+export const sentNote = "Thanks, your message was sent. We'll reply by email.";
+/** Shown when sending fails; the email link follows it. */
+export const failedNote = "Something went wrong and your message wasn't sent. Please try again, or email us at";
 export const fields = [
   { name: "name", label: "Name", type: "text", autoComplete: "name", maxLength: contactLimits.name },
   { name: "email", label: "Email", type: "email", autoComplete: "email", maxLength: contactLimits.email },

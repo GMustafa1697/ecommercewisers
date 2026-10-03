@@ -1,0 +1,4 @@
+# Vercel CLI uploads don't read .gitignore: only this file, on top of the CLI's own defaults (which
+# already skip .env.local, .next and node_modules). These hold secrets or local reference material.
+.claude/
+.env*

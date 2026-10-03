@@ -4,13 +4,15 @@ import { cn } from "@/lib/cn";
 type SplideTrackProps = {
   /** Each slide's classes, e.g. its pre-mount width (Splide's inline width wins once it mounts). */
   slideClassName: string;
+  /** The track's classes, e.g. its pre-mount padding (Splide's inline padding wins once it mounts). */
+  trackClassName?: string;
   children: ReactNode;
 };
 
 /** Splide's track and list, one <li> slide per child. Shared by Carousel and LogoStrip. */
-export function SplideTrack({ slideClassName, children }: SplideTrackProps) {
+export function SplideTrack({ slideClassName, trackClassName, children }: SplideTrackProps) {
   return (
-    <div className="splide__track">
+    <div className={cn("splide__track", trackClassName)}>
       <ul className="splide__list">
         {Children.toArray(children).map((child, index) => (
           <li

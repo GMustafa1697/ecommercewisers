@@ -9,50 +9,49 @@ export type ProcessStep = {
   still: number;
 };
 
-/** `mobileSrc` is the portrait version for phones; both share the frame count and step markers. */
-export type ProcessAnimation = { src: string; mobileSrc: string; frames: number };
+/** `speed` is the playback rate: below 1 slows the whole loop down. */
+export type ProcessAnimation = { src: string; frames: number; speed: number };
 
 export const eyebrow = "Process";
 export const title = "From brief to launch in four steps";
 
-// Your final animation (2026-10-02): a 474-frame (15.8 s) loop on a 1270×600 canvas. On the left it
-// draws these four steps (the same words) as cards whose gold bars fill in turn; on the right a row of
-// three tiles per step lights up and feeds a "Your store" panel that builds up to a live sales chart.
-// At the end it fades out and back in. Phones get your portrait version (400×740, the same frames and
-// markers): a step tracker, then one step's text and tiles at a time, sliding in at each marker, above
-// the same store panel. If you change a step's words here, change them in both animation files too.
+// Your v3 animation (2026-10-03): a 278-frame (9.3 s at 30 fps) loop on a 1270×600 canvas. On the
+// left a ring fills one quarter per step, with the step's icon in its centre; on the right a panel
+// shows one step at a time (its number, these words and three items). Launch ends on "LIVE", then it
+// fades out and back in. Played at 0.6×, so each step stays about 3.2 s (15.5 s a loop), the pace of
+// the earlier file. If you change a step's words here, change them in the animation file too.
 export const animation: ProcessAnimation = {
-  src: "/animations/process-flow.lottie",
-  mobileSrc: "/animations/process-flow-mobile.lottie",
-  frames: 474,
+  src: "/animations/process-ring.lottie",
+  frames: 278,
+  speed: 0.6,
 };
 
-// Each step owns the frames from its `start` to the next step's (from the file's markers: design 120,
-// develop 216, launch 312); `still` is a frame with its card and tiles lit and its part of the panel
-// built (the Launch still has everything done).
+// Each step owns the frames from its `start` to the next step's (the file's markers: discover 16,
+// design 74, develop 132, launch 190); `still` is the last frame before the step fades, with all three
+// items shown (the Launch still has the whole ring and "LIVE").
 export const steps: ProcessStep[] = [
   {
     title: "Discover",
     description: "We learn your products, customers and goals, and agree what to build.",
-    start: 0,
-    still: 104,
+    start: 16,
+    still: 64,
   },
   {
     title: "Design",
     description: "We plan structure and design, or work from your Figma files.",
-    start: 120,
-    still: 208,
+    start: 74,
+    still: 122,
   },
   {
     title: "Develop",
     description: "We build, test on real devices and share progress as we go.",
-    start: 216,
-    still: 306,
+    start: 132,
+    still: 180,
   },
   {
     title: "Launch",
     description: "We launch, check everything live and hand over what you need to run it.",
-    start: 312,
-    still: 440,
+    start: 190,
+    still: 246,
   },
 ];

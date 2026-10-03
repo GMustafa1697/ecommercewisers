@@ -39,7 +39,7 @@ export function PortfolioPreview() {
               width={project.image.width}
               height={project.image.height}
               alt={project.image.alt}
-              sizes="(min-width: 1440px) 324px, (min-width: 1024px) 23vw, (min-width: 640px) 45vw, 72vw"
+              sizes="(min-width: 1440px) 324px, (min-width: 1024px) 23vw, (min-width: 640px) 45vw, 76vw"
               style={
                 {
                   "--scroll-duration": `${scrollSeconds(project.image.width, project.image.height)}s`,

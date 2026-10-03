@@ -187,7 +187,7 @@
   }
 }
 
-/* 6. The glass header (ScrollHeader.tsx). While scrolling down it slides up and fades out
+/* 6. The glass header (ScrollHeader in Header.tsx). While scrolling down it slides up and fades out
  *    (data-hidden); scrolling up brings it back. It stays shown while focus is inside it (keyboard
  *    users) or the mobile menu is open. The reduced-motion guard makes the change instant. */
 @layer components {

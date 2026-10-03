@@ -33,6 +33,8 @@ type LottieAnimationProps = {
   fit?: "contain" | "cover";
   /** Which part of the canvas stays in view when it doesn't fit: [x, y], 0 to 1 (default centred). */
   align?: [number, number];
+  /** Playback rate: 1 (the default) as drawn, below 1 slower. */
+  speed?: number;
   /** Must reserve the box before the canvas loads (an aspect ratio and a width), so nothing shifts. */
   className: string;
   /** Receives the player once it exists, e.g. to follow its frames. Must be a stable function. */
@@ -50,6 +52,7 @@ export function LottieAnimation({
   stillFrame,
   fit = "contain",
   align = [0.5, 0.5],
+  speed = 1,
   className,
   onPlayer,
 }: LottieAnimationProps) {
@@ -97,6 +100,7 @@ export function LottieAnimation({
         <DotLottieReact
           src={src}
           layout={{ fit, align }}
+          speed={speed}
           loop
           renderConfig={{ freezeOnOffscreen: true, autoResize: true }}
           dotLottieRefCallback={setPlayer}
