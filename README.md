@@ -29,3 +29,7 @@ The contact form uses a Server Action, so the site needs a host that runs Next.j
 - `docs/PLAN.md`: the roadmap
 - `docs/DESIGN.md`: the design system
 - `docs/PROGRESS.md`: status, decisions and known issues, including what blocks deploy
+
+## Live
+
+https://ecommercewisers.vercel.app
