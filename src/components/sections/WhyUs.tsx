@@ -1,11 +1,38 @@
+import type { ComponentType } from "react";
 import { FeatureItem } from "@/components/ui/FeatureItem";
 import { IconTile } from "@/components/ui/IconTile";
+import { BagIcon, BoltIcon, CodeIcon, type IconProps, RouteIcon } from "@/components/ui/icons";
 import { LottieAnimation } from "@/components/ui/LottieAnimation";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { animation, eyebrow, points, title } from "@/data/why";
 
-/** The Why bento: the code animation and four point cards. Content: data/why.ts. */
+// Content: edit the texts, icons and animation here.
+
+/** `icon` is one of the generic icons in components/ui/icons.tsx. */
+type Point = { title: string; description: string; icon: ComponentType<IconProps> };
+
+const eyebrow = "Why ecommercewisers";
+const title = "What working with us looks like";
+
+/** The code scene; frame 360 of 480 has the phone, the code lines and the bubbles on screen. */
+const animation = { src: "/animations/code-dark.lottie", stillFrame: 360 };
+
+const points: Point[] = [
+  { title: "Performance first", description: "Pages built to load fast on real phones.", icon: BoltIcon },
+  {
+    title: "E-commerce focus",
+    description: "Catalogs, product pages, checkout and the content around them.",
+    icon: BagIcon,
+  },
+  {
+    title: "A clear process",
+    description: "You approve a plan before we build, and see progress at every step.",
+    icon: RouteIcon,
+  },
+  { title: "Maintainable code", description: "Typed, documented code your team can build on.", icon: CodeIcon },
+];
+
+/** The Why bento: the code animation and four point cards. */
 export function WhyUs() {
   return (
     <Section id="why">

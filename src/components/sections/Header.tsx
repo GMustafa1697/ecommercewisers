@@ -5,17 +5,25 @@ import { type FocusEvent, type ReactNode, useEffect, useRef, useState } from "re
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { CloseIcon, MenuIcon } from "@/components/ui/icons";
+import { TopLink } from "@/components/ui/TopLink";
 import { Wordmark } from "@/components/ui/Wordmark";
-import { startProject } from "@/data/contact";
-import { menuLabel, nav, skipLink } from "@/data/header";
 import { atLeast } from "@/lib/breakpoints";
+import { nav, startProject } from "@/lib/site";
+
+// Content: edit the texts here. The nav links and the button are shared with other sections, in lib/site.ts.
+
+/** The keyboard skip link, the first thing Tab reaches. */
+const skipLink = "Skip to content";
+
+/** The mobile menu button's accessible name. */
+const menuLabel = "Menu";
 
 type NavLink = { label: string; href: string };
 
 type MobileNavProps = {
   items: NavLink[];
   cta: NavLink;
-  /** The toggle button's accessible name (data/header.ts). */
+  /** The toggle button's accessible name (menuLabel). */
   label: string;
 };
 
@@ -169,7 +177,7 @@ function ScrollHeader({ children }: ScrollHeaderProps) {
   );
 }
 
-/** The skip link and the floating dark glass bar. Content: data/header.ts. */
+/** The skip link and the floating dark glass bar. */
 export function Header() {
   return (
     <>
@@ -185,10 +193,9 @@ export function Header() {
       <ScrollHeader>
         <Container className="h-full">
           <div className="theme-dark pointer-events-auto relative flex h-full items-center justify-between gap-6 rounded-lg border border-border bg-background/80 px-4 backdrop-blur-md sm:px-6">
-            {/* "/#top": a plain "/" keeps the scroll position when already on the homepage. */}
-            <Link href="/#top" className="flex h-11 items-center">
+            <TopLink className="flex h-11 items-center">
               <Wordmark />
-            </Link>
+            </TopLink>
 
             {/* White at 70%, not text-muted: over white content the glass renders a mid grey, where
                 the dark muted grey would be 3.2:1. This stays above 5:1 on any backdrop. */}

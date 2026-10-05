@@ -8,11 +8,13 @@ import { SplideTrack } from "@/components/ui/SplideTrack";
 import { maxPx } from "@/lib/breakpoints";
 import { cn } from "@/lib/cn";
 
-// Splide's page buttons (its core CSS leaves them unstyled): an 8px dot, a ring for the other pages
-// and filled with the accent (black on white, gold on dark) for the current one. Targets are 24px
-// (the WCAG AA minimum, side by side), not 44px, so the dots sit close: the user's choice.
+// Splide's page buttons (its core CSS leaves them unstyled): a solid 8px muted dot for the other pages,
+// and for the current one a 24×8 pill in the accent (black on white, gold on dark), so shape tells it
+// apart, not only colour. Its button widens to 40px, keeping the 16px gap to its neighbours, and both
+// widths animate, so the pill slides along (instant under reduced motion, from globals.css). Targets are
+// 24px (the WCAG AA minimum, side by side), not 44px, so the dots sit close: the user's choice.
 const pageClass =
-  "splide__pagination__page inline-flex size-6 cursor-pointer items-center justify-center rounded-full after:size-2 after:rounded-full after:border-[1.5px] after:border-muted after:transition-colors after:duration-300 after:ease-out hover:after:border-foreground aria-selected:after:border-accent aria-selected:after:bg-accent";
+  "splide__pagination__page inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded-full transition-[width] duration-300 ease-out aria-selected:w-10 after:h-2 after:w-2 after:rounded-full after:bg-muted after:transition-all after:duration-300 after:ease-out hover:after:bg-foreground aria-selected:after:w-6 aria-selected:after:bg-accent";
 
 
 // The prev/next buttons (Splide finds them by their splide__arrow--prev/--next classes and wires them):
@@ -27,7 +29,7 @@ type CarouselProps = {
   label: string;
   /** Splide's per-slide label; %s is replaced by the number and total, e.g. "Video %s of %s". */
   slideLabel: string;
-  /** Prev/next buttons over the track's edges (default off: the reviews use the dots only). */
+  /** Prev/next buttons over the track's edges (default off; the Portfolio and the reviews turn them on). */
   arrows?: boolean;
   /** Extra wiring after Splide mounts (must be a stable function). May return a cleanup. */
   onMounted?: (root: HTMLElement, splide: Splide) => void | (() => void);
@@ -38,7 +40,7 @@ type CarouselProps = {
 /**
  * The shared looping Splide carousel (core styles only; the look comes from the tokens).
  * 4 slides per view from lg, 2 on tablets, and on phones 1 centred with a peek of the cards either side,
- * edge to edge (it takes back the container's padding), with page dots under it.
+ * edge to edge (it takes back the container's padding), with one dot per slide under it.
  * Moved by the dots, drag and swipe, the arrow keys when focused, and with `arrows` the prev/next buttons.
  * Loop clones slides as plain DOM without React handlers, so slides must work without them
  * (CSS only, or wired in onMounted through listeners on the root).
@@ -64,6 +66,9 @@ export function Carousel({
       perPage: 4,
       // One slide per move (Splide's default moves a whole page).
       perMove: 1,
+      // One dot per slide, so the active dot follows every arrow click and drag (without `focus`,
+      // Splide makes one dot per page of 4). 0 keeps the current slide at the left edge, as before.
+      focus: 0,
       gap: "1.5rem",
       // Below lg and below sm, matching the pre-mount widths' sm: and lg: classes. Phones: 12% of the
       // track either side shows the neighbouring cards, so each card is 76% of the screen wide (the
@@ -119,7 +124,7 @@ export function Carousel({
           </div>
         )}
       </div>
-      {/* Splide fills the list with one button per page; the box holds its height before mount, so nothing
+      {/* Splide fills the list with one button per slide; the box holds its height before mount, so nothing
           shifts. On phones with arrows it's 44px tall, holding them either side of the dots. */}
       <div className={cn("mt-8 flex h-6 items-center justify-center", arrows && "max-sm:h-11")}>
         <ul className="splide__pagination" />

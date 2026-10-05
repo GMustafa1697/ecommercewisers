@@ -3,8 +3,8 @@ import type { ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/cn";
 
 const variants = {
-  primary: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:shadow-md",
-  secondary: "border border-border bg-transparent text-foreground hover:border-muted hover:bg-surface",
+  primary: "bg-white text-primary-foreground shadow-sm hover:bg-black hover:text-white hover:shadow-md border border-border",
+  secondary: " bg-white text-black hover:border-muted hover:bg-primary hover:text-black",
 } as const;
 
 const sizes = {

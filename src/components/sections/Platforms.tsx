@@ -5,9 +5,30 @@ import Splide from "@splidejs/splide";
 import Image from "next/image";
 import { useEffect, useRef, type ReactNode } from "react";
 import { SplideTrack } from "@/components/ui/SplideTrack";
-import { platforms, title } from "@/data/platforms";
 import { maxPx } from "@/lib/breakpoints";
 import { REDUCED_MOTION } from "@/lib/useMediaQuery";
+
+// Content: edit the platforms and logos here.
+
+/** `width`/`height` are the SVG's own viewBox size; the strip sets the height and keeps the ratio. */
+type Platform = {
+  name: string;
+  logo: { src: `/images/platforms/${string}.svg`; width: number; height: number };
+};
+
+/** The strip's name, for screen readers only (no visible heading, your choice). */
+const title = "Platforms we build on";
+
+// The platforms behind the four services (WooCommerce under WordPress Development), in your
+// screenshot's order. They are tools, not clients or partners. The logos keep their brand colours
+// (your request): they live in the SVG files, the one place outside globals.css with other hues.
+const platforms: Platform[] = [
+  { name: "WooCommerce", logo: { src: "/images/platforms/woocommerce.svg", width: 256, height: 153 } },
+  { name: "WordPress", logo: { src: "/images/platforms/wordpress.svg", width: 256, height: 255 } },
+  { name: "Next.js", logo: { src: "/images/platforms/nextjs.svg", width: 256, height: 256 } },
+  { name: "Figma", logo: { src: "/images/platforms/figma.svg", width: 256, height: 384 } },
+  { name: "Shopify", logo: { src: "/images/platforms/shopify.svg", width: 256, height: 292 } },
+];
 
 /** Scroll speed in CSS pixels per second: one 15rem (240px) slide every 5 s. */
 const speed = 48;
@@ -122,7 +143,7 @@ function LogoStrip({ label, children }: LogoStripProps) {
 
 /**
  * A dark, full-bleed logo strip after the Hero. The heading is for screen readers only, as you asked.
- * The top border separates it from the dark Hero, as in your screenshot. Content: data/platforms.ts.
+ * The top border separates it from the dark Hero, as in your screenshot.
  */
 export function Platforms() {
   return (

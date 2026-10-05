@@ -1,14 +1,62 @@
-import type { CSSProperties } from "react";
+import type { ComponentType, CSSProperties } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { FeatureItem } from "@/components/ui/FeatureItem";
 import { IconTile } from "@/components/ui/IconTile";
-import { CheckIcon } from "@/components/ui/icons";
+import { BagIcon, CheckIcon, CodeIcon, type IconProps, LayoutIcon, PenIcon } from "@/components/ui/icons";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { startProject } from "@/data/contact";
-import { eyebrow, intro, services, title } from "@/data/services";
+import { startProject } from "@/lib/site";
 
-/** The sticky heading column and the stacking service cards. Content: data/services.ts. */
+// Content: edit the texts and icons here. The button is the shared "Start a project" link in lib/site.ts.
+
+/** `icon` is one of the generic icons in components/ui/icons.tsx; `points` is the card's checklist. */
+type Service = { title: string; description: string; icon: ComponentType<IconProps>; points: string[] };
+
+const eyebrow = "What we do";
+const title = "Custom solutions for every part of your online store";
+const intro = "Every project is built around your products, your brand and your exact requirements.";
+
+/** The four services (CLAUDE.md). The Footer lists their names too. */
+export const services: Service[] = [
+  {
+    title: "Shopify Development",
+    description: "Shopify stores built or customised to fit your products and brand.",
+    icon: BagIcon,
+    points: [
+      "Theme customisation and new store builds",
+      "Product, collection and cart pages",
+      "App setup and integrations",
+    ],
+  },
+  {
+    title: "WordPress Development",
+    description: "WordPress sites and stores your team can manage with ease.",
+    icon: LayoutIcon,
+    points: [
+      "Custom themes and page layouts",
+      "WooCommerce stores",
+      "Content your team can edit without a developer",
+    ],
+  },
+  {
+    title: "Next.js Development",
+    description: "Custom storefronts and web apps built for speed.",
+    icon: CodeIcon,
+    points: ["Headless storefronts", "Fast, statically rendered pages", "Typed, maintainable code"],
+  },
+  {
+    title: "Figma to Web",
+    description: "Your Figma designs turned into responsive, production-ready pages.",
+    icon: PenIcon,
+    points: [
+      "Responsive layouts from mobile to desktop",
+      "Reusable components that match your design",
+      "Accessible, semantic markup",
+    ],
+  },
+];
+
+/** The sticky heading column and the stacking service cards. */
 export function Services() {
   return (
     <Section id="services" dark>

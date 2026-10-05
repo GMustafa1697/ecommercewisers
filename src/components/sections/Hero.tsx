@@ -1,14 +1,25 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { startProject } from "@/data/contact";
-import { eyebrow, intro, secondaryCta, title } from "@/data/hero";
+import { startProject } from "@/lib/site";
+
+// Content: edit the texts and links here. Your reference copy, word for word (2026-10-01, your
+// choice). The primary button is the shared "Start a project" link in lib/site.ts.
+
+const eyebrow = "Design, build, optimize";
+
+/** The H1, in three parts: the highlight is drawn in the accent colour (gold on the dark Hero). */
+const title = { lead: "Tailor-made stores built ", highlight: "your way", tail: ", from scratch." };
+
+const intro =
+  "We design and hand-build custom Shopify themes, Shopify apps, WordPress sites and UI/UX — no cookie-cutter templates, no page builders. Every line of code is written for your business.";
+
+const secondaryCta = { label: "See how we work", href: "/#process" };
 
 /**
  * The dark hero (2026-10-01, your reference). It starts under the floating header (-mt by the header's
  * height, added back to the top padding), so the page is dark from the very top. Centred over the dot
  * grid (2026-10-02, your choice), since it's text only: left-aligned, its right half stood empty.
- * Content: data/hero.ts.
  */
 export function Hero() {
   return (

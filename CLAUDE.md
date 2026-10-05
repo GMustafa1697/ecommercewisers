@@ -71,15 +71,13 @@ Hard rules:
 - Use Server Components by default. Add `"use client"` only where there is interaction (the mobile nav toggle, for example), and keep those components small. The exception is a section with interactive parts: since each section is one file (2026-10-03, your choice), Header, Platforms, Process, Reviews and Contact are client files as a whole (first-load JS +11 KB uncompressed). Footer and the other sections stay Server Components.
 - TypeScript is strict: no `any`, and props are typed with an interface or type.
 - Put sections in `src/components/sections/` and shared UI in `src/components/ui/`. One exported component per file, with PascalCase names. The exception is `src/components/ui/icons.tsx`, which holds all the icons.
-- `sections/` is **flat** (since 2026-10-02, your choice: no subfolders), and **each section is one self-contained file** (since 2026-10-03, your request). Its sub-components are plain, non-exported functions above the exported section component: `MobileNav` and `ScrollHeader` in `Header.tsx`, `LogoStrip` in `Platforms.tsx`, `ProcessPlayer` in `Process.tsx`, `ReviewCard` and `ReviewsCarousel` in `Reviews.tsx`, `ContactForm` in `Contact.tsx`, `FooterColumn` in `Footer.tsx`. The one extra file is the `sendMessage.ts` Server Action, because a `"use server"` module can't share a client file. `ui/` holds only components used by two or more sections (or by other `ui/` components). Shared hooks and helpers go in `src/lib/` (`cn.ts`, `useMediaQuery.ts`, and `breakpoints.ts`, the one place scripts get Tailwind's breakpoints; never hand-type `639` or `48rem`).
-- **Content lives in `src/data/`, one file per section** (since 2026-10-02, your request "one component, one data file, easy to change"; until then each section held its own content): `header.ts`, `hero.ts`, `platforms.ts`, `features.ts`, `services.ts`, `why.ts`, `process.ts`, `portfolio.ts`, `reviews.ts`, `contact.ts`, `footer.ts`.
-  - They hold every text, link, image and Lottie path, label and message, plus their types. Components hold only layout and behaviour. To change a text, image or link, edit the data file.
-  - Shared content is exported once, never copied:
-    - `startProject`, `contact`, `contactHref` and `contactLimits` from `data/contact.ts` (Header, Hero, Services, Footer, the form and its Server Action)
-    - `nav` from `data/header.ts` (Footer)
-    - `projects` from `data/portfolio.ts` (the Header's nav)
-    - `services` from `data/services.ts` (Footer)
+- `sections/` is **flat** (since 2026-10-02, your choice: no subfolders), and **each section is one self-contained file** (since 2026-10-03, your request). Its sub-components are plain, non-exported functions above the exported section component: `MobileNav` and `ScrollHeader` in `Header.tsx`, `LogoStrip` in `Platforms.tsx`, `ProcessPlayer` in `Process.tsx`, `ReviewCard` and `ReviewsCarousel` in `Reviews.tsx`, `ContactForm` in `Contact.tsx`, `FooterColumn` in `Footer.tsx`. The one extra file is the `sendMessage.ts` Server Action, because a `"use server"` module can't share a client file. `ui/` holds only components used by two or more sections (or by other `ui/` components). Shared hooks and helpers go in `src/lib/` (`cn.ts`, `useMediaQuery.ts`, and `breakpoints.ts`, the one place scripts get Tailwind's breakpoints; never hand-type `639` or `48rem`), and so does `site.ts`, the shared content (below).
+- **Each section holds its own content** (since 2026-10-05, your request "every section have own data"; `src/data/` was removed, after holding it from 2026-10-02). At the top of each section file, under a `// Content:` comment, are its texts, links, image, video and Lottie paths, labels and messages, plus their types. Not exported. The code below holds only layout and behaviour. To change a text, image or link, edit the top of the section file. The contact form's error texts are at the top of `sendMessage.ts`.
+  - Content that several sections use is exported once, never copied:
+    - `src/lib/site.ts`: `contact` and `contactHref` (Contact, Footer), `startProject` (Header, Hero, Services), `nav` (Header, Footer) and `contactLimits` (the form and its Server Action). They can't live in their own section, because Header and Contact are client files and server code can't read values exported from a client file ("cannot dot into a client module"). Add nothing else there.
+    - `services` from `sections/Services.tsx` (Footer; both are server files)
     - `brand` from `ui/Wordmark.tsx` (Footer)
+  - Never import content from a `"use client"` file into a server file.
 
   No copy-pasted blocks.
 - Reuse before you create. No duplicate markup and no dead code.
@@ -128,5 +126,6 @@ Every major task follows **Analyze → Plan → Approve → Implement → Test �
 - `docs/PLAN.md`: the roadmap
 - `docs/DESIGN.md`: the design system
 - `docs/PROGRESS.md`: status, decisions and known issues
+- `docs/REVIEW-VIDEOS.md`: how to add a video review and its thumbnail
 
 Update `PROGRESS.md` after every task.

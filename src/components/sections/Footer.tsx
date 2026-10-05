@@ -2,13 +2,22 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { services } from "@/components/sections/Services";
+import { TopLink } from "@/components/ui/TopLink";
 import { brand, wordmarkPath } from "@/components/ui/Wordmark";
-import { contact, contactHref } from "@/data/contact";
-import { contactTitle, description, navTitle, rights, servicesTitle, socials } from "@/data/footer";
-import { nav } from "@/data/header";
-import { services } from "@/data/services";
+import { contact, contactHref, nav } from "@/lib/site";
 
-// Content: data/footer.ts.
+// Content: edit the texts here. The links reuse the nav and the email (lib/site.ts) and the
+// services (Services.tsx).
+
+const description = "E-commerce development: Shopify, WordPress, Next.js and Figma to Web.";
+const navTitle = "Navigation";
+const servicesTitle = "Services";
+const contactTitle = "Contact";
+const rights = "All rights reserved.";
+
+/** Social profiles, listed under the email. Empty, so hidden, until real profiles are provided. */
+const socials: { label: string; href: string }[] = [];
 
 // Set when the page is built (it is static), so a rebuild updates it.
 const year = new Date().getFullYear();
@@ -68,7 +77,10 @@ export function Footer() {
       <Container className="py-12 md:py-16">
         <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8">
           <div>
-            <Lockup />
+            {/* min-h-11 keeps a 44px target where the lockup is 32px tall (md). */}
+            <TopLink className="inline-flex min-h-11 items-center">
+              <Lockup />
+            </TopLink>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">{description}</p>
           </div>
 

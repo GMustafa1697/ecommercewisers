@@ -1,7 +1,19 @@
 "use server";
 
-import { contactErrors as errorText, contactLimits as limits } from "@/data/contact";
 import { sendMail } from "@/lib/mailer";
+import { contactLimits as limits } from "@/lib/site";
+
+// Content: edit the error texts here. The rest of the form's texts are in Contact.tsx.
+
+/** The server's answers to invalid fields, shown under each field. */
+const errorText = {
+  nameMissing: "Enter your name.",
+  nameOneLine: "Enter your name on one line.",
+  nameTooLong: `Keep your name under ${limits.name} characters.`,
+  email: "Enter a valid email address.",
+  messageMissing: "Enter a message.",
+  messageTooLong: `Keep your message under ${limits.message} characters.`,
+};
 
 type Field = "name" | "email" | "message";
 type Fields = Record<Field, string>;

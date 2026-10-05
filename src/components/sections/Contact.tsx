@@ -6,21 +6,31 @@ import { buttonClass } from "@/components/ui/ButtonLink";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import {
-  checkFields,
-  contact,
-  contactHref,
-  emailLabel,
-  eyebrow,
-  failedNote,
-  fields,
-  intro,
-  requiredNote,
-  sentNote,
-  submit,
-  title,
-} from "@/data/contact";
 import { cn } from "@/lib/cn";
+import { contact, contactHref, contactLimits } from "@/lib/site";
+
+// Content: edit the texts here. The email and the form limits are shared, in lib/site.ts; the error
+// texts are in sendMessage.ts.
+
+// The heading and email (2026-10-02, your screenshot; it replaced the CTA). The WhatsApp number and
+// address from the screenshot wait for real ones.
+const eyebrow = "Contact";
+const title = "Get in touch";
+const intro = "Have a project in mind? Tell us about it and we'll reply with next steps.";
+const emailLabel = "Email";
+
+// The form.
+const requiredNote = "All fields are required.";
+const submit = { label: "Send message", pending: "Sending…" };
+const checkFields = "Check the fields marked above.";
+const sentNote = "Thanks, your message was sent. We'll reply by email.";
+/** Shown when sending fails; the email link follows it. */
+const failedNote = "Something went wrong and your message wasn't sent. Please try again, or email us at";
+const fields = [
+  { name: "name", label: "Name", type: "text", autoComplete: "name", maxLength: contactLimits.name },
+  { name: "email", label: "Email", type: "email", autoComplete: "email", maxLength: contactLimits.email },
+  { name: "message", label: "Message", maxLength: contactLimits.message },
+] as const;
 
 type ContactFormProps = {
   /** Where to write instead when sending fails. */
@@ -28,7 +38,7 @@ type ContactFormProps = {
   emailHref: string;
 };
 
-// The fields' maxLength (data/contact.ts) uses the same limits as sendMessage.ts, which checks
+// The fields' maxLength (contactLimits) is the same as sendMessage.ts's limits, which check
 // everything again on the server.
 const fieldClass = "mt-2 block w-full rounded-md border border-muted bg-background px-4 text-base text-foreground";
 
@@ -112,7 +122,7 @@ function ContactForm({ email, emailHref }: ContactFormProps) {
 
 /**
  * The contact section (2026-10-02, your screenshot; it replaced the CTA): on one light-grey panel,
- * the heading and email on the left, the form on the right (stacked below lg). Content: data/contact.ts.
+ * the heading and email on the left, the form on the right (stacked below lg).
  */
 export function Contact() {
   return (

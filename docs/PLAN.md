@@ -141,10 +141,10 @@ Since 2026-09-30 (your requests) **white and dark sections alternate**: the Hero
      | Layout 22 | UI / Layout system | `layout-22.webp`, 540×675 (low-res) | `layout-22.png` |
 6b. **Video reviews** (added 2026-09-30; the reference is `.claude/reference/image.png`)
    - `SectionHeading` (eyebrow "Video reviews", H2 "In their own words"). While `isPlaceholder`, a notice follows: "These are placeholders, not customers. Real video reviews will replace them."
-   - A Splide carousel (`role="group"`, label "Review videos", **endless horizontal loop**, no autoplay, drag and swipe) with page dots under it (since 2026-10-02; the custom arrows, "Previous videos" / "Next videos", were removed at your request).
+   - A Splide carousel (`role="group"`, label "Review videos", **endless horizontal loop**, no autoplay, drag and swipe) with one dot per video under it (dots since 2026-10-02, one per video since 2026-10-05; the custom arrows, "Previous videos" / "Next videos", were removed at your request).
    - Each card has a 9:16 video (`preload="none"`, lazy `next/image` poster), play/pause and mute buttons (sound starts muted), and a caption.
    - **Only one video plays at a time:** starting one pauses the others, and a video pauses when its slide leaves the view.
-   - The data is in `Reviews.tsx`: 6 stock clips (`public/videos/reviews/`, 720×1280 H.264, 0.2–2.6 MB each) made with ffmpeg from the old repo's stock files. The two comedy clips (and their `rv-7`/`rv-8` copies) are never used.
+   - The data is at the top of `Reviews.tsx`: 7 placeholder clips (`public/videos/reviews/`, 720×1280 H.264). Clips 1–6 are stock (0.2–2.6 MB each), made with ffmpeg from the old repo's stock files. Clip 7 is AI-generated (Gemini, 3.0 MB; added 2026-10-05). How to add one: `docs/REVIEW-VIDEOS.md`. The two comedy clips (and their `rv-7`/`rv-8` copies) are never used.
 7. **Contact** (2026-10-02, your screenshot; it replaced the CTA, a panel with an H2, one line and a `mailto:` "Start a project" button)
    - One `bg-surface border border-border rounded-lg p-6 md:p-12` panel. Left: the chip eyebrow "Contact", H2 "Get in touch", the intro, and `Email:` with the address (`mailto:`). Right: a form with Name, Email and Message and a primary "Send message" button. Stacked below `lg`.
    - Every "Start a project" button and the nav's "Contact" link scroll here (`/#contact`).
@@ -168,7 +168,7 @@ Since 2026-09-30 (your requests) **white and dark sections alternate**: the Hero
 
 ### Files (Phase 6)
 - ~~`src/content/site.ts`~~: removed on 2026-09-30 (your request); each section then held its own content.
-- `src/data/` (since 2026-10-02, your request): the content, one file per section: `header.ts`, `hero.ts`, `platforms.ts`, `features.ts`, `services.ts`, `why.ts`, `process.ts`, `portfolio.ts`, `reviews.ts`, `contact.ts`, `footer.ts`. Edit these to change text, images and links.
+- The content sits at the top of each section file, under a `// Content:` comment (since 2026-10-05, your request; `src/data/` held it from 2026-10-02). Edit it there to change text, images and links. The few values several sections share (email, "Start a project" link, nav, form limits) are in `src/lib/site.ts`.
 - `src/components/ui/`: `Container.tsx`, `ButtonLink.tsx` (variant and size map; `next/link` for `/…` hrefs, `<a>` for `mailto:`), `Section.tsx`, `SectionHeading.tsx`, `Eyebrow.tsx`, `FeatureItem.tsx`, `IconTile.tsx`, `Carousel.tsx`, `SplideTrack.tsx`, `LottieAnimation.tsx`, `Wordmark.tsx`, `icons.tsx` (only components used by two or more files; `LogoStrip` moved into `Platforms.tsx` on 2026-10-03)
 - `src/components/sections/` (flat since 2026-10-02, your choice; one self-contained file per section since 2026-10-03, your request): `Header.tsx` (with `MobileNav`, `ScrollHeader`), `Hero.tsx`, `Platforms.tsx` (with `LogoStrip`), `Features.tsx`, `Services.tsx`, `WhyUs.tsx`, `Process.tsx` (with `ProcessPlayer`), `PortfolioPreview.tsx`, `Reviews.tsx` (with `ReviewCard`, `ReviewsCarousel`), `Contact.tsx` (with `ContactForm`) and its `sendMessage.ts` Server Action (Contact replaced `Cta.tsx`), `Footer.tsx` (with `FooterColumn`)
 - `src/lib/`: `cn.ts`, `useMediaQuery.ts`, `breakpoints.ts`

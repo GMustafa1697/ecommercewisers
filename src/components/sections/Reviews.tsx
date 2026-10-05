@@ -9,17 +9,32 @@ import { Carousel } from "@/components/ui/Carousel";
 import { PauseIcon, PlayIcon, VolumeIcon, VolumeOffIcon } from "@/components/ui/icons";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import {
-  carouselLabel,
-  controlLabels,
-  eyebrow,
-  isPlaceholder,
-  notice,
-  type ReviewVideo,
-  slideLabel,
-  title,
-  videos,
-} from "@/data/reviews";
+
+// Content: edit the videos and texts here. How to add a video: docs/REVIEW-VIDEOS.md.
+
+/** One review clip. `captions` is a WebVTT file, required for real, spoken reviews (WCAG 1.2.2). */
+type ReviewVideo = { caption: string; src: string; poster: string; captions?: string };
+
+const eyebrow = "Video reviews";
+const title = "In their own words";
+
+// PLACEHOLDER: stock and AI-generated clips (07 is AI-generated), not customers. Replace with real,
+// consented reviews (with captions) before deploy, then set isPlaceholder to false.
+const isPlaceholder = true;
+const notice = "These are placeholders, not customers. Real video reviews will replace them.";
+
+/** The clips and their posters in public/videos/reviews/. */
+const videos: ReviewVideo[] = [1, 2, 3, 4, 5, 6, 7].map((n) => {
+  const file = `/videos/reviews/review-${String(n).padStart(2, "0")}`;
+  return { caption: "Placeholder", src: `${file}.mp4`, poster: `${file}.webp` };
+});
+
+/** The carousel's name and per-slide label for screen readers (%s: the number and the total). */
+const carouselLabel = "Review videos";
+const slideLabel = "Video %s of %s";
+
+/** The buttons' accessible names, each followed by ": " and the clip's caption. */
+const controlLabels = { play: "Play video", pause: "Pause video", mute: "Mute video" };
 
 type ReviewCardProps = {
   video: ReviewVideo;
@@ -152,7 +167,8 @@ function wireVideos(root: HTMLElement, splide: Splide) {
 
 function ReviewsCarousel({ videos }: ReviewsCarouselProps) {
   return (
-    <Carousel label={carouselLabel} slideLabel={slideLabel} onMounted={wireVideos} className="mt-8">
+    // Prev/next arrows as well as the dots (2026-10-05, your request), like the Portfolio.
+    <Carousel label={carouselLabel} slideLabel={slideLabel} arrows onMounted={wireVideos} className="mt-8">
       {videos.map((video) => (
         <ReviewCard key={video.src} video={video} />
       ))}
@@ -160,7 +176,7 @@ function ReviewsCarousel({ videos }: ReviewsCarouselProps) {
   );
 }
 
-/** The Video reviews heading, the placeholder notice and the carousel. Content: data/reviews.ts. */
+/** The Video reviews heading, the placeholder notice and the carousel. */
 export function Reviews() {
   if (videos.length === 0) return null;
 
