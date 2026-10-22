@@ -1,7 +1,8 @@
 import type { ComponentProps } from "react";
 
 // The one file allowed to hold several components (CLAUDE.md). Generic line icons,
-// no brand marks. Callers always set the size (size-5 or size-6) and colour (text-accent).
+// no brand marks. Callers always set the size (size-4, size-5 or size-6) and colour
+// (text-accent, or currentColor inside a button).
 
 export type IconProps = ComponentProps<"svg">;
 
@@ -111,6 +112,15 @@ export function ChevronRightIcon(props: IconProps) {
   return (
     <Icon {...props}>
       <path d="m9 5 7 7-7 7" />
+    </Icon>
+  );
+}
+
+export function ArrowUpRightIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M7 17 17 7" />
+      <path d="M9 7h8v8" />
     </Icon>
   );
 }

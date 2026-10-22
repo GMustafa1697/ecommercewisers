@@ -217,3 +217,94 @@
     scroll-margin-bottom: var(--header-height);
   }
 }
+
+/* 7. The CTA buttons' spin ring (ButtonLink.tsx and ButtonContent.tsx; your buttons.html, 2026-10-22).
+ *    On hover or keyboard focus a ring sweeps around the 2px border (border-2 on the button): a
+ *    conic gradient spinning behind an inner cover in the button's own colour, so only the border
+ *    band shows it. The gradient is your approved exception to "no gradients", palette colours only.
+ *    It's paused while hidden, and holds still under reduced motion. */
+@layer components {
+  /* Primary: the gold button. Its ring is black on the white page and white in .theme-dark. */
+  .btn-primary {
+    --btn-bg: var(--primary);
+    --btn-ring: var(--foreground);
+    --btn-rest: color-mix(in oklab, var(--color-white) 50%, transparent);
+  }
+
+  /* Secondary: the dark button (#222 in the dark sections), with a gold ring. */
+  .btn-secondary {
+    --btn-bg: var(--background);
+    --btn-ring: var(--color-primary);
+    --btn-rest: color-mix(in oklab, var(--foreground) 35%, transparent);
+  }
+
+  /* Sits exactly over the 2px border, so the button never changes size. */
+  .btn-ring {
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+
+  /* The spinning sweep: a square half again as wide as the button, so it covers every corner. */
+  .btn-ring::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--btn-ring) 0%,
+      var(--btn-bg) 3%,
+      var(--btn-ring) 60%,
+      var(--btn-ring) 100%
+    );
+    translate: -50% -50%;
+    animation: btn-ring-spin 2s linear infinite paused;
+  }
+
+  /* The inner cover: everything inside the border band, in the button's own colour. */
+  .btn-ring::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: inherit;
+    background: var(--btn-bg);
+  }
+
+  /* Hover only where there is a pointer, so a tap never leaves it on (as Tailwind's hover: does). */
+  @media (hover: hover) {
+    :hover > .btn-ring {
+      opacity: 1;
+    }
+
+    :hover > .btn-ring::before {
+      animation-play-state: running;
+    }
+  }
+
+  :focus-visible > .btn-ring {
+    opacity: 1;
+  }
+
+  :focus-visible > .btn-ring::before {
+    animation-play-state: running;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-ring::before {
+      animation: none;
+    }
+  }
+}
+
+@keyframes btn-ring-spin {
+  to {
+    rotate: 1turn;
+  }
+}

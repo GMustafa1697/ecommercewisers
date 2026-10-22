@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { type ContactState, sendMessage } from "@/components/sections/sendMessage";
 import { buttonClass } from "@/components/ui/ButtonLink";
+import { ButtonContent } from "@/components/ui/ButtonContent";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -40,7 +41,14 @@ type ContactFormProps = {
 
 // The fields' maxLength (contactLimits) is the same as sendMessage.ts's limits, which check
 // everything again on the server.
-const fieldClass = "mt-2 block w-full rounded-md border border-muted bg-background px-4 text-base text-foreground";
+// Surface boxes on the black panel, outlined in the muted grey a control's boundary needs. On focus the
+// grey border goes (2026-10-22, your request), leaving the gold focus ring alone around the field.
+const fieldClass =
+  "mt-2 block w-full rounded-md border border-muted bg-surface px-4 text-base text-foreground focus-visible:border-transparent";
+
+// The sent and failed messages: surface pills like the Reviews notice (2026-10-22, your request), with
+// px-6 so lines that wrap on phones stay clear of the rounded ends.
+const noteClass = "rounded-full border border-border bg-surface px-6 py-4 text-sm leading-relaxed";
 
 const initialState: ContactState = { status: "idle" };
 
@@ -97,10 +105,10 @@ function ContactForm({ email, emailHref }: ContactFormProps) {
       <div role="status">
         {state.status === "invalid" && <p className="text-sm font-medium">{checkFields}</p>}
         {state.status === "sent" && (
-          <p className="rounded-md border border-border bg-background p-4 text-sm leading-relaxed">{sentNote}</p>
+          <p className={noteClass}>{sentNote}</p>
         )}
         {state.status === "failed" && (
-          <p className="rounded-md border border-border bg-background p-4 text-sm leading-relaxed">
+          <p className={noteClass}>
             {failedNote}{" "}
             <a href={emailHref} className="font-medium underline underline-offset-4">
               {email}
@@ -112,22 +120,26 @@ function ContactForm({ email, emailHref }: ContactFormProps) {
       <button
         type="submit"
         disabled={pending}
-        className={cn(buttonClass(), "cursor-pointer disabled:cursor-wait disabled:opacity-70 sm:self-start")}
+        className={cn(
+          buttonClass({ variant: "secondary" }),
+          "cursor-pointer disabled:cursor-wait disabled:opacity-70 sm:self-start",
+        )}
       >
-        {pending ? submit.pending : submit.label}
+        <ButtonContent>{pending ? submit.pending : submit.label}</ButtonContent>
       </button>
     </form>
   );
 }
 
 /**
- * The contact section (2026-10-02, your screenshot; it replaced the CTA): on one light-grey panel,
- * the heading and email on the left, the form on the right (stacked below lg).
+ * The contact section (2026-10-02, your screenshot; it replaced the CTA): on one black panel
+ * (.theme-dark on the white section, 2026-10-22, your request; light grey before), the heading and
+ * email on the left, the form on the right (stacked below lg).
  */
 export function Contact() {
   return (
     <Section id="contact">
-      <div className="grid gap-10 rounded-lg border border-border bg-surface p-6 md:p-12 lg:grid-cols-2 lg:gap-16">
+      <div className="theme-dark grid gap-10 rounded-lg border border-border p-6 md:p-12 lg:grid-cols-2 lg:gap-16">
         <div>
           <SectionHeading id="contact-title" eyebrow={eyebrow} title={title} intro={intro} />
           {/* mailto: with the placeholder email above (blocks deploy). The label matches the footer's column titles. */}

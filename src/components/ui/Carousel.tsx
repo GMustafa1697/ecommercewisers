@@ -104,9 +104,11 @@ export function Carousel({
       <div className="relative">
         {/* Pre-mount widths, gap and (on phones) the track's side padding match Splide's, so nothing
             jumps when it mounts; its inline styles win after. The margins are important (!) to beat the
-            core CSS's unlayered `margin: 0`. */}
+            core CSS's unlayered `margin: 0`, and so is the overflow, over its `overflow: hidden`: the
+            track clips only sideways (clip, unlike hidden, allows a visible y), so a card's hover lift
+            and shadow aren't cut off at its top and bottom. */}
         <SplideTrack
-          trackClassName="max-sm:px-[12%]"
+          trackClassName="overflow-x-clip! overflow-y-visible! max-sm:px-[12%]"
           slideClassName="mr-4! w-full sm:mr-6! sm:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)]"
         >
           {children}

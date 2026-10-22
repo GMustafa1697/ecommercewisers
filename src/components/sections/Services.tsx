@@ -1,4 +1,5 @@
 import type { ComponentType, CSSProperties } from "react";
+import { ButtonContent } from "@/components/ui/ButtonContent";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { FeatureItem } from "@/components/ui/FeatureItem";
 import { IconTile } from "@/components/ui/IconTile";
@@ -13,7 +14,7 @@ import { startProject } from "@/lib/site";
 type Service = { title: string; description: string; icon: ComponentType<IconProps>; points: string[] };
 
 const eyebrow = "What we do";
-const title = "Custom solutions for every part of your online store";
+const title = "Custom solutions for every part of your ecommerce Journey";
 const intro = "Every project is built around your products, your brand and your exact requirements.";
 
 /** The four services (CLAUDE.md). The Footer lists their names too. */
@@ -63,8 +64,8 @@ export function Services() {
       <div className="grid gap-12 lg:grid-cols-[2fr_3fr] lg:gap-16">
         <div className="lg:sticky lg:top-[calc(var(--header-height)+2rem)] lg:self-start">
           <SectionHeading id="services-title" eyebrow={eyebrow} title={title} intro={intro} />
-          <ButtonLink href={startProject.href} className="mt-8 w-full sm:w-auto">
-            {startProject.label}
+          <ButtonLink href={startProject.href} variant="secondary" className="mt-8 w-full sm:w-auto">
+            <ButtonContent>{startProject.label}</ButtonContent>
           </ButtonLink>
         </div>
         {/* Sticky stacking: each card sticks 1rem below the previous one, so the stack shows their top edges,

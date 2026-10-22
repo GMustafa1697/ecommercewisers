@@ -19,13 +19,15 @@ type Platform = {
 /** The strip's name, for screen readers only (no visible heading, your choice). */
 const title = "Platforms we build on";
 
-// The platforms behind the four services (WooCommerce under WordPress Development), in your
-// screenshot's order. They are tools, not clients or partners. The logos keep their brand colours
-// (your request): they live in the SVG files, the one place outside globals.css with other hues.
+// The platforms behind the four services (WooCommerce under WordPress Development, React under
+// Next.js Development), in your screenshot's order; React added after Next.js on 2026-10-22, your
+// request. They are tools, not clients or partners. The logos keep their brand colours (your
+// request): they live in the SVG files, the one place outside globals.css with other hues.
 const platforms: Platform[] = [
   { name: "WooCommerce", logo: { src: "/images/platforms/woocommerce.svg", width: 256, height: 153 } },
   { name: "WordPress", logo: { src: "/images/platforms/wordpress.svg", width: 256, height: 255 } },
   { name: "Next.js", logo: { src: "/images/platforms/nextjs.svg", width: 256, height: 256 } },
+  { name: "React", logo: { src: "/images/platforms/react.svg", width: 256, height: 228 } },
   { name: "Figma", logo: { src: "/images/platforms/figma.svg", width: 256, height: 384 } },
   { name: "Shopify", logo: { src: "/images/platforms/shopify.svg", width: 256, height: 292 } },
 ];
