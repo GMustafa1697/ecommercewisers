@@ -2,14 +2,17 @@ import Link from "next/link";
 import type { ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/cn";
 
+// Your buttons.html (2026-10-22): the gold button (primary) and the dark one (secondary), each a pill
+// with a 2px rim. Their ring colours and rims are variables in globals.css (.btn-primary,
+// .btn-secondary); ButtonContent draws the ring and the arrow.
 const variants = {
-  primary: "bg-white text-primary-foreground shadow-sm hover:bg-black hover:text-white hover:shadow-md border border-border",
-  secondary: " bg-white text-black hover:border-muted hover:bg-primary hover:text-black",
+  primary: "group btn-primary bg-primary text-primary-foreground border-(--btn-rest)",
+  secondary: "group btn-secondary bg-background text-foreground border-(--btn-rest)",
 } as const;
 
 const sizes = {
   md: "h-11 px-5 text-sm",
-  lg: "h-12 px-6 text-base",
+  lg: "h-13 px-6 text-base",
 } as const;
 
 type ButtonStyle = {
@@ -20,7 +23,7 @@ type ButtonStyle = {
 /** The button classes, shared by ButtonLink and real <button>s (the contact form's submit). */
 export function buttonClass({ variant = "primary", size = "lg" }: ButtonStyle = {}) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 ease-out hover:-translate-y-px active:translate-y-0 active:shadow-none motion-reduce:transition-colors motion-reduce:hover:translate-y-0",
+    "relative isolate inline-flex items-center justify-center gap-2 rounded-full border-2 font-semibold",
     variants[variant],
     sizes[size],
   );

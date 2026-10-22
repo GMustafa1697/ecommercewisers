@@ -1,26 +1,17 @@
 import type { ComponentType } from "react";
 import type { IconProps } from "@/components/ui/icons";
-import { cn } from "@/lib/cn";
 
 type IconTileProps = {
   icon: ComponentType<IconProps>;
-  /** Extra classes on the tile, e.g. the Why cards' hover. */
-  className?: string;
 };
 
 /**
- * An icon on a gold-tinted tile: the accent marker for the Services and Why cards. The tint marks
- * labels and icons; solid gold marks actions. The icon is the accent (black on white, gold on dark).
- * Centred on phones, like FeatureItem's text.
+ * An icon on a solid gold tile, the icon in black: the marker for the Services and Why cards (solid
+ * since 2026-10-22, your requests; a 15% gold tint before). Centred on phones, like FeatureItem's text.
  */
-export function IconTile({ icon: Icon, className }: IconTileProps) {
+export function IconTile({ icon: Icon }: IconTileProps) {
   return (
-    <span
-      className={cn(
-        "mx-auto flex size-12 items-center justify-center rounded-md bg-primary/15 text-accent sm:mx-0",
-        className,
-      )}
-    >
+    <span className="mx-auto flex size-12 items-center justify-center rounded-md bg-primary text-primary-foreground sm:mx-0">
       <Icon className="size-6" />
     </span>
   );

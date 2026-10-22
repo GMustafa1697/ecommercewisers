@@ -14,8 +14,10 @@ type Point = { title: string; description: string; icon: ComponentType<IconProps
 const eyebrow = "Why ecommercewisers";
 const title = "What working with us looks like";
 
-/** The code scene; frame 360 of 480 has the phone, the code lines and the bubbles on screen. */
-const animation = { src: "/animations/code-dark.lottie", stillFrame: 360 };
+/** The code scene; frame 359 of 480 has the phone, the code lines and five badges at rest on screen.
+    The file name carries a version: a replaced animation gets a new one, because browsers and CDNs
+    cache it for a day (next.config.ts) and would otherwise keep serving the old copy. */
+const animation = { src: "/animations/code-dark-v2.lottie", stillFrame: 359 };
 
 const points: Point[] = [
   { title: "Performance first", description: "Pages built to load fast on real phones.", icon: BoltIcon },
@@ -38,8 +40,8 @@ export function WhyUs() {
     <Section id="why">
       <SectionHeading id="why-title" eyebrow={eyebrow} title={title} />
       {/* A bento: the 2×2 cards and the animation panel share one gap. Side by side from xl only.
-          Light-grey surface cards with a border, like Features and Contact; every icon sits on a
-          gold-tinted tile. On hover a card inverts to black, with a solid gold icon tile. */}
+          Black cards (.theme-dark, 2026-10-22, your request: the look their hover had), like the
+          Features cards; every icon sits on a solid gold tile. */}
       <div className="mt-12 grid gap-6 md:gap-8 lg:mt-16 xl:grid-cols-2">
         <div className="flex items-center p-6 sm:p-8">
           {/* 4:3 with `cover` crops the square canvas's empty top and bottom only: the scene spans
@@ -55,16 +57,10 @@ export function WhyUs() {
           {points.map((item) => (
             <FeatureItem
               key={item.title}
-              marker={
-                <IconTile
-                  icon={item.icon}
-                  className="transition-colors duration-300 ease-out group-hover:bg-primary group-hover:text-primary-foreground"
-                />
-              }
+              marker={<IconTile icon={item.icon} />}
               title={item.title}
               description={item.description}
-              // Hover (pointer devices only): the card turns black, its text white and grey, the icon tile gold.
-              className="group rounded-lg border border-border bg-surface p-6 transition-colors duration-300 ease-out hover:border-foreground hover:bg-foreground hover:text-background md:p-8 [&>p]:transition-colors [&>p]:duration-300 hover:[&>p]:text-background/70"
+              className="theme-dark rounded-lg border border-border p-6 md:p-8"
             />
           ))}
         </ul>

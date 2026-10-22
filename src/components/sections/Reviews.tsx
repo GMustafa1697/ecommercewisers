@@ -185,7 +185,7 @@ export function Reviews() {
       <SectionHeading id="reviews-title" eyebrow={eyebrow} title={title} />
       {/* PLACEHOLDER notice: shown until real, consented reviews replace the stock clips. */}
       {isPlaceholder && (
-        <p className="mt-12 rounded-lg border border-border bg-surface p-4 text-sm text-muted lg:mt-16">{notice}</p>
+        <p className="mt-12 rounded-full border border-border bg-surface px-6 py-4 text-sm text-muted lg:mt-16">{notice}</p>
       )}
       <ReviewsCarousel videos={videos} />
     </Section>

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Request a demo button variations</title>
+<style>
+  :root {
+    --dark: #222222;
+    --gold: #e6ac0e;
+    --white: #ffffff;
+    --border-width: 2px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .panel {
+    min-height: 50vh;
+    padding: 40px 24px 56px;
+  }
+
+  .panel--light { background: #ffffff; color: #222222; }
+  .panel--dark  { background: #222222; color: #ffffff; }
+
+  .panel__title {
+    margin: 0 0 32px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .panel__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 48px;
+  }
+
+  .variant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .variant__name {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .variant__desc {
+    margin: -8px 0 4px;
+    font-size: 13px;
+    opacity: 0.65;
+  }
+
+  /* ---------- Spin ring button (shared) ----------
+     Each variant sets its own colors:
+     --btn-bg     button fill
+     --btn-text   label + arrow color
+     --rest-border  light border shown at rest
+     --ring-color   color of the spinning ring on hover */
+  .demo-btn {
+    --btn-bg: var(--dark);
+    --btn-text: var(--white);
+    --rest-border: rgba(255, 255, 255, 0.35);
+    --ring-color: var(--gold);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 200px;
+    height: 52px;
+    padding: 0 22px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: var(--border-width) solid var(--rest-border);
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    isolation: isolate;
+  }
+
+  /* Button 2: yellow button, white ring */
+  .demo-btn--yellow {
+    --btn-bg: var(--gold);
+    --btn-text: var(--dark);
+    --rest-border: rgba(255, 255, 255, 0.5);
+    --ring-color: var(--white);
+  }
+
+  /* On the white background, the yellow button gets a black ring so it stays visible */
+  .panel--light .demo-btn--yellow {
+    --ring-color: var(--dark);
+  }
+
+  .demo-btn:focus-visible { outline: none; }
+
+  .demo-btn__label { position: relative; z-index: 1; }
+
+  /* Ring layer sits exactly over the 2px border, so size never changes on hover */
+  .demo-btn__ring {
+    position: absolute;
+    inset: calc(var(--border-width) * -1);
+    border-radius: 999px;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .demo-btn__ring::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: conic-gradient(var(--ring-color) 0%, var(--btn-bg) 3%, var(--ring-color) 60%, var(--ring-color) 100%);
+    transform: translate(-50%, -50%);
+    animation: spin linear 2s infinite;
+  }
+
+  .demo-btn__ring::after {
+    content: "";
+    position: absolute;
+    inset: var(--border-width);
+    border-radius: 999px;
+    background: var(--btn-bg);
+  }
+
+  .demo-btn:hover .demo-btn__ring,
+  .demo-btn:focus-visible .demo-btn__ring { opacity: 1; }
+
+  /* Arrow: fixed box, both arrows offset with transforms */
+  .demo-btn__arrow {
+    position: relative;
+    z-index: 1;
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .demo-btn__arrow svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .demo-btn__arrow .arrow-main { transform: translate(0, 0); }
+  .demo-btn__arrow .arrow-next { transform: translate(0, 150%); }
+
+  .demo-btn:hover .arrow-main,
+  .demo-btn:focus-visible .arrow-main { transform: translate(150%, -150%); }
+
+  .demo-btn:hover .arrow-next,
+  .demo-btn:focus-visible .arrow-next { transform: translate(0, 0); }
+
+  @keyframes spin {
+    0%   { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- White body -->
+  <section class="panel panel--light">
+    <h2 class="panel__title">White background</h2>
+    <div class="panel__row">
+
+      <div class="variant">
+        <h3 class="variant__name">Button 1 — Dark, Gold Spin Ring</h3>
+        <p class="variant__desc">Gold ring spins around the border on hover</p>
+        <a class="demo-btn" href="#">
+          <span class="demo-btn__ring" aria-hidden="true"></span>
+          <span class="demo-btn__label">Request a demo</span>
+          <span class="demo-btn__arrow" aria-hidden="true">
+            <svg class="arrow-main" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L10 4M5 4h5v5"/></svg>
+            <svg class="arrow-next" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L10 4M5 4h5v5"/></svg>
+          </span>
+        </a>
+      </div>
+
+      <div class="variant">
+        <h3 class="variant__name">Button 2 — Yellow, Black Spin Ring</h3>
+        <p class="variant__desc">Black ring spins around the border on hover</p>
+        <a class="demo-btn demo-btn--yellow" href="#">
+          <span class="demo-btn__ring" aria-hidden="true"></span>
+          <span class="demo-btn__label">Request a demo</span>
+          <span class="demo-btn__arrow" aria-hidden="true">
+            <svg class="arrow-main" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L10 4M5 4h5v5"/></svg>
+            <svg class="arrow-next" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L10 4M5 4h5v5"/></svg>
+          </span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Dark body -->
+  <section class="panel panel--dark">
+    <h2 class="panel__title">Dark background</h2>
+    <div class="panel__row">
+
+      <div class="variant">
+        <h3 class="variant__name">Button 1 — Dark, Gold Spin Ring</h3>
+        <p class="variant__desc">Gold ring spins around the border on hover</p>
+        <a class="demo-btn" href="#">
+          <span class="demo-btn__ring" aria-hidden="true"></span>
+          <span class="demo-btn__label">Request a demo</span>
+          <span class="demo-btn__arrow" aria-hidden="true">
+            <svg class="arrow-main" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L10 4M5 4h5v5"/></svg>
+            <svg class="arrow-next" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L10 4M5 4h5v5"/></svg>
+          </span>
+        </a>
+      </div>
+
+      <div class="variant">
+        <h3 class="variant__name">Button 2 — Yellow, White Spin Ring</h3>
+        <p class="variant__desc">White ring spins around the border on hover</p>
+        <a class="demo-btn demo-btn--yellow" href="#">
+          <span class="demo-btn__ring" aria-hidden="true"></span>
+          <span class="demo-btn__label">Request a demo</span>
+          <span class="demo-btn__arrow" aria-hidden="true">
+            <svg class="arrow-main" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L10 4M5 4h5v5"/></svg>
+            <svg class="arrow-next" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L10 4M5 4h5v5"/></svg>
+          </span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>

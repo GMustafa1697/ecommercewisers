@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { type FocusEvent, type ReactNode, useEffect, useRef, useState } from "react";
+import { ButtonContent } from "@/components/ui/ButtonContent";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { CloseIcon, MenuIcon } from "@/components/ui/icons";
@@ -80,7 +81,7 @@ function MobileNav({ items, cta, label }: MobileNavProps) {
         aria-expanded={open}
         aria-controls="mobile-menu"
         onClick={() => setOpen((value) => !value)}
-        className="-mr-2.5 inline-flex size-11 items-center justify-center rounded-md text-foreground transition-colors ease-out hover:bg-surface"
+        className="-mr-2.5 inline-flex size-11 items-center justify-center rounded-full text-foreground transition-colors ease-out hover:bg-surface"
       >
         {open ? <CloseIcon className="size-6" /> : <MenuIcon className="size-6" />}
       </button>
@@ -113,7 +114,7 @@ function MobileNav({ items, cta, label }: MobileNavProps) {
             size="lg"
             className="mt-4 w-full"
           >
-            {cta.label}
+            <ButtonContent>{cta.label}</ButtonContent>
           </ButtonLink>
         </Container>
       </div>
@@ -188,11 +189,12 @@ export function Header() {
         {skipLink}
       </a>
 
-      {/* A dark glass bar in the 1440px container, floating just below the top. It hides while
-          scrolling down and returns on scrolling up (ScrollHeader). */}
+      {/* A dark glass pill (2026-10-22, your request, like the CTA buttons) in the 1440px container,
+          floating just below the top. It hides while scrolling down and returns on scrolling up
+          (ScrollHeader). */}
       <ScrollHeader>
         <Container className="h-full">
-          <div className="theme-dark pointer-events-auto relative flex h-full items-center justify-between gap-6 rounded-lg border border-border bg-background/80 px-4 backdrop-blur-md sm:px-6">
+          <div className="theme-dark pointer-events-auto relative flex h-full items-center justify-between gap-6 rounded-full border border-border bg-background/80 px-4 backdrop-blur-md sm:px-6">
             <TopLink className="flex h-11 items-center">
               <Wordmark />
             </TopLink>
@@ -216,7 +218,7 @@ export function Header() {
 
             <div className="hidden md:block">
               <ButtonLink href={startProject.href} variant="secondary" size="md">
-                {startProject.label}
+                <ButtonContent>{startProject.label}</ButtonContent>
               </ButtonLink>
             </div>
 
