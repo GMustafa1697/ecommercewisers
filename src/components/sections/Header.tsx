@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { type FocusEvent, type ReactNode, useEffect, useRef, useState } from "react";
-import { ButtonContent } from "@/components/ui/ButtonContent";
+import { ButtonContent, swapEase, swapMotion } from "@/components/ui/ButtonContent";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { CloseIcon, MenuIcon } from "@/components/ui/icons";
 import { TopLink } from "@/components/ui/TopLink";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { atLeast } from "@/lib/breakpoints";
+import { cn } from "@/lib/cn";
 import { nav, startProject } from "@/lib/site";
 
 // Content: edit the texts here. The nav links and the button are shared with other sections, in lib/site.ts.
@@ -31,6 +32,10 @@ type MobileNavProps = {
 /**
  * Disclosure menu below md. Closes on a link click, Escape (focus returns to the toggle),
  * a tap outside it, focus moving out of it, or the window widening past md.
+ *
+ * The panel slides in from the left as it fades in, and back out on closing, on the CTA arrow's curve,
+ * like the toggle's ☰/✕. While open it wears the CTA spin ring around its whole border, always spinning
+ * (globals.css → .btn-ring-on), since phones have no hover.
  */
 function MobileNav({ items, cta, label }: MobileNavProps) {
   const [open, setOpen] = useState(false);
@@ -83,40 +88,59 @@ function MobileNav({ items, cta, label }: MobileNavProps) {
         onClick={() => setOpen((value) => !value)}
         className="-mr-2.5 inline-flex size-11 items-center justify-center rounded-full text-foreground transition-colors ease-out hover:bg-surface"
       >
-        {open ? <CloseIcon className="size-6" /> : <MenuIcon className="size-6" />}
+        {/* ☰ and ✕ swap like the CTA arrow: the one leaving slides up out of the clipped box as the
+            other rises into place. No motion-safe: it's a change of state, so under reduced motion it
+            still happens, instantly (the global 0s transition). */}
+        <span className="relative size-6 overflow-hidden" aria-hidden="true">
+          <MenuIcon className={cn("absolute inset-0 size-full", swapMotion, open && "-translate-y-[150%]")} />
+          <CloseIcon className={cn("absolute inset-0 size-full", swapMotion, !open && "translate-y-[150%]")} />
+        </span>
       </button>
 
+      {/* The frame wears the ring (btn-secondary's gold) over its 2px border; the list scrolls inside
+          it, since overflow would clip the ring at the padding edge. The list's height cap allows for
+          the borders' 4px, so the panel still ends 12px above the viewport's bottom.
+          Closed, it waits off the left edge, transparent and invisible (out of the tab order and the
+          accessibility tree, as `hidden` was, which can't animate). Visibility turns on at once when
+          it opens and off only once it has slid out. */}
       <div
         id="mobile-menu"
-        hidden={!open}
-        className="absolute inset-x-0 top-full mt-2 max-h-[calc(100dvh-var(--header-height)-1.25rem)] overflow-y-auto overscroll-contain rounded-lg border border-border bg-background"
+        data-open={open || undefined}
+        className={cn(
+          "btn-secondary absolute inset-x-0 top-full isolate mt-2 rounded-lg border-2 border-border bg-background transition-[translate,opacity,visibility]",
+          swapEase,
+          open ? "btn-ring-on" : "invisible -translate-x-full opacity-0",
+        )}
       >
-        <Container className="pt-2 pb-6">
-          <nav aria-label="Main">
-            <ul className="divide-y divide-border">
-              {items.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    onClick={close}
-                    className="flex h-12 items-center text-base font-medium text-foreground"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <ButtonLink
-            href={cta.href}
-            onClick={close}
-            variant="secondary"
-            size="lg"
-            className="mt-4 w-full"
-          >
-            <ButtonContent>{cta.label}</ButtonContent>
-          </ButtonLink>
-        </Container>
+        <span className="btn-ring" aria-hidden="true" />
+        <div className="relative z-1 max-h-[calc(100dvh-var(--header-height)-1.5rem)] overflow-y-auto overscroll-contain">
+          <Container className="pt-2 pb-6">
+            <nav aria-label="Main">
+              <ul className="divide-y divide-border">
+                {items.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={close}
+                      className="flex h-12 items-center text-base font-medium text-foreground"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <ButtonLink
+              href={cta.href}
+              onClick={close}
+              variant="secondary"
+              size="lg"
+              className="mt-4 w-full"
+            >
+              <ButtonContent>{cta.label}</ButtonContent>
+            </ButtonLink>
+          </Container>
+        </div>
       </div>
     </div>
   );

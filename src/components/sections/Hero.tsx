@@ -18,9 +18,10 @@ const intro =
 
 const secondaryCta = { label: "See how we work", href: "/#process" };
 
-/** The code scene: Why ecommercewisers' code-dark-v2.lottie, copied with its orbit ring and seven small
-    dots recoloured from near-black to the palette's muted grey (2026-10-22, your request), since they vanished on this
-    dark background; Why keeps the original on white. Frame 359 of 480 has the phone, the code lines and
+/** The code scene: a copy of code-dark-v2.lottie with its orbit ring and seven small dots recoloured from
+    near-black to the palette's muted grey (2026-10-22, your request), since they vanished on this dark
+    background. The original, which Why played on white, is kept in public/animations/ but unused since
+    the Why cards moved into the footer (2026-10-23). Frame 359 of 480 has the phone, the code lines and
     five badges at rest on screen, which is what a reduced-motion visitor sees. A replaced animation gets
     a new file name, because browsers and CDNs cache it for a day (next.config.ts). */
 const animation = { src: "/animations/code-hero.lottie", stillFrame: 359 };
@@ -43,7 +44,7 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="theme-dark relative -mt-(--header-height) overflow-hidden pt-[calc(var(--header-height)+6rem)] pb-24 md:pt-[calc(var(--header-height)+10rem)] md:pb-40"
+      className="theme-dark relative -mt-(--header-height) overflow-hidden pt-[calc(var(--header-height)+2rem)]  md:pt-[calc(var(--header-height)+5rem)] md:pb-30 pb-15"
     >
       {/* A faint dot grid: white at 10%, decorative, drawn with an SVG pattern. */}
       <svg aria-hidden="true" className="pointer-events-none absolute inset-0 size-full text-foreground/10">
@@ -60,7 +61,7 @@ export function Hero() {
               xl, where the scene sits beside the text. */}
           <div className="text-center xl:text-left">
             {/* A hairline gold rule over the eyebrow: a quiet, confident mark. */}
-            <div aria-hidden="true" className="mx-auto mb-6 h-px w-12 bg-primary xl:mx-0" />
+            
             <Eyebrow className="mx-auto xl:mx-0">{eyebrow}</Eyebrow>
             <h1
               id="hero-title"
@@ -74,13 +75,14 @@ export function Hero() {
             <p className="mx-auto mt-6 max-w-200 text-base leading-relaxed text-muted lg:text-lg xl:mx-0">
               {intro}
             </p>
-            {/* Full width and stacked on phones, side by side from sm: centred while the columns
+            {/* Side by side at every width: compact below sm so the pair fits a phone from 360px
+                (it wraps onto two lines at 320), the lg size from sm. Centred while the columns
                 stack, at the start of the text column from xl. */}
-            <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:justify-center xl:justify-start">
-              <ButtonLink href={startProject.href}>
+            <div className="mt-12 flex flex-wrap justify-center gap-x-2 gap-y-3 sm:gap-4 xl:justify-start">
+              <ButtonLink href={startProject.href} size="responsive">
                 <ButtonContent>{startProject.label}</ButtonContent>
               </ButtonLink>
-              <ButtonLink href={secondaryCta.href} variant="secondary">
+              <ButtonLink href={secondaryCta.href} variant="secondary" size="responsive">
                 <ButtonContent>{secondaryCta.label}</ButtonContent>
               </ButtonLink>
             </div>

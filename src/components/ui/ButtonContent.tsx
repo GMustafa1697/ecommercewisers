@@ -1,8 +1,10 @@
 import type { ReactNode } from "react";
 import { ArrowUpRightIcon } from "@/components/ui/icons";
 
-// The arrow's travel, from your buttons.html: 400ms on its ease-out curve.
-const arrowMotion = "transition-transform duration-400 ease-[cubic-bezier(0.22,0.61,0.36,1)]";
+// The arrow's travel, from your buttons.html: 400ms on its ease-out curve. The mobile menu (Header.tsx)
+// moves on it too: the toggle's ☰/✕ swap (swapMotion) and the panel's slide (swapEase).
+export const swapEase = "duration-400 ease-[cubic-bezier(0.22,0.61,0.36,1)]";
+export const swapMotion = `transition-transform ${swapEase}`;
 
 /**
  * The contents of a CTA button: the spin ring, the label and the arrow that swaps on hover.
@@ -29,11 +31,11 @@ export function ButtonContent({ children }: { children: ReactNode }) {
       <span className="relative z-1 size-3.5 shrink-0 overflow-hidden" aria-hidden="true">
         <ArrowUpRightIcon
           strokeWidth={3}
-          className={`absolute inset-0 size-full ${arrowMotion} motion-safe:group-hover:translate-x-[150%] motion-safe:group-hover:-translate-y-[150%] motion-safe:group-focus-visible:translate-x-[150%] motion-safe:group-focus-visible:-translate-y-[150%]`}
+          className={`absolute inset-0 size-full ${swapMotion} motion-safe:group-hover:translate-x-[150%] motion-safe:group-hover:-translate-y-[150%] motion-safe:group-focus-visible:translate-x-[150%] motion-safe:group-focus-visible:-translate-y-[150%]`}
         />
         <ArrowUpRightIcon
           strokeWidth={3}
-          className={`absolute inset-0 size-full translate-y-[150%] ${arrowMotion} motion-safe:group-hover:translate-y-0 motion-safe:group-focus-visible:translate-y-0`}
+          className={`absolute inset-0 size-full translate-y-[150%] ${swapMotion} motion-safe:group-hover:translate-y-0 motion-safe:group-focus-visible:translate-y-0`}
         />
       </span>
     </>

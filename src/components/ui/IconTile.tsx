@@ -6,7 +6,7 @@ type IconTileProps = {
 };
 
 /**
- * An icon on a solid gold tile, the icon in black: the marker for the Services and Why cards (solid
+ * An icon on a solid gold tile, the icon in black: the marker for the Services and footer Why cards (solid
  * since 2026-10-22, your requests; a 15% gold tint before). Centred on phones, like FeatureItem's text.
  */
 export function IconTile({ icon: Icon }: IconTileProps) {

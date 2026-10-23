@@ -41,12 +41,12 @@ type ContactFormProps = {
 
 // The fields' maxLength (contactLimits) is the same as sendMessage.ts's limits, which check
 // everything again on the server.
-// Surface boxes on the black panel, outlined in the muted grey a control's boundary needs. On focus the
-// grey border goes (2026-10-22, your request), leaving the gold focus ring alone around the field.
+// Light-grey boxes on the white form card, outlined in the muted black a control's boundary needs. On focus
+// the border goes (2026-10-22, your request), leaving the black focus ring alone around the field.
 const fieldClass =
   "mt-2 block w-full rounded-md border border-muted bg-surface px-4 text-base text-foreground focus-visible:border-transparent";
 
-// The sent and failed messages: surface pills like the Reviews notice (2026-10-22, your request), with
+// The sent and failed messages: light-grey surface pills (pills since 2026-10-22, your request), with
 // px-6 so lines that wrap on phones stay clear of the rounded ends.
 const noteClass = "rounded-full border border-border bg-surface px-6 py-4 text-sm leading-relaxed";
 
@@ -56,14 +56,15 @@ const initialState: ContactState = { status: "idle" };
  * The contact form. The browser checks the fields first (required, type="email"); the Server Action
  * checks them again and sends the message by SMTP. When it's sent, React's reset after the action
  * clears the form. When it's invalid or sending fails, the typed values come back as defaultValue, so
- * the reset doesn't lose them.
+ * the reset doesn't lose them. It's a white card (.theme-light, 2026-10-23, your request): the one
+ * light part of the dark section, so its focus ring is black and its submit gold.
  */
 function ContactForm({ email, emailHref }: ContactFormProps) {
   const [state, formAction, pending] = useActionState(sendMessage, initialState);
   const errors = state.status === "invalid" ? state.errors : {};
 
   return (
-    <form action={formAction} className="flex flex-col gap-5">
+    <form action={formAction} className="theme-light flex flex-col gap-5 rounded-lg p-6 md:p-8">
       <p className="text-sm text-muted">{requiredNote}</p>
       {fields.map((field) => {
         const id = `contact-${field.name}`;
@@ -121,7 +122,7 @@ function ContactForm({ email, emailHref }: ContactFormProps) {
         type="submit"
         disabled={pending}
         className={cn(
-          buttonClass({ variant: "secondary" }),
+          buttonClass({ variant: "primary" }),
           "cursor-pointer disabled:cursor-wait disabled:opacity-70 sm:self-start",
         )}
       >
@@ -132,14 +133,16 @@ function ContactForm({ email, emailHref }: ContactFormProps) {
 }
 
 /**
- * The contact section (2026-10-02, your screenshot; it replaced the CTA): on one black panel
- * (.theme-dark on the white section, 2026-10-22, your request; light grey before), the heading and
- * email on the left, the form on the right (stacked below lg).
+ * The contact section (2026-10-02, your screenshot; it replaced the CTA): a dark section, the heading
+ * and email on the left and the form, a white card, on the right (stacked below lg). All dark but the
+ * form since 2026-10-23 (your request; earlier that day the whole panel was white, and before that a
+ * black panel on a white section), with no inner frame (removed the same day, your request). Divider
+ * lines above and below, since Reviews and the footer are dark too.
  */
 export function Contact() {
   return (
-    <Section id="contact">
-      <div className="theme-dark grid gap-10 rounded-lg border border-border p-6 md:p-12 lg:grid-cols-2 lg:gap-16">
+    <Section id="contact" dark className="border-y border-border">
+      <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
         <div>
           <SectionHeading id="contact-title" eyebrow={eyebrow} title={title} intro={intro} />
           {/* mailto: with the placeholder email above (blocks deploy). The label matches the footer's column titles. */}
