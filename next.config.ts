@@ -30,7 +30,8 @@ const securityHeaders = [
 ];
 
 // Files in public/ get `max-age=0` by default. The WASM has its version in its name, so it's cached
-// for good; the animations, videos and platform logos keep their names when replaced, so for a day.
+// for good; the animations, videos and platform logos are cached for a day, so a replaced file needs a
+// new name (`code-dark-v2.lottie`) to reach browsers that already hold the old one.
 const cacheForever = [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }];
 const cacheForADay = [{ key: "Cache-Control", value: "public, max-age=86400" }];
 

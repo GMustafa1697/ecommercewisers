@@ -28,7 +28,7 @@
 /* 2. Semantic variables (guide §4). The page is white with light-grey surfaces (2026-09-30; it was
  *    dark-first), alternating with dark sections (.theme-dark). Gold is a fill only on white: gold
  *    text on white is 2.0:1. The same light values form .theme-light: a white element inside a
- *    dark section (the Services cards). */
+ *    dark section (the Services cards, the Contact form). */
 :root,
 .theme-light {
   color-scheme: light;
@@ -53,7 +53,7 @@
 
 /* 3. Scopes. Each sets the same names, so the semantic utilities follow it. Dark sections
  *    alternate with the white ones: the Hero, the Platforms strip, <Section dark> (Services, Process,
- *    Portfolio, Reviews) and the footer.
+ *    Reviews, Contact) and the footer.
  *    #2E2E2E surfaces, #A0A0A0 muted text; gold text is allowed here (7.8:1). */
 @layer components {
   .theme-dark {
@@ -197,7 +197,7 @@
       opacity 300ms ease-out;
   }
 
-  .site-header[data-hidden]:not(:focus-within):not(:has(#mobile-menu:not([hidden]))) {
+  .site-header[data-hidden]:not(:focus-within):not(:has(#mobile-menu[data-open])) {
     translate: 0 -100%;
     opacity: 0;
   }
@@ -222,7 +222,8 @@
  *    On hover or keyboard focus a ring sweeps around the 2px border (border-2 on the button): a
  *    conic gradient spinning behind an inner cover in the button's own colour, so only the border
  *    band shows it. The gradient is your approved exception to "no gradients", palette colours only.
- *    It's paused while hidden, and holds still under reduced motion. */
+ *    The open mobile menu's panel wears one too, always spinning (below). It's paused while hidden, and
+ *    holds still under reduced motion. */
 @layer components {
   /* Primary: the gold button. Its ring is black on the white page and white in .theme-dark. */
   .btn-primary {
@@ -238,7 +239,8 @@
     --btn-rest: color-mix(in oklab, var(--foreground) 35%, transparent);
   }
 
-  /* Sits exactly over the 2px border, so the button never changes size. */
+  /* Sits exactly over the 2px border, so the button never changes size. A size container, so the sweep
+   * below can measure it. */
   .btn-ring {
     position: absolute;
     inset: -2px;
@@ -247,15 +249,19 @@
     pointer-events: none;
     opacity: 0;
     transition: opacity 200ms ease;
+    container-type: size;
   }
 
-  /* The spinning sweep: a square half again as wide as the button, so it covers every corner. */
+  /* The spinning sweep: a circle half again as wide as the ring's longer side (cqmax), so it covers every
+   * corner, of a wide button or of the taller-than-wide menu panel. For a button that's 150% of its
+   * width, the fallback where container units aren't supported. */
   .btn-ring::before {
     content: "";
     position: absolute;
     top: 50%;
     left: 50%;
     width: 150%;
+    width: 150cqmax;
     aspect-ratio: 1;
     border-radius: 50%;
     background: conic-gradient(
@@ -293,6 +299,18 @@
   }
 
   :focus-visible > .btn-ring::before {
+    animation-play-state: running;
+  }
+
+  /* Always on (2026-10-23, your request): the mobile menu panel's ring (Header.tsx) spins the whole time
+   * the menu is open, since phones have no hover. The panel has this class only while open, so the ring
+   * fades and stops as it slides away. Only its own ring (>): the CTA inside keeps hover and focus.
+   * Still under reduced motion, as everywhere. */
+  .btn-ring-on > .btn-ring {
+    opacity: 1;
+  }
+
+  .btn-ring-on > .btn-ring::before {
     animation-play-state: running;
   }
 

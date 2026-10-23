@@ -149,7 +149,7 @@ function LogoStrip({ label, children }: LogoStripProps) {
  */
 export function Platforms() {
   return (
-    <section aria-labelledby="platforms-title" className="theme-dark border-t border-border py-12 md:py-16">
+    <section aria-labelledby="platforms-title" className="theme-dark border-t border-b border-border py-12 md:py-16">
       <h2 id="platforms-title" className="sr-only">
         {title}
       </h2>

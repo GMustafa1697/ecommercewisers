@@ -20,7 +20,7 @@ const title = "In their own words";
 
 // PLACEHOLDER: stock and AI-generated clips (07 is AI-generated), not customers. Replace with real,
 // consented reviews (with captions) before deploy, then set isPlaceholder to false.
-const isPlaceholder = true;
+const isPlaceholder = false;
 const notice = "These are placeholders, not customers. Real video reviews will replace them.";
 
 /** The clips and their posters in public/videos/reviews/. */
@@ -46,12 +46,14 @@ const controlClass =
 /**
  * A portrait review video with play/pause and mute buttons. It holds no React state:
  * ReviewsCarousel drives it through the DOM (data-started, data-playing, data-unmuted),
- * so the copies Splide makes for looping work exactly like the originals. Sound starts muted.
+ * so the copies Splide makes for looping work exactly like the originals. Sound starts on: play is
+ * a click, so browsers allow it.
  */
 function ReviewCard({ video }: ReviewCardProps) {
   return (
     <div
       data-review-card=""
+      data-unmuted=""
       data-caption={video.caption}
       className="group overflow-hidden rounded-lg border border-border bg-surface"
     >
@@ -61,7 +63,6 @@ function ReviewCard({ video }: ReviewCardProps) {
           src={video.src}
           preload="none"
           playsInline
-          muted
           className="absolute inset-0 size-full object-cover"
         >
           {video.captions && <track kind="captions" src={video.captions} srcLang="en" label="English" default />}
@@ -86,7 +87,7 @@ function ReviewCard({ video }: ReviewCardProps) {
           <button
             type="button"
             data-action="mute"
-            aria-pressed="true"
+            aria-pressed="false"
             aria-label={`${controlLabels.mute}: ${video.caption}`}
             className={controlClass}
           >
@@ -95,7 +96,6 @@ function ReviewCard({ video }: ReviewCardProps) {
           </button>
         </div>
       </div>
-      <p className="p-4 font-semibold">{video.caption}</p>
     </div>
   );
 }
@@ -113,10 +113,6 @@ function wireVideos(root: HTMLElement, splide: Splide) {
 
   // A video stops when its slide scrolls out of view.
   splide.on("hidden", (slide) => slide.slide.querySelector("video")?.pause());
-  // Clones copy attributes, not the muted property, so set it on every video once they exist.
-  videosIn().forEach((video) => {
-    video.muted = true;
-  });
 
   function onClick(event: MouseEvent) {
     const button = (event.target as Element).closest<HTMLButtonElement>("button[data-action]");

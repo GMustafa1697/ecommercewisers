@@ -13,6 +13,8 @@ const variants = {
 const sizes = {
   md: "h-11 px-5 text-sm",
   lg: "h-13 px-6 text-base",
+  // The Hero's pair, side by side on phones: md's height and text with tighter padding below sm, lg from sm.
+  responsive: "h-11 px-3 text-sm sm:h-13 sm:px-6 sm:text-base",
 } as const;
 
 type ButtonStyle = {

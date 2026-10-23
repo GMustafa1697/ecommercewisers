@@ -87,7 +87,7 @@ const videos: ReviewVideo[] = [
 
 | Field | What it is | Example |
 |---|---|---|
-| `caption` | The text under the video. Screen readers also read it on the buttons | `"Customer name, Store name"` |
+| `caption` | The clip's name. It isn't shown: screen readers read it on the play and mute buttons | `"Customer name, Store name"` |
 | `src` | The video. It starts with `/videos/reviews/`, **without** `public` | `"/videos/reviews/review-08.mp4"` |
 | `poster` | The thumbnail | `"/videos/reviews/review-08.webp"` |
 | `captions` | The captions file (needed for real reviews) | `"/videos/reviews/review-08.vtt"` |

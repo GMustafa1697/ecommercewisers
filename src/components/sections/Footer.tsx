@@ -1,14 +1,37 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { FeatureItem } from "@/components/ui/FeatureItem";
+import { IconTile } from "@/components/ui/IconTile";
+import { BagIcon, BoltIcon, CodeIcon, type IconProps, RouteIcon } from "@/components/ui/icons";
 import { services } from "@/components/sections/Services";
 import { TopLink } from "@/components/ui/TopLink";
 import { brand, wordmarkPath } from "@/components/ui/Wordmark";
 import { contact, contactHref, nav } from "@/lib/site";
 
-// Content: edit the texts here. The links reuse the nav and the email (lib/site.ts) and the
-// services (Services.tsx).
+// Content: edit the texts and the Why points here. The links reuse the nav and the email
+// (lib/site.ts) and the services (Services.tsx).
+
+/** `icon` is one of the generic icons in components/ui/icons.tsx. */
+type Point = { title: string; description: string; icon: ComponentType<IconProps> };
+
+/** The Why cards across the top (their own section until 2026-10-23). The heading is for screen readers only. */
+const whyTitle = "Why ecommercewisers";
+const points: Point[] = [
+  { title: "Performance first", description: "Pages built to load fast on real phones.", icon: BoltIcon },
+  {
+    title: "E-commerce focus",
+    description: "Catalogs, product pages, checkout and the content around them.",
+    icon: BagIcon,
+  },
+  {
+    title: "A clear process",
+    description: "You approve a plan before we build, and see progress at every step.",
+    icon: RouteIcon,
+  },
+  { title: "Maintainable code", description: "Typed, documented code your team can build on.", icon: CodeIcon },
+];
 
 const description = "E-commerce development: Shopify, WordPress, Next.js and Figma to Web.";
 const navTitle = "Navigation";
@@ -25,6 +48,12 @@ const year = new Date().getFullYear();
 // DESIGN.md text link, with a 44×44px minimum target.
 const linkClass =
   "inline-flex min-h-11 min-w-11 items-center text-sm text-foreground underline-offset-4 hover:underline";
+
+// A compact Why card (2026-10-23, your request): 16px title, 14px line. From sm the tile (IconTile's
+// root <span>) spans both rows beside the text, as in the Features cards. The child selectors outrank
+// FeatureItem's own sizes, since cn() doesn't merge classes.
+const whyCardClass =
+  "rounded-lg border border-border bg-surface p-4 md:p-5 [&>h3]:mt-3 [&>h3]:text-base [&>p]:mt-1 [&>p]:text-sm sm:grid sm:grid-cols-[auto_1fr] sm:gap-x-4 sm:[&>span]:row-span-2 sm:[&>span]:self-center sm:[&>h3]:mt-0 sm:[&>h3]:self-end sm:[&>p]:self-start";
 
 type FooterColumnProps = {
   title: string;
@@ -75,7 +104,27 @@ export function Footer() {
     // Dark, like the dark sections: .theme-dark flips the tokens inside it.
     <footer className="theme-dark">
       <Container className="py-12 md:py-16">
-        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-4 md:gap-8">
+        {/* The Why cards (2026-10-23, your request; compact the same day): the "Why us" anchor, stacked
+            on phones, 2×2 from sm and in one row from lg. On the dark surface (bg-surface), so they show
+            on the black footer. */}
+        <section id="why" aria-labelledby="why-title">
+          <h2 id="why-title" className="sr-only">
+            {whyTitle}
+          </h2>
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {points.map((item) => (
+              <FeatureItem
+                key={item.title}
+                marker={<IconTile icon={item.icon} />}
+                title={item.title}
+                description={item.description}
+                className={whyCardClass}
+              />
+            ))}
+          </ul>
+        </section>
+
+        <div className="mt-12 grid gap-10 border-t border-border pt-12 sm:grid-cols-2 md:grid-cols-4 md:gap-8">
           <div>
             {/* min-h-11 keeps a 44px target where the lockup is 32px tall (md). */}
             <TopLink className="inline-flex min-h-11 items-center">
